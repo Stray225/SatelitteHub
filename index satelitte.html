@@ -209,6 +209,15 @@
 <body>
 
 
+<!-- Modal resultado OK/Error -->
+<div class="modal-overlay" id="result-modal" onclick="this.classList.remove('open')">
+  <div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;max-width:380px">
+    <div class="modal-title" id="result-modal-title" style="font-size:18px;margin-bottom:10px"></div>
+    <div class="modal-sub" id="result-modal-body" style="font-size:14px;margin-bottom:20px;line-height:1.6"></div>
+    <button class="btn" id="result-modal-btn" onclick="document.getElementById('result-modal').classList.remove('open')" style="width:100%;justify-content:center">Cerrar</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="confirm-modal">
   <div class="modal-box">
     <div class="modal-title">¿Confirmas la sincronización?</div>
@@ -928,7 +937,7 @@ document.getElementById('confirm-modal').addEventListener('click', function(e) {
 /* ============================================================
    SUBMIT HANDLER - REAL n8n WEBHOOK
    ============================================================ */
-const WEBHOOK_URL = 'https://TU-N8N-URL/webhook/clientes'; // TODO: reemplazar con URL real de n8n
+const WEBHOOK_URL = 'http://n8n.tesacom.net/webhook/tesacom-clientes';
 const N8N_WEBHOOK_EQUIPOS  = 'PEGAR_URL_WEBHOOK_N8N_EQUIPOS';
 const N8N_WEBHOOK_PLANES   = 'PEGAR_URL_WEBHOOK_N8N_PLANES';
 
@@ -974,11 +983,16 @@ async function handleSubmit(k) {
     const data = await res.json().catch(() => ({}));
     const ok   = res.ok && data.ok !== false;
     setBadge(k, ok ? 'success' : 'error'); addLog(k, ok ? 1 : 0, ok ? 0 : 1, 1);
-    if (ok) showToast('Sincronizado correctamente');
+    if (ok) {
+      showResultModal('success', '✅ Cliente sincronizado', 'El cliente fue creado correctamente en IBIS.' + (data.CustomerID ? ' ID IBIS: <strong>' + data.CustomerID + '</strong>' : ''));
+    } else {
+      showResultModal('error', '❌ Error al sincronizar', 'IBIS respondió con error: ' + (data.Message || data.message || res.status));
+    }
   } catch(e) {
-    setBadge(k, 'error'); addLog(k, 0, 1, 1); showToast('Error de conexion con n8n');
+    setBadge(k, 'error'); addLog(k, 0, 1, 1);
+    showResultModal('error', '❌ Error de conexión', 'No se pudo conectar con n8n. Verificá que el servidor esté activo.<br><small>' + e.message + '</small>');
   }
-  setTimeout(() => setBadge(k, 'idle'), 3000);
+  setTimeout(() => setBadge(k, 'idle'), 4000);
 }
 
 /* ============================================================
@@ -1167,6 +1181,15 @@ function fallbackCopy(text) {
   ta.select();
   try { document.execCommand('copy'); showToast('¡Copiado!'); } catch(e) { showToast('Error al copiar'); }
   document.body.removeChild(ta);
+}
+function showResultModal(type, title, body) {
+  const modal = document.getElementById('result-modal');
+  const btn   = document.getElementById('result-modal-btn');
+  document.getElementById('result-modal-title').innerHTML = title;
+  document.getElementById('result-modal-body').innerHTML  = body;
+  btn.style.background = type === 'success' ? '#22c55e' : '#e05c5c';
+  btn.style.borderColor = type === 'success' ? '#22c55e' : '#e05c5c';
+  modal.classList.add('open');
 }
 function showToast(msg) {
   const existing = document.getElementById('toast-el');
