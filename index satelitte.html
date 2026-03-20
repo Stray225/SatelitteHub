@@ -1,16 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Satellite Hub</title>
-  
+
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a2535'/%3E%3Cg transform='translate(16,16) rotate(-45)'%3E%3Crect x='-3' y='-8' width='6' height='16' rx='1' fill='%232a9d5c'/%3E%3Crect x='-9' y='-2' width='7' height='4' rx='1' fill='%232a7fff'/%3E%3Crect x='2' y='-2' width='7' height='4' rx='1' fill='%232a7fff'/%3E%3Ccircle cx='0' cy='0' r='2.5' fill='%23f0a030'/%3E%3C/g%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    
+
     :root {
       --bg: #f0f4f8;
       --card: #ffffff;
@@ -47,16 +47,16 @@
     @keyframes toastIn { from { opacity: 0; transform: translateY(20px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
     #app { max-width: 1200px; margin: 0 auto; padding: 0 32px 40px; }
     header { border-bottom: 1px solid var(--border); padding: 0 32px; margin: 0 -32px 24px; background: var(--card); transition: background 0.25s, border-color 0.25s; }
-    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 80px; }
     .header-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: 0.02em; }
-    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo { display: flex; align-items: center; gap: 20px; padding: 10px 0; }
     .logo-icon { width: 32px; height: 32px; background: #2a7fff15; border: 1px solid #2a7fff40; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    .logo-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.02em; color: var(--text); }
+    .logo-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.02em; color: #1a3a6b; }
     .logo-sub { font-size: 10px; color: #3a6a9a; letter-spacing: 0.1em; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #30c060; box-shadow: 0 0 8px #30c060; display: inline-block; }
     .status-label { font-size: 11px; color: #30c060; margin-left: 6px; }
 
-    
+
     .dark-toggle { background: none; border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; flex-shrink: 0; }
     .dark-toggle:hover { border-color: #2a9d5c; color: #2a9d5c; }
 
@@ -77,13 +77,16 @@
     .field { display: flex; flex-direction: column; }
     .field label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
     .field label .req { color: #e05c5c; margin-left: 3px; }
-    .field input, .field select { width: 100%; padding: 9px 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; outline: none; transition: border-color 0.2s, background 0.25s, color 0.25s; font-family: inherit; appearance: none; }
+    .field input, .field select { width: 100%; padding: 9px 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; outline: none; transition: border-color 0.2s, background 0.2s, background-color 0.2s, color 0.25s; font-family: inherit; appearance: none; }
     .field input:focus, .field select:focus { border-color: #2a9d5c; }
     .field input.field-error, .field select.field-error { border-color: #e05c5c; }
+    .field input.field-filled, .field select.field-filled { background-color: #e8faf0; }
+    body.dark .field input.field-filled, body.dark .field select.field-filled { background-color: #0d2a1a; }
     .field-error-msg { font-size: 10px; color: #e05c5c; margin-top: 4px; display: none; }
     .field-error-msg.show { display: block; }
     .field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a7a9a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
-    .btn { display: flex; align-items: center; gap: 8px; padding: 10px 24px; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: inherit; transition: opacity 0.2s; white-space: nowrap; }
+    .field select.field-filled { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a7a9a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); }
+    .btn { display: flex; align-items: center; gap: 8px; padding: 10px 24px; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: inherit; transition: opacity 0.2s, background 0.2s; white-space: nowrap; }
     .btn:hover:not(:disabled) { opacity: 0.85; }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .btn-blue { background: #2a9d5c; }
@@ -92,6 +95,10 @@
     .btn-ghost.active { background: #e8f8ee; border-color: #2a9d5c; color: #1a6640; }
     .btn-icon { background: none; border: 1px solid var(--border); border-radius: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; flex-shrink: 0; padding: 0; }
     .btn-icon:hover { border-color: #2a9d5c; color: #2a9d5c; }
+    /* Green submit button when active */
+    #btn-submit-clients:not(:disabled) { background: #22c55e; }
+    #btn-submit-clients:disabled { background: #c8d8e4; color: #8aa0b0; opacity: 1; cursor: not-allowed; }
+    body.dark #btn-submit-clients:disabled { background: #2a3a4a; color: #5a7a9a; }
     .sync-badge { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; }
     .sync-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .sync-text { font-size: 12px; font-weight: 500; }
@@ -127,7 +134,7 @@
     .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
     .progress-bar { height: 6px; background: var(--input-bg); border-radius: 3px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, #1a6abf, #2a7fff); border-radius: 3px; transition: width 0.3s ease; }
-    
+
     .form-progress-bar { height: 4px; background: var(--input-bg); border-radius: 3px; overflow: hidden; margin-top: 6px; }
     .form-progress-fill { height: 100%; background: linear-gradient(90deg, #1a9a4a, #2a9d5c); border-radius: 3px; transition: width 0.4s ease; }
     .form-progress-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
@@ -156,8 +163,6 @@
     .log-msg { font-size: 10px; color: var(--text-muted); }
     .log-time { font-size: 10px; color: #3a5a7a; }
     .log-empty { font-size: 11px; color: #3a5a7a; text-align: center; padding: 16px 0; }
-    .steps-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #30a050; margin-bottom: 8px; }
-    .steps-list { list-style: disc; padding-left: 14px; font-size: 11px; color: #5a9a6a; line-height: 1.9; }
     .spinning { animation: spin 1s linear infinite; }
     .btn-blue:not(:disabled) { background: #2a9d5c; }
     .btn-ibis:not(:disabled) { background: #25b865; }
@@ -165,14 +170,14 @@
     body.dark .btn-blue:disabled, body.dark .btn-ibis:disabled { background: #2a3a4a; color: #5a7a9a; }
     .btn-blue:not(:disabled):hover, .btn-ibis:not(:disabled):hover { opacity: 0.85; }
 
-    
+
     .tooltip-wrap { position: relative; display: inline-flex; align-items: center; }
     .tooltip-icon { width: 14px; height: 14px; border-radius: 50%; background: #2a7fff30; border: 1px solid #2a7fff60; color: #2a7fff; font-size: 9px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; cursor: default; font-style: normal; flex-shrink: 0; }
     .tooltip-popup { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2535; color: #e0e8f0; font-size: 10px; font-weight: 400; letter-spacing: 0; text-transform: none; padding: 5px 9px; border-radius: 5px; white-space: nowrap; z-index: 100; pointer-events: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
     .tooltip-popup::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: #1a2535; }
     .tooltip-wrap:hover .tooltip-popup { display: block; }
 
-    
+
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; width: 340px; max-width: 95vw; animation: fadeIn 0.2s ease; }
@@ -185,9 +190,20 @@
     .btn-modal-confirm { background: #2a9d5c; color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: opacity 0.15s; }
     .btn-modal-confirm:hover { opacity: 0.85; }
 
-    
+
     .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a2535; color: #e0e8f0; padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 300; animation: toastIn 0.25s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.3); border: 1px solid #2a9d5c; }
     .btn-actions-wrap { display: flex; align-items: center; gap: 8px; }
+
+    /* Actividad Reciente en tabs */
+    .recent-activity { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--section-border); }
+    .recent-activity-title { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2a9d5c; margin-bottom: 12px; }
+    .activity-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon { width: 28px; height: 28px; border-radius: 50%; background: #e8f8ee; border: 1px solid #2a9d5c30; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .activity-body { flex: 1; }
+    .activity-name { font-size: 12px; font-weight: 600; color: var(--text); }
+    .activity-msg { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .activity-time { font-size: 10px; color: #3a5a7a; margin-top: 2px; }
   </style>
 </head>
 <body>
@@ -207,12 +223,21 @@
 <header>
   <div class="header-inner">
     <div class="logo">
-      <img src="grupo-tesacom-logo.jpg" alt="Grupo Tesacom" style="height:52px;width:220px;object-fit:contain;object-position:left center;margin-left:48px;" />
+      <img src="C:\Users\apazos\Desktop\grupo-tesacom-logo.jpg" alt="Grupo Tesacom" style="height:60px;object-fit:contain;object-position:left center;" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex';" />
+      <div id="logo-fallback" style="display:none;align-items:center;gap:10px;">
+        <div class="logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a7fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div>
+          <div class="logo-title">Satellite Hub</div>
+          <div class="logo-sub">TESACOM GROUP</div>
+        </div>
+      </div>
     </div>
     <div style="display:flex;align-items:center;gap:16px">
-      <span class="header-title">Carga de altas y bajas</span>
+      <span class="header-title" style="color:#1a3a6b;font-family:'Syne',sans-serif;font-weight:700;">Carga de altas y bajas</span>
       <div style="display:flex;align-items:center"><span class="status-dot"></span><span class="status-label">n8n conectado</span></div>
-      
+
       <button class="dark-toggle" id="dark-toggle-btn" onclick="toggleDarkMode()" title="Cambiar modo oscuro/claro">
         <svg id="dark-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg id="dark-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -245,7 +270,25 @@
         <div class="form-grid">
           <div class="section-title">Informacion Principal</div>
 
-          
+          <!-- Pais -->
+          <div class="field">
+            <label>
+              Pais <span class="req">*</span>
+              <span class="tooltip-wrap">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-popup">Selecciona el país del cliente</span>
+              </span>
+            </label>
+            <select id="client-pais" onchange="checkClientForm();updateFieldFilled(this)">
+              <option value="">Seleccionar...</option>
+              <option value="3">Argentina</option>
+              <option value="4">Chile</option>
+              <option value="5">Paraguay</option>
+              <option value="6">Perú</option>
+            </select>
+          </div>
+
+          <!-- Nombre / Razon Social -->
           <div class="field span-2">
             <label>
               Nombre / Razon Social <span class="req">*</span>
@@ -254,95 +297,162 @@
                 <span class="tooltip-popup">Nombre legal completo de la empresa</span>
               </span>
             </label>
-            <input id="client-nombre" type="text" placeholder="Ej: Empresa S.A." oninput="checkClientForm()" />
+            <input id="client-nombre" type="text" placeholder="Ej: Empresa S.A." oninput="checkClientForm();updateFieldFilled(this)" />
           </div>
 
-          
-          <div class="field">
-            <label>
-              Tipo de Documento <span class="req">*</span>
-              <span class="tooltip-wrap">
-                <span class="tooltip-icon">?</span>
-                <span class="tooltip-popup">Documento fiscal del país</span>
-              </span>
-            </label>
-            <select id="client-tipo-doc" onchange="checkClientForm()">
-              <option value="">Seleccionar...</option>
-              <option>CUIT</option><option>RUT</option><option>NIT</option><option>RFC</option><option>RUC</option><option>Otro</option>
-            </select>
-          </div>
-
-          
+          <!-- Numero de Documento -->
           <div class="field">
             <label>
               Numero de Documento <span class="req">*</span>
               <span class="tooltip-wrap">
                 <span class="tooltip-icon">?</span>
-                <span class="tooltip-popup">Formato: XX-XXXXXXXX-X</span>
+                <span class="tooltip-popup">Código de identificación fiscal</span>
               </span>
             </label>
-            <input id="client-num-doc" type="text" placeholder="XX-XXXXXXXX-X" oninput="onCuitInput(this); checkClientForm()" maxlength="13" />
-            <span class="field-error-msg" id="cuit-error">Formato incorrecto. Use XX-XXXXXXXX-X</span>
+            <input id="client-num-doc" type="text" placeholder="Ej: 20-12345678-9" oninput="checkClientForm();updateFieldFilled(this)" />
           </div>
 
+          <!-- Categoria Fiscal -->
           <div class="field">
             <label>Categoria Fiscal</label>
-            <select><option value="">Seleccionar...</option><option>Responsable Inscripto</option><option>Monotributista</option><option>Exento</option><option>Consumidor Final</option></select>
+            <input id="client-categoria-fiscal" type="text" placeholder="Ej: Responsable Inscripto" oninput="updateFieldFilled(this)" />
           </div>
+
+          <!-- Mercado -->
           <div class="field">
             <label>Mercado</label>
-            <select><option value="">Seleccionar...</option><option>Corporativo</option><option>Gobierno</option><option>Maritimo</option><option>Aeronautico</option><option>Mineria</option><option>Oil &amp; Gas</option></select>
+            <select id="client-mercado" onchange="updateFieldFilled(this)">
+              <option value="">Seleccionar...</option>
+              <option value="AGRICULTURE">Agricultura</option>
+              <option value="AID AND NGO">Ayuda y ONG</option>
+              <option value="BANKING">Banca</option>
+              <option value="CABLE LAYER">Capa de Cable</option>
+              <option value="CIVIL GOVERNMENT">Gobierno Civil</option>
+              <option value="CONSTRUCTION">Construcción</option>
+              <option value="DREDGE">Dragado</option>
+              <option value="EDUCATION">Educación</option>
+              <option value="ENVIRONMENTAL MONITORING">Monitoreo Ambiental</option>
+              <option value="FISHING">Pesca</option>
+              <option value="GOV HEALTH/EDUC">Salud Gov/Educación</option>
+              <option value="HEALTHCARE">Salud</option>
+              <option value="INSURANCE">Seguros</option>
+              <option value="LEISURE">Ocio</option>
+              <option value="LOCAL GOVT">Gobierno Local</option>
+              <option value="MANUFACTURING">Manufactura</option>
+              <option value="MEDIA">Medios</option>
+              <option value="MERCHANT">Comerciante</option>
+              <option value="MILITARY GOVERNMENT">Gobierno Militar</option>
+              <option value="MINING">Minería</option>
+              <option value="NATIONAL GOVT">Gobierno Nacional</option>
+              <option value="OFFSHORE SUPPLY VESSELS">Buques Offshore</option>
+              <option value="OIL AND GAS">Petróleo y Gas</option>
+              <option value="OTHER">Otro</option>
+              <option value="PASSENGER OR FERRY">Pasajeros o Ferry</option>
+              <option value="TRANSPORTATION AND LOGISTICS">Transporte y Logística</option>
+              <option value="TRAVEL AND TOURISM">Viajes y Turismo</option>
+              <option value="TUG">Remolcador</option>
+              <option value="UTILITIES">Utilities</option>
+            </select>
           </div>
 
           <div class="section-title">Contacto</div>
 
-          
+          <!-- Email -->
           <div class="field">
             <label>
-              Email <span class="req">*</span>
+              Email
               <span class="tooltip-wrap">
                 <span class="tooltip-icon">?</span>
                 <span class="tooltip-popup">Email principal de contacto</span>
               </span>
             </label>
-            <input id="client-email" type="email" placeholder="contacto@empresa.com" oninput="checkClientForm()" />
+            <input id="client-email" type="email" placeholder="contacto@empresa.com" oninput="updateFieldFilled(this)" />
             <span class="field-error-msg" id="email-error">Email inválido. Debe contener @ y punto</span>
           </div>
 
-          <div class="field"><label>Telefono</label><input type="text" placeholder="+54 11 XXXX-XXXX" /></div>
-          <div class="field"><label>Comercial Asignado</label><input type="text" placeholder="Nombre del comercial" /></div>
+          <!-- Telefono -->
+          <div class="field">
+            <label>Telefono</label>
+            <input id="client-telefono" type="text" placeholder="+54 11 XXXX-XXXX" oninput="updateFieldFilled(this)" />
+          </div>
+
+          <!-- Comercial Asignado -->
+          <div class="field">
+            <label>Comercial Asignado</label>
+            <select id="client-comercial" onchange="updateFieldFilled(this)">
+              <option value="">Seleccionar...</option>
+              <option value="ADOVAL">ADOVAL</option>
+              <option value="AREBATTA">AREBATTA</option>
+              <option value="ABRAVO">ABRAVO</option>
+              <option value="RMOLINA">RMOLINA</option>
+            </select>
+          </div>
 
           <div class="section-title">Ubicacion</div>
-          <div class="field span-2"><label>Direccion</label><input type="text" placeholder="Calle, numero, piso" /></div>
-          <div class="field"><label>Pais</label><select><option value="">Seleccionar...</option><option>Argentina</option><option>Brasil</option><option>Chile</option><option>Colombia</option><option>Mexico</option><option>Peru</option><option>Uruguay</option><option>Estados Unidos</option><option>Otro</option></select></div>
-
-          <div class="section-title">Configuracion</div>
-          <div class="field"><label>Tipo de Formulario</label><select><option value="">Seleccionar...</option><option>Estandar</option><option>Corporativo</option><option>Enterprise</option></select></div>
-          <div class="field"><label>Categoria</label><input type="text" placeholder="Ej: Premium, Standard..." /></div>
+          <!-- Direccion -->
+          <div class="field span-2">
+            <label>Direccion</label>
+            <input id="client-direccion" type="text" placeholder="Calle, número, piso" oninput="updateFieldFilled(this)" />
+          </div>
         </div>
 
-        
+
         <div style="margin-top:20px">
-          <div class="form-progress-label" id="form-progress-label">0 de 4 campos obligatorios completados</div>
+          <div class="form-progress-label" id="form-progress-label">0 de 3 campos obligatorios completados</div>
           <div class="form-progress-bar"><div class="form-progress-fill" id="form-progress-fill" style="width:0%"></div></div>
         </div>
 
         <div class="bottom-bar">
           <div id="badge-clients" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
           <div class="btn-actions-wrap">
-            
+
             <button class="btn btn-ghost" onclick="resetClientForm()" style="height:42px">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg>
               Limpiar
             </button>
-            
+
             <button class="btn-icon" onclick="copyClientJSON()" title="Copiar datos como JSON">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             </button>
-            <button id="btn-submit-clients" class="btn btn-blue" onclick="openModal('clients')" disabled>
+            <button id="btn-submit-clients" class="btn" onclick="openModal('clients')" disabled>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Sincronizar con ODOO + IBIS
+              Enviar / Sincronizar
             </button>
+          </div>
+        </div>
+
+        <!-- Actividad Reciente - Clientes -->
+        <div class="recent-activity">
+          <div class="recent-activity-title">Actividad Reciente</div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Iridium</div>
+              <div class="activity-msg">Lorem ipsum alta de cliente completada</div>
+              <div class="activity-time">hace 2 horas</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Inmarsat</div>
+              <div class="activity-msg">Lorem ipsum sincronización exitosa</div>
+              <div class="activity-time">hace 5 horas</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Starlink</div>
+              <div class="activity-msg">Lorem ipsum actualización de plan</div>
+              <div class="activity-time">hace 1 día</div>
+            </div>
           </div>
         </div>
       </div>
@@ -439,6 +549,41 @@
             </div>
           </div>
         </div>
+
+        <!-- Actividad Reciente - Equipos -->
+        <div class="recent-activity">
+          <div class="recent-activity-title">Actividad Reciente</div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Iridium</div>
+              <div class="activity-msg">Lorem ipsum alta de cliente completada</div>
+              <div class="activity-time">hace 2 horas</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Inmarsat</div>
+              <div class="activity-msg">Lorem ipsum sincronización exitosa</div>
+              <div class="activity-time">hace 5 horas</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Starlink</div>
+              <div class="activity-msg">Lorem ipsum actualización de plan</div>
+              <div class="activity-time">hace 1 día</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- PLANS -->
@@ -517,8 +662,43 @@
           <div id="badge-plans" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
           <button class="btn btn-blue" onclick="openModal('plans')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            Sincronizar con ODOO + IBIS
+            Sincronizar con IBIS
           </button>
+        </div>
+
+        <!-- Actividad Reciente - Planes -->
+        <div class="recent-activity">
+          <div class="recent-activity-title">Actividad Reciente</div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Iridium</div>
+              <div class="activity-msg">Lorem ipsum alta de cliente completada</div>
+              <div class="activity-time">hace 2 horas</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Inmarsat</div>
+              <div class="activity-msg">Lorem ipsum sincronización exitosa</div>
+              <div class="activity-time">hace 5 horas</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="activity-body">
+              <div class="activity-name">Equipo Starlink</div>
+              <div class="activity-msg">Lorem ipsum actualización de plan</div>
+              <div class="activity-time">hace 1 día</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -527,10 +707,6 @@
     <div class="sidebar">
       <div class="sidebar-card">
         <div class="sidebar-label">DESTINOS</div>
-        <div class="dest-row" id="dest-odoo">
-          <div><span class="dest-name">ODOO</span><span class="dest-na" id="odoo-na" style="display:none">no aplica</span></div>
-          <div class="dest-status"><div class="dest-dot" id="dot-odoo" style="background:#3a5a7a"></div><span class="dest-status-text" id="label-odoo" style="color:#3a5a7a">Verificando...</span></div>
-        </div>
         <div class="dest-row">
           <div><span class="dest-name">IBIS</span></div>
           <div class="dest-status"><div class="dest-dot" id="dot-ibis" style="background:#3a5a7a"></div><span class="dest-status-text" id="label-ibis" style="color:#3a5a7a">Verificando...</span></div>
@@ -538,7 +714,7 @@
         <div class="via-box"><div class="via-label">VIA</div><div class="via-value">n8n Webhooks</div></div>
       </div>
 
-      
+
       <div class="sidebar-card">
         <div class="sidebar-header">
           <div class="sidebar-label" style="margin-bottom:0">ACTIVIDAD RECIENTE</div>
@@ -570,11 +746,6 @@ function switchTab(tab,btn){
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   currentTab=tab;
-  updateOdooIndicator();
-}
-function updateOdooIndicator(){
-  const e=currentTab==='equipment';
-  document.getElementById('dest-odoo').style.display=e?'none':'flex';
 }
 
 /* ============================================================
@@ -681,7 +852,7 @@ async function startBulkSend(){
     document.getElementById('progress-fill').style.width=pct+'%';
     document.getElementById('progress-pct').textContent=pct+'%';
     document.getElementById('progress-text').textContent='Enviando equipo '+(i+1)+' de '+bulkRows.length+'...';
-    
+
     // await fetch('https://tu-n8n.com/webhook/equipos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vendor,...bulkRows[i]})});
     await new Promise(r=>setTimeout(r,200));
     const success=Math.random()>0.08;
@@ -729,11 +900,9 @@ function setBadge(k,s){
   b.querySelector('.sync-text').style.color=c.dot;
   b.querySelector('.sync-text').textContent=c.text;
 }
-const checkSvg=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#30c060" stroke-width="2.5" style="margin-left:4px;vertical-align:middle"><polyline points="20 6 9 17 4 12"/></svg>`;
-const xSvg=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e05c5c" stroke-width="2.5" style="margin-left:4px;vertical-align:middle"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
 
 /* ============================================================
-   FEATURE 3: CONFIRMATION MODAL
+   CONFIRMATION MODAL
    ============================================================ */
 let pendingSubmitTab = null;
 const tabDisplayNames = {clients:'Clientes', equipment:'Equipos', plans:'Planes', 'equipment-bulk':'Bulk Equipos'};
@@ -757,42 +926,51 @@ document.getElementById('confirm-modal').addEventListener('click', function(e) {
 });
 
 /* ============================================================
-   SUBMIT HANDLER
+   SUBMIT HANDLER - REAL n8n WEBHOOK
    ============================================================ */
-// Reemplazar con la URL que da n8n al activar el workflow
-const N8N_WEBHOOK_CLIENTES = 'PEGAR_URL_WEBHOOK_N8N_CLIENTES';
+const WEBHOOK_URL = 'https://TU-N8N-URL/webhook/clientes'; // TODO: reemplazar con URL real de n8n
 const N8N_WEBHOOK_EQUIPOS  = 'PEGAR_URL_WEBHOOK_N8N_EQUIPOS';
 const N8N_WEBHOOK_PLANES   = 'PEGAR_URL_WEBHOOK_N8N_PLANES';
 
 function getWebhookUrl(k) {
-  if (k === 'clients')   return N8N_WEBHOOK_CLIENTES;
+  if (k === 'clients')   return WEBHOOK_URL;
   if (k === 'equipment') return N8N_WEBHOOK_EQUIPOS;
   return N8N_WEBHOOK_PLANES;
 }
 
 function getFormPayload(k) {
   if (k !== 'clients') return {};
+  const pais = document.getElementById('client-pais')?.value || '';
   return {
-    nombre:  document.getElementById('client-nombre')?.value   || '',
-    tipoDoc: document.getElementById('client-tipo-doc')?.value || '',
-    numDoc:  document.getElementById('client-num-doc')?.value  || '',
-    email:   document.getElementById('client-email')?.value    || ''
+    CustomerName: document.getElementById('client-nombre')?.value || '',
+    ParentCustomerID: parseInt(pais) || null,
+    TaxCode: document.getElementById('client-num-doc')?.value || '',
+    Description: document.getElementById('client-categoria-fiscal')?.value || '',
+    Industry: document.getElementById('client-mercado')?.value || '',
+    EmailGeneral: document.getElementById('client-email')?.value || '',
+    MainContactPhone: document.getElementById('client-telefono')?.value || '',
+    AccountManagerCode: document.getElementById('client-comercial')?.value || '',
+    Location: document.getElementById('client-direccion')?.value || '',
+    ShowCdrsOnInvoice: false,
+    MainAddressSameAsParentMainAddress: false,
+    BillingAddressSameAsMainAddress: false
   };
 }
 
 async function handleSubmit(k) {
   const url = getWebhookUrl(k);
   setBadge(k, 'loading');
-  if (!url || url.startsWith('PEGAR_URL')) {
+  if (!url || url.startsWith('PEGAR_URL') || url.includes('TU-N8N-URL')) {
     setTimeout(() => {
       setBadge(k, 'success'); addLog(k, 1, 0, 1);
-      showToast('Modo demo â€” pegar URL del webhook de n8n en el codigo');
+      showToast('Modo demo - pegar URL del webhook de n8n en el codigo');
       setTimeout(() => setBadge(k, 'idle'), 3000);
     }, 1200);
     return;
   }
   try {
-    const res  = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(getFormPayload(k)) });
+    const payload = getFormPayload(k);
+    const res  = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
     const data = await res.json().catch(() => ({}));
     const ok   = res.ok && data.ok !== false;
     setBadge(k, ok ? 'success' : 'error'); addLog(k, ok ? 1 : 0, ok ? 0 : 1, 1);
@@ -804,7 +982,7 @@ async function handleSubmit(k) {
 }
 
 /* ============================================================
-   FEATURE 7: localStorage PERSISTENCE FOR LOG
+   localStorage PERSISTENCE FOR LOG
    ============================================================ */
 const LS_KEY = 'satelliteHub_logItems';
 const MAX_LOG = 20;
@@ -832,9 +1010,9 @@ let logItems = (function() {
   const stored = loadLogFromStorage();
   if (stored && stored.length > 0) return stored;
   return [
-    {tab:'Equipo',time:'10:42:15',msg:'Enviado a IBIS',ok:true,vendor:'Iridium'},
-    {tab:'Equipo',time:'10:38:50',msg:'Enviado a IBIS',ok:true,vendor:'GX'},
-    {tab:'Equipo',time:'10:31:22',msg:'Enviado a IBIS',ok:true,vendor:'Starlink'}
+    {tab:'Equipo Iridium',time:'hace 2 horas',msg:'Lorem ipsum alta de cliente completada',ok:true},
+    {tab:'Equipo Inmarsat',time:'hace 5 horas',msg:'Lorem ipsum sincronización exitosa',ok:true},
+    {tab:'Equipo Starlink',time:'hace 1 día',msg:'Lorem ipsum actualización de plan',ok:true}
   ];
 })();
 
@@ -850,14 +1028,14 @@ function addLog(k,ok,err,total){
   let msg;
   if(k==='equipment-bulk'){msg=ok+'/'+total+' enviados a IBIS'+(err>0?' - '+err+' errores':'');}
   else if(k==='equipment'){msg=ok?'Enviado a IBIS':'Error en IBIS';}
-  else{msg=ok?'Enviado a ODOO + IBIS':'Error - revisar webhook';}
+  else{msg=ok?'Enviado a IBIS':'Error - revisar webhook';}
   logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0},...logItems].slice(0, MAX_LOG);
   renderLog();
-  saveLogToStorage(); 
+  saveLogToStorage();
 }
 
 /* ============================================================
-   FEATURE 6: EXPORT ACTIVITY LOG TO EXCEL
+   EXPORT ACTIVITY LOG TO EXCEL
    ============================================================ */
 function exportLogToExcel() {
   if (!logItems.length) { showToast('Sin actividad para exportar'); return; }
@@ -876,106 +1054,66 @@ function exportLogToExcel() {
 }
 
 /* ============================================================
-   FEATURE 2: AUTO-FORMAT CUIT (XX-XXXXXXXX-X)
+   FIELD FILL VISUAL FEEDBACK
    ============================================================ */
-function onCuitInput(input) {
-  // Strip non-digits
-  let digits = input.value.replace(/\D/g, '');
-  if (digits.length > 11) digits = digits.slice(0, 11);
-  let formatted = digits;
-  if (digits.length > 2) {
-    formatted = digits.slice(0,2) + '-' + digits.slice(2);
+function updateFieldFilled(el) {
+  if (el.value && el.value.trim() !== '') {
+    el.classList.add('field-filled');
+  } else {
+    el.classList.remove('field-filled');
   }
-  if (digits.length > 10) {
-    formatted = digits.slice(0,2) + '-' + digits.slice(2,10) + '-' + digits.slice(10);
-  }
-  input.value = formatted;
 }
 
 /* ============================================================
-   FEATURE 9: EMAIL AND CUIT VALIDATION
+   EMAIL VALIDATION
    ============================================================ */
 function isValidEmail(email) {
   return email.includes('@') && email.includes('.') && email.indexOf('@') < email.lastIndexOf('.');
 }
-function isValidCuit(cuit) {
-  return /^\d{2}-\d{8}-\d$/.test(cuit);
-}
 
 /* ============================================================
-   FEATURE 1: PROGRESS COUNTER
+   PROGRESS COUNTER (3 required fields: Pais, Nombre, Documento)
    ============================================================ */
 function updateProgressCounter(filledCount) {
   const label = document.getElementById('form-progress-label');
   const fill = document.getElementById('form-progress-fill');
-  if (label) label.textContent = filledCount + ' de 4 campos obligatorios completados';
-  if (fill) fill.style.width = (filledCount / 4 * 100) + '%';
+  if (label) label.textContent = filledCount + ' de 3 campos obligatorios completados';
+  if (fill) fill.style.width = (filledCount / 3 * 100) + '%';
 }
 
 /* ============================================================
    CLIENT FORM VALIDATION
    ============================================================ */
 function checkClientForm() {
+  const pais = document.getElementById('client-pais');
   const nombre = document.getElementById('client-nombre');
-  const tipoDoc = document.getElementById('client-tipo-doc');
   const numDoc = document.getElementById('client-num-doc');
-  const email = document.getElementById('client-email');
-  const cuitErr = document.getElementById('cuit-error');
-  const emailErr = document.getElementById('email-error');
 
+  const paisVal = pais ? pais.value.trim() : '';
   const nombreVal = nombre ? nombre.value.trim() : '';
-  const tipoVal = tipoDoc ? tipoDoc.value.trim() : '';
   const numVal = numDoc ? numDoc.value.trim() : '';
-  const emailVal = email ? email.value.trim() : '';
 
-  
-  let emailOk = emailVal !== '';
-  let emailFormatOk = true;
-  if (emailVal !== '') {
-    emailFormatOk = isValidEmail(emailVal);
-    if (!emailFormatOk) {
-      email.classList.add('field-error');
-      if (emailErr) emailErr.classList.add('show');
-    } else {
-      email.classList.remove('field-error');
-      if (emailErr) emailErr.classList.remove('show');
-    }
-  } else {
-    email.classList.remove('field-error');
-    if (emailErr) emailErr.classList.remove('show');
-  }
-
-  
-  let cuitFormatOk = true;
-  if (numVal !== '' && tipoVal === 'CUIT') {
-    cuitFormatOk = isValidCuit(numVal);
-    if (!cuitFormatOk) {
-      numDoc.classList.add('field-error');
-      if (cuitErr) cuitErr.classList.add('show');
-    } else {
-      numDoc.classList.remove('field-error');
-      if (cuitErr) cuitErr.classList.remove('show');
-    }
-  } else {
-    numDoc.classList.remove('field-error');
-    if (cuitErr) cuitErr.classList.remove('show');
-    cuitFormatOk = true;
-  }
-
-  
-  const filled = [nombreVal, tipoVal, numVal, emailVal].filter(v => v !== '').length;
+  // Count filled required fields
+  const filled = [paisVal, nombreVal, numVal].filter(v => v !== '').length;
   updateProgressCounter(filled);
 
-  // All required: filled AND format valid
-  const allFilled = nombreVal && tipoVal && numVal && emailVal;
-  const allValid = emailFormatOk && cuitFormatOk;
-  const ok = allFilled && allValid;
+  // All 3 required must be filled
+  const allFilled = paisVal && nombreVal && numVal;
 
   const btn = document.getElementById('btn-submit-clients');
-  if (btn) btn.disabled = !ok;
+  if (btn) {
+    btn.disabled = !allFilled;
+    if (allFilled) {
+      btn.style.background = '#22c55e';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+  }
 
   const b = document.getElementById('badge-clients');
-  if (ok) {
+  if (allFilled) {
     b.style.background='#e8faf0'; b.style.border='1px solid #30c060';
     b.querySelector('.sync-dot').style.background='#30c060';
     b.querySelector('.sync-dot').style.boxShadow='0 0 8px #30c060';
@@ -991,42 +1129,29 @@ function checkClientForm() {
 }
 
 /* ============================================================
-   FEATURE 4: RESET CLIENT FORM
+   RESET CLIENT FORM
    ============================================================ */
 function resetClientForm() {
-  const nombre = document.getElementById('client-nombre');
-  const tipoDoc = document.getElementById('client-tipo-doc');
-  const numDoc = document.getElementById('client-num-doc');
-  const email = document.getElementById('client-email');
-  if (nombre) nombre.value = '';
-  if (tipoDoc) tipoDoc.value = '';
-  if (numDoc) { numDoc.value = ''; numDoc.classList.remove('field-error'); }
-  if (email) { email.value = ''; email.classList.remove('field-error'); }
-  // Clear error messages
-  const cuitErr = document.getElementById('cuit-error');
+  const ids = ['client-pais','client-nombre','client-num-doc','client-categoria-fiscal',
+               'client-mercado','client-email','client-telefono','client-comercial','client-direccion'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.value = '';
+      el.classList.remove('field-error', 'field-filled');
+    }
+  });
   const emailErr = document.getElementById('email-error');
-  if (cuitErr) cuitErr.classList.remove('show');
   if (emailErr) emailErr.classList.remove('show');
-  // Reset other non-required fields in clients tab
-  const clientTab = document.getElementById('tab-clients');
-  if (clientTab) {
-    clientTab.querySelectorAll('input:not(#client-nombre):not(#client-num-doc):not(#client-email)').forEach(inp => { inp.value = ''; });
-    clientTab.querySelectorAll('select:not(#client-tipo-doc)').forEach(sel => { sel.value = ''; });
-  }
   checkClientForm();
 }
 
 /* ============================================================
-   FEATURE 8: COPY CLIENT JSON TO CLIPBOARD + TOAST
+   COPY CLIENT JSON TO CLIPBOARD
    ============================================================ */
 function copyClientJSON() {
-  const data = {
-    nombre: (document.getElementById('client-nombre')||{}).value || '',
-    tipoDocumento: (document.getElementById('client-tipo-doc')||{}).value || '',
-    numeroDocumento: (document.getElementById('client-num-doc')||{}).value || '',
-    email: (document.getElementById('client-email')||{}).value || ''
-  };
-  const jsonStr = JSON.stringify(data, null, 2);
+  const payload = getFormPayload('clients');
+  const jsonStr = JSON.stringify(payload, null, 2);
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(jsonStr).then(() => showToast('¡Copiado!')).catch(() => fallbackCopy(jsonStr));
   } else {
@@ -1064,12 +1189,13 @@ function checkEquipForm(){
 }
 
 /* ============================================================
-   PING DESTINATIONS
+   PING DESTINATIONS (IBIS only)
    ============================================================ */
-const DEST_URLS={odoo:'https://www.tesacom.net/odoo',ibis:'https://ibis.tesacom.net/Welcome.aspx'};
+const DEST_URLS={ibis:'https://ibis.tesacom.net/Welcome.aspx'};
 async function pingDest(id){
   const dot=document.getElementById('dot-'+id);
   const lbl=document.getElementById('label-'+id);
+  if (!dot || !lbl) return;
   try{
     const ctrl=new AbortController();
     const t=setTimeout(()=>ctrl.abort(),5000);
@@ -1082,12 +1208,12 @@ async function pingDest(id){
     lbl.style.color='#e05c5c';lbl.textContent='Offline';
   }
 }
-function pingAll(){pingDest('odoo');pingDest('ibis');}
+function pingAll(){pingDest('ibis');}
 pingAll();
 setInterval(pingAll,30000);
 
 /* ============================================================
-   FEATURE 10: DARK MODE TOGGLE
+   DARK MODE TOGGLE
    ============================================================ */
 function toggleDarkMode() {
   const isDark = document.body.classList.toggle('dark');
