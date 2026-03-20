@@ -8,12 +8,12 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "id": "webhook-001",
       "name": "Webhook Clientes",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 300],
-      "webhookId": "tesacom-clientes-001"
+      "position": [180, 300],
+      "webhookId": "tesacom-clientes-webhook"
     },
     {
       "parameters": {
@@ -31,11 +31,11 @@
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0002-0002-0002-000000000002",
+      "id": "ibis-token-002",
       "name": "Obtener Token IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [480, 300]
+      "position": [400, 300]
     },
     {
       "parameters": {
@@ -47,19 +47,23 @@
             {
               "name": "Authorization",
               "value": "=Bearer {{ $('Obtener Token IBIS').item.json.access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
             }
           ]
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={{ JSON.stringify({ Name: $('Webhook Clientes').item.json.body.nombre, TaxID: $('Webhook Clientes').item.json.body.numDoc, Email: $('Webhook Clientes').item.json.body.email, Phone: $('Webhook Clientes').item.json.body.telefono }) }}",
+        "jsonBody": "={{ JSON.stringify({ Name: $('Webhook Clientes').item.json.body.nombre, TaxID: $('Webhook Clientes').item.json.body.numDoc, Email: $('Webhook Clientes').item.json.body.email, Phone: $('Webhook Clientes').item.json.body.telefono }) }}",
         "options": {}
       },
-      "id": "a1b2c3d4-0003-0003-0003-000000000003",
+      "id": "ibis-create-003",
       "name": "Crear Cliente en IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [720, 160]
+      "position": [640, 160]
     },
     {
       "parameters": {
@@ -71,45 +75,63 @@
             {
               "name": "Authorization",
               "value": "Bearer REEMPLAZAR_API_KEY_ODOO"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
             }
           ]
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={{ JSON.stringify({ name: $('Webhook Clientes').item.json.body.nombre, vat: $('Webhook Clientes').item.json.body.numDoc, email: $('Webhook Clientes').item.json.body.email, is_company: true }) }}",
+        "jsonBody": "={{ JSON.stringify({ name: $('Webhook Clientes').item.json.body.nombre, vat: $('Webhook Clientes').item.json.body.numDoc, email: $('Webhook Clientes').item.json.body.email, phone: $('Webhook Clientes').item.json.body.telefono, is_company: true }) }}",
         "options": {}
       },
-      "id": "a1b2c3d4-0004-0004-0004-000000000004",
+      "id": "odoo-create-004",
       "name": "Crear Cliente en ODOO",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [720, 440]
+      "position": [640, 440]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "merge-005",
+      "name": "Combinar Resultados",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [880, 300]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, ibis: $('Crear Cliente en IBIS').item.json, odoo: $('Crear Cliente en ODOO').item.json }) }}",
-        "options": {}
+        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Cliente sincronizado correctamente', ibis: $input.all()[0].json, odoo: $input.all()[1].json }) }}",
+        "options": {
+          "responseCode": 200
+        }
       },
-      "id": "a1b2c3d4-0005-0005-0005-000000000005",
+      "id": "respuesta-ok-006",
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [960, 300]
+      "position": [1100, 300]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={ \"ok\": false, \"error\": \"Error al sincronizar\" }",
+        "responseBody": "={ \"ok\": false, \"error\": \"Error al sincronizar cliente\" }",
         "options": {
           "responseCode": 500
         }
       },
-      "id": "a1b2c3d4-0006-0006-0006-000000000006",
+      "id": "respuesta-error-007",
       "name": "Respuesta Error",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [960, 500]
+      "position": [1100, 500]
     }
   ],
   "connections": {
@@ -131,11 +153,18 @@
     "Crear Cliente en IBIS": {
       "main": [
         [
-          { "node": "Respuesta OK", "type": "main", "index": 0 }
+          { "node": "Combinar Resultados", "type": "main", "index": 0 }
         ]
       ]
     },
     "Crear Cliente en ODOO": {
+      "main": [
+        [
+          { "node": "Combinar Resultados", "type": "main", "index": 1 }
+        ]
+      ]
+    },
+    "Combinar Resultados": {
       "main": [
         [
           { "node": "Respuesta OK", "type": "main", "index": 0 }
@@ -146,8 +175,11 @@
   "settings": {
     "executionOrder": "v1",
     "saveManualExecutions": true,
-    "callerPolicy": "workflowsFromSameOwner"
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
   },
   "staticData": null,
-  "tags": []
+  "tags": [
+    { "name": "Tesacom" }
+  ]
 }
