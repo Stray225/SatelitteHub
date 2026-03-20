@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -759,20 +759,48 @@ document.getElementById('confirm-modal').addEventListener('click', function(e) {
 /* ============================================================
    SUBMIT HANDLER
    ============================================================ */
-function handleSubmit(k){
-  setBadge(k,'loading');
-  const iconEl = document.getElementById('tab-icon-'+k);
-  if (iconEl) iconEl.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f0a030" stroke-width="2" class="spinning" style="margin-left:4px;vertical-align:middle"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
-  setTimeout(()=>{
-    const ok=Math.random()>0.1;
-    setBadge(k,ok?'success':'error');
-    if (iconEl) iconEl.innerHTML=ok?checkSvg:xSvg;
-    addLog(k,ok?1:0,ok?0:1,1);
-    setTimeout(()=>{
-      setBadge(k,'idle');
-      if (iconEl) iconEl.innerHTML='';
-    },3000);
-  },1800);
+// Reemplazar con la URL que da n8n al activar el workflow
+const N8N_WEBHOOK_CLIENTES = 'PEGAR_URL_WEBHOOK_N8N_CLIENTES';
+const N8N_WEBHOOK_EQUIPOS  = 'PEGAR_URL_WEBHOOK_N8N_EQUIPOS';
+const N8N_WEBHOOK_PLANES   = 'PEGAR_URL_WEBHOOK_N8N_PLANES';
+
+function getWebhookUrl(k) {
+  if (k === 'clients')   return N8N_WEBHOOK_CLIENTES;
+  if (k === 'equipment') return N8N_WEBHOOK_EQUIPOS;
+  return N8N_WEBHOOK_PLANES;
+}
+
+function getFormPayload(k) {
+  if (k !== 'clients') return {};
+  return {
+    nombre:  document.getElementById('client-nombre')?.value   || '',
+    tipoDoc: document.getElementById('client-tipo-doc')?.value || '',
+    numDoc:  document.getElementById('client-num-doc')?.value  || '',
+    email:   document.getElementById('client-email')?.value    || ''
+  };
+}
+
+async function handleSubmit(k) {
+  const url = getWebhookUrl(k);
+  setBadge(k, 'loading');
+  if (!url || url.startsWith('PEGAR_URL')) {
+    setTimeout(() => {
+      setBadge(k, 'success'); addLog(k, 1, 0, 1);
+      showToast('Modo demo â€” pegar URL del webhook de n8n en el codigo');
+      setTimeout(() => setBadge(k, 'idle'), 3000);
+    }, 1200);
+    return;
+  }
+  try {
+    const res  = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(getFormPayload(k)) });
+    const data = await res.json().catch(() => ({}));
+    const ok   = res.ok && data.ok !== false;
+    setBadge(k, ok ? 'success' : 'error'); addLog(k, ok ? 1 : 0, ok ? 0 : 1, 1);
+    if (ok) showToast('Sincronizado correctamente');
+  } catch(e) {
+    setBadge(k, 'error'); addLog(k, 0, 1, 1); showToast('Error de conexion con n8n');
+  }
+  setTimeout(() => setBadge(k, 'idle'), 3000);
 }
 
 /* ============================================================

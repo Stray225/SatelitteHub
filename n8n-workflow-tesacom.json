@@ -1,0 +1,156 @@
+{
+  "name": "Tesacom - Sync Clientes ODOO + IBIS",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tesacom-clientes",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-clientes",
+      "name": "Webhook Clientes",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "tesacom-clientes"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ibistesacom.satcomhost.com/identity/connect/token",
+        "authentication": "none",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "grant_type",    "value": "client_credentials" },
+            { "name": "client_id",     "value": "REEMPLAZAR_CON_TU_CLIENT_ID" },
+            { "name": "client_secret", "value": "REEMPLAZAR_CON_TU_CLIENT_SECRET" },
+            { "name": "scope",         "value": "ibisApi" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-ibis-token",
+      "name": "Obtener Token IBIS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ibistesacom.satcomhost.com/api/v1/CustomerDetails",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Obtener Token IBIS').item.json.access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"Name\": \"{{ $('Webhook Clientes').item.json.body.nombre }}\",\n  \"TaxID\": \"{{ $('Webhook Clientes').item.json.body.numDoc }}\",\n  \"Email\": \"{{ $('Webhook Clientes').item.json.body.email }}\",\n  \"Phone\": \"{{ $('Webhook Clientes').item.json.body.telefono }}\",\n  \"Country\": \"{{ $('Webhook Clientes').item.json.body.pais }}\",\n  \"Address\": \"{{ $('Webhook Clientes').item.json.body.direccion }}\",\n  \"CustomerCode\": \"{{ $('Webhook Clientes').item.json.body.numDoc }}\",\n  \"TaxCategory\": \"{{ $('Webhook Clientes').item.json.body.categoriaFiscal }}\"\n}",
+        "options": {}
+      },
+      "id": "create-ibis-customer",
+      "name": "Crear Cliente en IBIS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [720, 180]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.tesacom.net/odoo/api/res.partner",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer REEMPLAZAR_CON_TU_API_KEY_ODOO"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"name\": \"{{ $('Webhook Clientes').item.json.body.nombre }}\",\n  \"vat\": \"{{ $('Webhook Clientes').item.json.body.numDoc }}\",\n  \"email\": \"{{ $('Webhook Clientes').item.json.body.email }}\",\n  \"phone\": \"{{ $('Webhook Clientes').item.json.body.telefono }}\",\n  \"street\": \"{{ $('Webhook Clientes').item.json.body.direccion }}\",\n  \"country_id\": \"{{ $('Webhook Clientes').item.json.body.pais }}\",\n  \"is_company\": true,\n  \"l10n_latam_identification_type_id\": \"{{ $('Webhook Clientes').item.json.body.tipoDoc }}\",\n  \"x_market\": \"{{ $('Webhook Clientes').item.json.body.mercado }}\",\n  \"x_commercial\": \"{{ $('Webhook Clientes').item.json.body.comercial }}\"\n}",
+        "options": {}
+      },
+      "id": "create-odoo-customer",
+      "name": "Crear Cliente en ODOO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [720, 420]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"ok\": true,\n  \"ibis_id\": \"{{ $('Crear Cliente en IBIS').item.json.CustomerID }}\",\n  \"odoo_id\": \"{{ $('Crear Cliente en ODOO').item.json.id }}\",\n  \"mensaje\": \"Cliente sincronizado correctamente\"\n}",
+        "options": {}
+      },
+      "id": "respuesta-ok",
+      "name": "Respuesta OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [960, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"ok\": false, \"error\": \"{{ $json.message }}\" }",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "respuesta-error",
+      "name": "Respuesta Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [960, 500]
+    }
+  ],
+  "connections": {
+    "Webhook Clientes": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Obtener Token IBIS": {
+      "main": [
+        [
+          { "node": "Crear Cliente en IBIS",  "type": "main", "index": 0 },
+          { "node": "Crear Cliente en ODOO",  "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Crear Cliente en IBIS": {
+      "main": [
+        [{ "node": "Respuesta OK", "type": "main", "index": 0 }]
+      ]
+    },
+    "Crear Cliente en ODOO": {
+      "main": [
+        [{ "node": "Respuesta OK", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": ["tesacom", "clientes", "odoo", "ibis"]
+}
