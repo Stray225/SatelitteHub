@@ -979,18 +979,33 @@ async function handleSubmit(k) {
   }
   try {
     const payload = getFormPayload(k);
-    const res  = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-    const data = await res.json().catch(() => ({}));
-    const ok   = res.ok && data.ok !== false;
+    console.log('[SatHub] Enviando a:', url, payload);
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    console.log('[SatHub] Respuesta HTTP:', res.status, res.statusText);
+    const text = await res.text();
+    console.log('[SatHub] Body respuesta:', text);
+    let data = {};
+    try { data = JSON.parse(text); } catch(e) { console.warn('[SatHub] Respuesta no es JSON:', text); }
+    const ok = res.ok && data.ok !== false;
     setBadge(k, ok ? 'success' : 'error'); addLog(k, ok ? 1 : 0, ok ? 0 : 1, 1);
     if (ok) {
-      showResultModal('success', '✅ Cliente sincronizado', 'El cliente fue creado correctamente en IBIS.' + (data.CustomerID ? ' ID IBIS: <strong>' + data.CustomerID + '</strong>' : ''));
+      showResultModal('success', '✅ Cliente sincronizado', 'Creado correctamente en IBIS.' + (data.CustomerID ? ' ID: <strong>' + data.CustomerID + '</strong>' : ''));
     } else {
-      showResultModal('error', '❌ Error al sincronizar', 'IBIS respondió con error: ' + (data.Message || data.message || res.status));
+      showResultModal('error', '❌ Error al sincronizar',
+        'HTTP ' + res.status + ': ' + (data.Message || data.message || data.error || text || 'Sin detalle'));
     }
   } catch(e) {
     setBadge(k, 'error'); addLog(k, 0, 1, 1);
-    showResultModal('error', '❌ Error de conexión', 'No se pudo conectar con n8n. Verificá que el servidor esté activo.<br><small>' + e.message + '</small>');
+    console.error('[SatHub] Error fetch:', e);
+    let msg = e.message || 'Error desconocido';
+    if (e.message && e.message.includes('Failed to fetch')) {
+      msg = 'No se pudo conectar con n8n.<br>Causas posibles:<br>• El workflow no está <strong>activado</strong> en n8n<br>• CORS bloqueado (abrí el HTML desde un servidor, no doble clic)<br>• n8n no está corriendo';
+    }
+    showResultModal('error', '❌ Error de conexión', msg);
   }
   setTimeout(() => setBadge(k, 'idle'), 4000);
 }
