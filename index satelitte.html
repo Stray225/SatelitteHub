@@ -232,7 +232,7 @@
 <header>
   <div class="header-inner">
     <div class="logo">
-      <img src="C:\Users\apazos\Desktop\grupo-tesacom-logo.jpg" alt="Grupo Tesacom" style="height:60px;object-fit:contain;object-position:left center;" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex';" />
+      <img src="./grupo-tesacom-logo.jpg" alt="Grupo Tesacom" style="height:60px;object-fit:contain;object-position:left center;" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex';" />
       <div id="logo-fallback" style="display:none;align-items:center;gap:10px;">
         <div class="logo-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a7fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
@@ -941,8 +941,9 @@ function closeModal() {
   pendingSubmitTab = null;
 }
 function confirmSubmit() {
+  const tab = pendingSubmitTab;
   closeModal();
-  if (pendingSubmitTab) handleSubmit(pendingSubmitTab);
+  if (tab) handleSubmit(tab);
 }
 
 document.getElementById('confirm-modal').addEventListener('click', function(e) {
@@ -952,7 +953,7 @@ document.getElementById('confirm-modal').addEventListener('click', function(e) {
 /* ============================================================
    SUBMIT HANDLER - REAL n8n WEBHOOK
    ============================================================ */
-const WEBHOOK_URL = 'https://n8n.tesacom.net/webhook/tesacom-clientes';
+const WEBHOOK_URL = 'http://localhost:3000/api/clientes';
 const N8N_WEBHOOK_EQUIPOS  = 'PEGAR_URL_WEBHOOK_N8N_EQUIPOS';
 const N8N_WEBHOOK_PLANES   = 'PEGAR_URL_WEBHOOK_N8N_PLANES';
 

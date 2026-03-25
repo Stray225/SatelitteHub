@@ -1,5 +1,5 @@
 {
-  "name": "Tesacom - Sync Clientes ODOO + IBIS",
+  "name": "Tesacom - Sync Clientes IBIS",
   "nodes": [
     {
       "parameters": {
@@ -29,13 +29,32 @@
             { "name": "scope",         "value": "ibisApi" }
           ]
         },
-        "options": {}
+        "options": {
+          "continueOnFail": true
+        }
       },
       "id": "ibis-token-002",
       "name": "Obtener Token IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.access_token }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "check-token-008",
+      "name": "Token OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [600, 300]
     },
     {
       "parameters": {
@@ -56,59 +75,38 @@
         },
         "sendBody": true,
         "contentType": "json",
-        "jsonBody": "={{ JSON.stringify({ Name: $('Webhook Clientes').item.json.body.nombre, TaxID: $('Webhook Clientes').item.json.body.numDoc, Email: $('Webhook Clientes').item.json.body.email, Phone: $('Webhook Clientes').item.json.body.telefono }) }}",
-        "options": {}
+        "jsonBody": "={{ JSON.stringify({ CustomerName: $('Webhook Clientes').item.json.body.CustomerName, ParentCustomerID: $('Webhook Clientes').item.json.body.ParentCustomerID, TaxCode: $('Webhook Clientes').item.json.body.TaxCode, Description: $('Webhook Clientes').item.json.body.Description, Industry: $('Webhook Clientes').item.json.body.Industry, EmailGeneral: $('Webhook Clientes').item.json.body.EmailGeneral, MainContactPhone: $('Webhook Clientes').item.json.body.MainContactPhone, AccountManagerCode: $('Webhook Clientes').item.json.body.AccountManagerCode, Location: $('Webhook Clientes').item.json.body.Location, ShowCdrsOnInvoice: false, MainAddressSameAsParentMainAddress: false, BillingAddressSameAsMainAddress: false }) }}",
+        "options": {
+          "continueOnFail": true
+        }
       },
       "id": "ibis-create-003",
       "name": "Crear Cliente en IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [640, 160]
+      "position": [820, 180]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://www.tesacom.net/odoo/api/res.partner",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
+        "conditions": {
+          "number": [
             {
-              "name": "Authorization",
-              "value": "Bearer REEMPLAZAR_API_KEY_ODOO"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
+              "value1": "={{ $json.CustomerID }}",
+              "operation": "isNotEmpty"
             }
           ]
-        },
-        "sendBody": true,
-        "contentType": "json",
-        "jsonBody": "={{ JSON.stringify({ name: $('Webhook Clientes').item.json.body.nombre, vat: $('Webhook Clientes').item.json.body.numDoc, email: $('Webhook Clientes').item.json.body.email, phone: $('Webhook Clientes').item.json.body.telefono, is_company: true }) }}",
-        "options": {}
+        }
       },
-      "id": "odoo-create-004",
-      "name": "Crear Cliente en ODOO",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4,
-      "position": [640, 440]
-    },
-    {
-      "parameters": {
-        "mode": "combine",
-        "combinationMode": "mergeByPosition",
-        "options": {}
-      },
-      "id": "merge-005",
-      "name": "Combinar Resultados",
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 2,
-      "position": [880, 300]
+      "id": "check-ibis-009",
+      "name": "IBIS OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1020, 180]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Cliente sincronizado correctamente', ibis: $input.all()[0].json, odoo: $input.all()[1].json }) }}",
+        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Cliente creado correctamente en IBIS', CustomerID: $('Crear Cliente en IBIS').item.json.CustomerID, ibis: $('Crear Cliente en IBIS').item.json }) }}",
         "options": {
           "responseCode": 200
         }
@@ -117,12 +115,12 @@
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1100, 300]
+      "position": [1240, 100]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={ \"ok\": false, \"error\": \"Error al sincronizar cliente\" }",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: 'Error al crear cliente en IBIS', detail: $('Crear Cliente en IBIS').item.json.Message || $('Crear Cliente en IBIS').item.json.error || $('Obtener Token IBIS').item.json.error || 'Sin detalle' }) }}",
         "options": {
           "responseCode": 500
         }
@@ -131,7 +129,7 @@
       "name": "Respuesta Error",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1100, 500]
+      "position": [1240, 400]
     }
   ],
   "connections": {
@@ -145,29 +143,34 @@
     "Obtener Token IBIS": {
       "main": [
         [
-          { "node": "Crear Cliente en IBIS", "type": "main", "index": 0 },
-          { "node": "Crear Cliente en ODOO", "type": "main", "index": 0 }
+          { "node": "Token OK?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Token OK?": {
+      "main": [
+        [
+          { "node": "Crear Cliente en IBIS", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Respuesta Error", "type": "main", "index": 0 }
         ]
       ]
     },
     "Crear Cliente en IBIS": {
       "main": [
         [
-          { "node": "Combinar Resultados", "type": "main", "index": 0 }
+          { "node": "IBIS OK?", "type": "main", "index": 0 }
         ]
       ]
     },
-    "Crear Cliente en ODOO": {
-      "main": [
-        [
-          { "node": "Combinar Resultados", "type": "main", "index": 1 }
-        ]
-      ]
-    },
-    "Combinar Resultados": {
+    "IBIS OK?": {
       "main": [
         [
           { "node": "Respuesta OK", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Respuesta Error", "type": "main", "index": 0 }
         ]
       ]
     }
