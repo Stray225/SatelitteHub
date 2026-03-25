@@ -1032,7 +1032,7 @@ async function handleSubmit(k) {
     if (e.name === 'AbortError') {
       msg = 'n8n no respondió en 20 segundos.<br>• Verificá que el workflow esté <strong>activado (toggle verde)</strong><br>• El nodo "Crear Cliente en IBIS" puede estar bloqueando la respuesta';
     } else if (e.message && e.message.includes('Failed to fetch')) {
-      msg = 'No se pudo conectar con n8n.<br>• Abrí la página desde <strong>GitHub Pages</strong>, no con doble clic<br>• Verificá que n8n esté corriendo';
+      msg = 'No se pudo conectar con el servidor local.<br>• Asegurate de que <strong>server.js esté corriendo</strong> (npm start)<br>• Verificá que n8n esté corriendo en la red';
     }
     showResultModal('error', '❌ Error de conexión', msg);
   }

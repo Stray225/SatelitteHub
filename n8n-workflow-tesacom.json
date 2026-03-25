@@ -89,9 +89,9 @@
     {
       "parameters": {
         "conditions": {
-          "number": [
+          "string": [
             {
-              "value1": "={{ $json.CustomerID }}",
+              "value1": "={{ String($json.CustomerID) }}",
               "operation": "isNotEmpty"
             }
           ]
@@ -120,7 +120,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: false, error: 'Error al crear cliente en IBIS', detail: $('Crear Cliente en IBIS').item.json.Message || $('Crear Cliente en IBIS').item.json.error || $('Obtener Token IBIS').item.json.error || 'Sin detalle' }) }}",
+        "responseBody": "={{ JSON.stringify({ ok: false, error: 'Error al crear cliente en IBIS', detail: ($json.Message || $json.error_description || $json.error || 'Sin detalle') }) }}",
         "options": {
           "responseCode": 500
         }
@@ -134,44 +134,24 @@
   ],
   "connections": {
     "Webhook Clientes": {
-      "main": [
-        [
-          { "node": "Obtener Token IBIS", "type": "main", "index": 0 }
-        ]
-      ]
+      "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]]
     },
     "Obtener Token IBIS": {
-      "main": [
-        [
-          { "node": "Token OK?", "type": "main", "index": 0 }
-        ]
-      ]
+      "main": [[{ "node": "Token OK?", "type": "main", "index": 0 }]]
     },
     "Token OK?": {
       "main": [
-        [
-          { "node": "Crear Cliente en IBIS", "type": "main", "index": 0 }
-        ],
-        [
-          { "node": "Respuesta Error", "type": "main", "index": 0 }
-        ]
+        [{ "node": "Crear Cliente en IBIS", "type": "main", "index": 0 }],
+        [{ "node": "Respuesta Error", "type": "main", "index": 0 }]
       ]
     },
     "Crear Cliente en IBIS": {
-      "main": [
-        [
-          { "node": "IBIS OK?", "type": "main", "index": 0 }
-        ]
-      ]
+      "main": [[{ "node": "IBIS OK?", "type": "main", "index": 0 }]]
     },
     "IBIS OK?": {
       "main": [
-        [
-          { "node": "Respuesta OK", "type": "main", "index": 0 }
-        ],
-        [
-          { "node": "Respuesta Error", "type": "main", "index": 0 }
-        ]
+        [{ "node": "Respuesta OK", "type": "main", "index": 0 }],
+        [{ "node": "Respuesta Error", "type": "main", "index": 0 }]
       ]
     }
   },
@@ -182,7 +162,5 @@
     "errorWorkflow": ""
   },
   "staticData": null,
-  "tags": [
-    { "name": "Tesacom" }
-  ]
+  "tags": [{ "name": "Tesacom" }]
 }
