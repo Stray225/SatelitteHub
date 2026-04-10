@@ -4,48 +4,61 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Satellite Hub</title>
-
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a2535'/%3E%3Cg transform='translate(16,16) rotate(-45)'%3E%3Crect x='-3' y='-8' width='6' height='16' rx='1' fill='%232a9d5c'/%3E%3Crect x='-9' y='-2' width='7' height='4' rx='1' fill='%232a7fff'/%3E%3Crect x='2' y='-2' width='7' height='4' rx='1' fill='%232a7fff'/%3E%3Ccircle cx='0' cy='0' r='2.5' fill='%23f0a030'/%3E%3C/g%3E%3C/svg%3E" />
-  <style>
-    @font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 400; src: url('fonts/aFTU7PB1QTsUX8KYhh0.ttf') format('truetype'); }
-    @font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 500; src: url('fonts/aFTR7PB1QTsUX8KYvumzIYQ.ttf') format('truetype'); }
-    @font-face { font-family: 'Syne'; font-style: normal; font-weight: 600; src: url('fonts/8vIS7w4qzmVxsWxjBZRjr0FKM_24vj6k.ttf') format('truetype'); }
-    @font-face { font-family: 'Syne'; font-style: normal; font-weight: 700; src: url('fonts/8vIS7w4qzmVxsWxjBZRjr0FKM_3fvj6k.ttf') format('truetype'); }
-    @font-face { font-family: 'Syne'; font-style: normal; font-weight: 800; src: url('fonts/8vIS7w4qzmVxsWxjBZRjr0FKM_3mvj6k.ttf') format('truetype'); }
-  </style>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230C1135'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%23723EF7' stroke-width='2'/%3E%3Cline x1='16' y1='4' x2='16' y2='10' stroke='%2300FFDB' stroke-width='2'/%3E%3Cline x1='16' y1='22' x2='16' y2='28' stroke='%2300FFDB' stroke-width='2'/%3E%3Cline x1='4' y1='16' x2='10' y2='16' stroke='%2300FFDB' stroke-width='2'/%3E%3Cline x1='22' y1='16' x2='28' y2='16' stroke='%2300FFDB' stroke-width='2'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500;900&display=swap" rel="stylesheet" />
   <script src="xlsx.full.min.js"></script>
   <style>
-
     :root {
-      --bg: #f0f4f8;
-      --card: #ffffff;
-      --border: #dde3ea;
-      --text: #1a2535;
-      --text-muted: #5a7a9a;
-      --input-bg: #f5f7fa;
-      --sidebar-bg: #ffffff;
-      --scrollbar-track: #ffffff;
-      --scrollbar-thumb: #1e2e3e;
-      --section-border: #dde3ea;
-      --bulk-step-bg: #f8fafc;
-      --via-bg: #f0f4f8;
+      --brand-violet:    #723EF7;
+      --brand-celeste:   #90CFFF;
+      --brand-turquoise: #00FFDB;
+      --brand-navy:      #0C1135;
+      --brand-slate:     #425463;
+      --brand-deep:      #192023;
+      --brand-grey:      #ADB2BC;
+      --bg:              #F5F5F5;
+      --surface:         #FFFFFF;
+      --border:          #E0E0E0;
+      --text:            #192023;
+      --text-muted:      #ADB2BC;
+      --primary:         #723EF7;
+      --primary-hover:   #5f2de0;
+      --accent:          #00FFDB;
+      --secondary:       #90CFFF;
+      --font-base:       'Poppins', 'Segoe UI', sans-serif;
+      --fw-heading:      900;
+      --fw-sub:          500;
+      --fw-body:         300;
+      --fw-meta:         200;
+      --card:            var(--surface);
+      --input-bg:        #F5F5F5;
+      --sidebar-bg:      var(--surface);
+      --scrollbar-track: var(--surface);
+      --scrollbar-thumb: var(--primary);
+      --section-border:  var(--border);
+      --bulk-step-bg:    #F9F9F9;
+      --via-bg:          #F5F5F5;
     }
     body.dark {
-      --bg: #0f1923;
-      --card: #1a2535;
-      --border: #2a3a4a;
-      --text: #e0e8f0;
-      --text-muted: #7a9ab8;
-      --input-bg: #1e2e3e;
-      --sidebar-bg: #1a2535;
-      --scrollbar-track: #1a2535;
-      --scrollbar-thumb: #2a9d5c;
-      --section-border: #2a3a4a;
-      --bulk-step-bg: #1a2535;
-      --via-bg: #0f1923;
+      --bg:              #0C1135;
+      --surface:         #192023;
+      --border:          #425463;
+      --text:            #FFFFFF;
+      --text-muted:      #ADB2BC;
+      --primary:         #723EF7;
+      --primary-hover:   #8a5ff8;
+      --card:            var(--surface);
+      --input-bg:        #192023;
+      --sidebar-bg:      var(--surface);
+      --scrollbar-track: var(--surface);
+      --scrollbar-thumb: var(--primary);
+      --section-border:  var(--border);
+      --bulk-step-bg:    #192023;
+      --via-bg:          #0C1135;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; transition: background 0.25s, color 0.25s; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-base); font-weight: var(--fw-body); min-height: 100vh; transition: background 0.25s, color 0.25s; }
     ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--scrollbar-track); } ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -53,173 +66,144 @@
     #app { max-width: 1200px; margin: 0 auto; padding: 0 32px 40px; }
     header { border-bottom: 1px solid var(--border); padding: 0 32px; margin: 0 -32px 24px; background: var(--card); transition: background 0.25s, border-color 0.25s; }
     .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 80px; }
-    .header-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: 0.02em; }
+    .header-title { font-family: var(--font-base); font-size: 15px; font-weight: var(--fw-sub); color: var(--text); letter-spacing: 0.01em; }
     .logo { display: flex; align-items: center; gap: 20px; padding: 10px 0; }
-    .logo-icon { width: 32px; height: 32px; background: #2a7fff15; border: 1px solid #2a7fff40; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    .logo-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.02em; color: #1a3a6b; }
-    .logo-sub { font-size: 10px; color: #3a6a9a; letter-spacing: 0.1em; }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #30c060; box-shadow: 0 0 8px #30c060; display: inline-block; }
-    .status-label { font-size: 11px; color: #30c060; margin-left: 6px; }
-
-
+    .logo-light { display: block; }
+    .logo-dark  { display: none; }
+    body.dark .logo-light { display: none; }
+    body.dark .logo-dark  { display: block; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); display: inline-block; }
+    .status-label { font-size: 11px; color: var(--accent); margin-left: 6px; }
     .dark-toggle { background: none; border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; flex-shrink: 0; }
-    .dark-toggle:hover { border-color: #2a9d5c; color: #2a9d5c; }
-
+    .dark-toggle:hover { border-color: var(--primary); color: var(--primary); }
     .tabs { display: flex; gap: 4px; background: var(--card); padding: 4px; border-radius: 10px; width: fit-content; margin-bottom: 24px; border: 1px solid var(--border); transition: background 0.25s; }
-    .tab-btn { display: flex; align-items: center; gap: 7px; padding: 8px 18px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: var(--text-muted); cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; transition: all 0.15s; }
-    .tab-btn.active { background: #e8f8ee; border-color: #2a9d5c; color: #1a6640; }
+    .tab-btn { display: flex; align-items: center; gap: 7px; padding: 8px 18px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: var(--text-muted); cursor: pointer; font-size: 12px; font-weight: var(--fw-sub); font-family: var(--font-base); transition: all 0.15s; }
+    .tab-btn.active { background: #ede8ff; border-color: var(--primary); color: var(--primary-hover); }
     .tab-btn:hover:not(.active) { color: var(--text); }
     .main-grid { display: grid; grid-template-columns: 1fr 260px; gap: 20px; align-items: start; }
     @media (max-width: 800px) { .main-grid { grid-template-columns: 1fr; } }
     .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; animation: fadeIn 0.2s ease; transition: background 0.25s, border-color 0.25s; }
     .sidebar { display: flex; flex-direction: column; gap: 12px; }
     .sidebar-card { background: var(--sidebar-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: background 0.25s, border-color 0.25s; }
-    .sidebar-card.green { background: #f0faf4; border-color: #1e3a22; }
-    body.dark .sidebar-card.green { background: #0d2a1a; border-color: #1a6a30; }
     .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .span-2 { grid-column: span 2; }
-    .section-title { grid-column: 1 / -1; border-bottom: 1px solid var(--section-border); padding-bottom: 8px; margin-top: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2a9d5c; }
+    .section-title { grid-column: 1 / -1; border-bottom: 1px solid var(--section-border); padding-bottom: 8px; margin-top: 8px; font-size: 11px; font-weight: var(--fw-sub); letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary); }
     .field { display: flex; flex-direction: column; }
-    .field label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+    .field label { font-size: 11px; font-weight: var(--fw-sub); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
     .field label .req { color: #e05c5c; margin-left: 3px; }
-    .field input, .field select { width: 100%; padding: 9px 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; outline: none; transition: border-color 0.2s, background 0.2s, background-color 0.2s, color 0.25s; font-family: inherit; appearance: none; }
-    .field input:focus, .field select:focus { border-color: #2a9d5c; }
-    .field input.field-error, .field select.field-error { border-color: #e05c5c; }
-    .field input.field-filled, .field select.field-filled { background-color: #e8faf0; }
-    body.dark .field input.field-filled, body.dark .field select.field-filled { background-color: #0d2a1a; }
-    .field-error-msg { font-size: 10px; color: #e05c5c; margin-top: 4px; display: none; }
-    .field-error-msg.show { display: block; }
-    .field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a7a9a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
-    .field select.field-filled { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a7a9a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); }
-    .btn { display: flex; align-items: center; gap: 8px; padding: 10px 24px; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: inherit; transition: opacity 0.2s, background 0.2s; white-space: nowrap; }
+    .field input, .field select { width: 100%; padding: 9px 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; font-family: var(--font-base); font-weight: var(--fw-body); outline: none; transition: border-color 0.2s, background 0.2s, color 0.25s; appearance: none; }
+    .field input:focus, .field select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px #723EF715; }
+    .field input.field-filled, .field select.field-filled { background-color: #f0ebff; }
+    body.dark .field input.field-filled, body.dark .field select.field-filled { background-color: #1a0f35; }
+    .field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ADB2BC' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+    .field input:disabled, .field select:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn { display: flex; align-items: center; gap: 8px; padding: 10px 24px; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: var(--fw-sub); font-family: var(--font-base); transition: opacity 0.2s, background 0.2s; white-space: nowrap; }
     .btn:hover:not(:disabled) { opacity: 0.85; }
     .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .btn-blue { background: #2a9d5c; }
-    .btn-ibis { background: #25b865; }
-    .btn-ghost { background: transparent; border: 1px solid #2a9d5c; color: #2a9d5c; padding: 8px 16px; font-size: 12px; }
-    .btn-ghost.active { background: #e8f8ee; border-color: #2a9d5c; color: #1a6640; }
+    .btn-primary { background: var(--primary); }
+    .btn-ghost { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 8px 16px; font-size: 12px; }
+    .btn-ghost.active { background: #ede8ff; border-color: var(--primary); color: var(--primary-hover); }
     .btn-icon { background: none; border: 1px solid var(--border); border-radius: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; flex-shrink: 0; padding: 0; }
-    .btn-icon:hover { border-color: #2a9d5c; color: #2a9d5c; }
-    /* Green submit button when active */
-    #btn-submit-clients:not(:disabled) { background: #22c55e; }
-    #btn-submit-clients:disabled { background: #c8d8e4; color: #8aa0b0; opacity: 1; cursor: not-allowed; }
-    body.dark #btn-submit-clients:disabled { background: #2a3a4a; color: #5a7a9a; }
+    .btn-icon:hover { border-color: var(--primary); color: var(--primary); }
+    #btn-submit-clients:not(:disabled) { background: var(--primary); }
+    #btn-submit-clients:disabled { background: var(--border); color: var(--text-muted); opacity: 1; cursor: not-allowed; }
+    body.dark #btn-submit-clients:disabled { background: var(--brand-slate); color: var(--text-muted); }
     .sync-badge { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; }
     .sync-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .sync-text { font-size: 12px; font-weight: 500; }
-    .info-banner { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #e8f0fe; border: 1px solid #b8d4f0; border-radius: 8px; margin-bottom: 16px; font-size: 12px; color: #4a9adf; }
+    .sync-text { font-size: 12px; font-weight: var(--fw-sub); }
+    .info-banner { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #e8f0ff; border: 1px solid #c5d8f0; border-radius: 8px; margin-bottom: 16px; font-size: 12px; color: var(--brand-slate); }
+    body.dark .info-banner { background: #0a1040; border-color: var(--brand-slate); color: var(--secondary); }
     .vendor-box { margin-bottom: 20px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
     .vendor-hint { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
     .mode-toggle { display: flex; gap: 6px; margin-bottom: 20px; }
-    .bulk-section { animation: fadeIn 0.2s ease; }
     .bulk-step { margin-bottom: 20px; padding: 16px; background: var(--bulk-step-bg); border: 1px solid var(--border); border-radius: 10px; }
     .bulk-step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .step-num { width: 22px; height: 22px; border-radius: 50%; background: #2a7fff20; border: 1px solid #2a7fff60; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #2a7fff; flex-shrink: 0; }
-    .step-title { font-size: 12px; font-weight: 700; color: var(--text); letter-spacing: 0.05em; }
-    .dropzone { border: 2px dashed #b8d4f0; border-radius: 8px; padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
-    .dropzone:hover, .dropzone.dragover { border-color: #2a7fff; background: #0d1e30; }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: #723EF720; border: 1px solid #723EF760; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: var(--fw-sub); color: var(--primary); flex-shrink: 0; }
+    .step-title { font-size: 12px; font-weight: var(--fw-sub); color: var(--text); letter-spacing: 0.05em; }
+    .dropzone { border: 2px dashed var(--border); border-radius: 8px; padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+    .dropzone:hover, .dropzone.dragover { border-color: var(--primary); background: #ede8ff30; }
     .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-    .dropzone-icon { color: #3a6a9a; margin-bottom: 8px; }
+    .dropzone-icon { color: var(--text-muted); margin-bottom: 8px; }
     .dropzone-text { font-size: 13px; color: var(--text-muted); }
-    .dropzone-sub { font-size: 11px; color: #3a5a7a; margin-top: 4px; }
-    .dropzone.has-file { border-color: #1a6a30; background: #f0faf4; }
-    body.dark .dropzone.has-file { background: #0d2a1a; }
-    .dropzone.has-file .dropzone-text { color: #30c060; }
+    .dropzone-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .dropzone.has-file { border-color: var(--accent); background: #00FFDB0d; }
+    .dropzone.has-file .dropzone-text { color: var(--accent); }
     .preview-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); margin-top: 8px; max-height: 260px; overflow-y: auto; }
     .preview-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-    .preview-table th { background: var(--bulk-step-bg); color: var(--text-muted); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; position: sticky; top: 0; }
+    .preview-table th { background: var(--bulk-step-bg); color: var(--text-muted); font-weight: var(--fw-sub); letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; position: sticky; top: 0; }
     .preview-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--text); white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
-    .preview-table tr:last-child td { border-bottom: none; }
-    .preview-table tr.row-ok td:first-child { border-left: 3px solid #30c060; }
+    .preview-table tr.row-ok td:first-child { border-left: 3px solid var(--accent); }
     .preview-table tr.row-err td:first-child { border-left: 3px solid #e05c5c; }
-    .preview-table tr.row-pending td:first-child { border-left: 3px solid #3a5a7a; }
+    .preview-table tr.row-pending td:first-child { border-left: 3px solid var(--brand-slate); }
     .preview-table tr.row-sending td:first-child { border-left: 3px solid #f0a030; }
-    .row-status { font-size: 10px; font-weight: 600; }
+    .row-status { font-size: 10px; font-weight: var(--fw-sub); }
     .progress-wrap { margin-top: 12px; }
     .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
     .progress-bar { height: 6px; background: var(--input-bg); border-radius: 3px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #1a6abf, #2a7fff); border-radius: 3px; transition: width 0.3s ease; }
-
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-hover), var(--primary)); border-radius: 3px; transition: width 0.3s ease; }
     .form-progress-bar { height: 4px; background: var(--input-bg); border-radius: 3px; overflow: hidden; margin-top: 6px; }
-    .form-progress-fill { height: 100%; background: linear-gradient(90deg, #1a9a4a, #2a9d5c); border-radius: 3px; transition: width 0.4s ease; }
+    .form-progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-hover), var(--primary)); border-radius: 3px; transition: width 0.4s ease; }
     .form-progress-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
     .result-summary { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-    .result-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-    .pill-ok  { background: #0d2a1a; color: #30c060; border: 1px solid #30c06040; }
+    .result-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: var(--fw-sub); }
+    .pill-ok  { background: #001f1a; color: var(--accent); border: 1px solid #00FFDB40; }
     .pill-err { background: #2a0d0d; color: #e05c5c; border: 1px solid #e05c5c40; }
     .pill-tot { background: var(--bulk-step-bg); color: var(--text-muted); border: 1px solid var(--border); }
     .bottom-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; flex-wrap: wrap; gap: 10px; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #3a6a9a; margin-bottom: 12px; }
+    .sidebar-label { font-size: 10px; font-weight: var(--fw-sub); letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 12px; }
     .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .dest-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); transition: opacity 0.3s; }
-    .dest-row.inactive { opacity: 0.35; }
-    .dest-name { font-size: 12px; font-weight: 600; color: var(--text); }
-    .dest-na { font-size: 9px; color: var(--text-muted); margin-left: 6px; }
+    .dest-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .dest-name { font-size: 12px; font-weight: var(--fw-sub); color: var(--text); }
     .dest-status { display: flex; align-items: center; gap: 5px; }
     .dest-dot { width: 6px; height: 6px; border-radius: 50%; }
     .dest-status-text { font-size: 10px; }
     .via-box { margin-top: 8px; padding: 8px; background: var(--via-bg); border-radius: 6px; }
-    .via-label { font-size: 10px; color: #3a6a9a; }
-    .via-value { font-size: 12px; color: #f0a030; font-weight: 600; margin-top: 2px; }
+    .via-label { font-size: 10px; color: var(--text-muted); }
+    .via-value { font-size: 12px; color: var(--secondary); font-weight: var(--fw-sub); margin-top: 2px; }
     .log-item { display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); animation: fadeIn 0.3s ease; }
-    .log-title { font-size: 11px; color: var(--text); font-weight: 500; }
+    .log-title { font-size: 11px; color: var(--text); font-weight: var(--fw-sub); }
     .log-msg { font-size: 10px; color: var(--text-muted); }
-    .log-time { font-size: 10px; color: #3a5a7a; }
-    .log-empty { font-size: 11px; color: #3a5a7a; text-align: center; padding: 16px 0; }
+    .log-time { font-size: 10px; color: var(--text-muted); }
+    .log-empty { font-size: 11px; color: var(--text-muted); text-align: center; padding: 16px 0; }
     .spinning { animation: spin 1s linear infinite; }
-    .btn-blue:not(:disabled) { background: #2a9d5c; }
-    .btn-ibis:not(:disabled) { background: #25b865; }
-    .btn-blue:disabled, .btn-ibis:disabled { background: #c8d8e4; color: #8aa0b0; opacity: 1; cursor: not-allowed; }
-    body.dark .btn-blue:disabled, body.dark .btn-ibis:disabled { background: #2a3a4a; color: #5a7a9a; }
-    .btn-blue:not(:disabled):hover, .btn-ibis:not(:disabled):hover { opacity: 0.85; }
-
-
     .tooltip-wrap { position: relative; display: inline-flex; align-items: center; }
-    .tooltip-icon { width: 14px; height: 14px; border-radius: 50%; background: #2a7fff30; border: 1px solid #2a7fff60; color: #2a7fff; font-size: 9px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; cursor: default; font-style: normal; flex-shrink: 0; }
-    .tooltip-popup { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #1a2535; color: #e0e8f0; font-size: 10px; font-weight: 400; letter-spacing: 0; text-transform: none; padding: 5px 9px; border-radius: 5px; white-space: nowrap; z-index: 100; pointer-events: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-    .tooltip-popup::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: #1a2535; }
+    .tooltip-icon { width: 14px; height: 14px; border-radius: 50%; background: #723EF730; border: 1px solid #723EF760; color: var(--primary); font-size: 9px; font-weight: var(--fw-sub); display: inline-flex; align-items: center; justify-content: center; cursor: default; font-style: normal; flex-shrink: 0; }
+    .tooltip-popup { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--brand-navy); color: #fff; font-size: 10px; padding: 5px 9px; border-radius: 5px; white-space: nowrap; z-index: 100; pointer-events: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .tooltip-popup::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: var(--brand-navy); }
     .tooltip-wrap:hover .tooltip-popup { display: block; }
-
-
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; width: 340px; max-width: 95vw; animation: fadeIn 0.2s ease; }
-    .modal-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .modal-title { font-size: 16px; font-weight: var(--fw-sub); color: var(--text); margin-bottom: 8px; }
     .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
-    .modal-tab-name { font-weight: 700; color: #2a9d5c; }
+    .modal-tab-name { font-weight: var(--fw-sub); color: var(--primary); }
     .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-    .btn-modal-cancel { background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+    .btn-modal-cancel { background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: var(--fw-sub); font-family: var(--font-base); cursor: pointer; }
     .btn-modal-cancel:hover { border-color: #e05c5c; color: #e05c5c; }
-    .btn-modal-confirm { background: #2a9d5c; color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; transition: opacity 0.15s; }
+    .btn-modal-confirm { background: var(--primary); color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: var(--fw-sub); font-family: var(--font-base); cursor: pointer; }
     .btn-modal-confirm:hover { opacity: 0.85; }
-
-
-    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a2535; color: #e0e8f0; padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 300; animation: toastIn 0.25s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.3); border: 1px solid #2a9d5c; }
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--brand-navy); color: #fff; padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: var(--fw-sub); z-index: 300; animation: toastIn 0.25s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.3); border: 1px solid var(--primary); }
     .btn-actions-wrap { display: flex; align-items: center; gap: 8px; }
-
-    /* Actividad Reciente en tabs */
     .recent-activity { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--section-border); }
-    .recent-activity-title { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2a9d5c; margin-bottom: 12px; }
+    .recent-activity-title { font-size: 11px; font-weight: var(--fw-sub); letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
     .activity-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
     .activity-item:last-child { border-bottom: none; }
-    .activity-icon { width: 28px; height: 28px; border-radius: 50%; background: #e8f8ee; border: 1px solid #2a9d5c30; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .activity-icon { width: 28px; height: 28px; border-radius: 50%; background: #ede8ff; border: 1px solid #723EF730; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .activity-body { flex: 1; }
-    .activity-name { font-size: 12px; font-weight: 600; color: var(--text); }
+    .activity-name { font-size: 12px; font-weight: var(--fw-sub); color: var(--text); }
     .activity-msg { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-    .activity-time { font-size: 10px; color: #3a5a7a; margin-top: 2px; }
+    .activity-time { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
   </style>
 </head>
 <body>
 
-
-<!-- Modal resultado OK/Error -->
 <div class="modal-overlay" id="result-modal" onclick="this.classList.remove('open')">
   <div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;max-width:380px">
     <div class="modal-title" id="result-modal-title" style="font-size:18px;margin-bottom:10px"></div>
     <div class="modal-sub" id="result-modal-body" style="font-size:14px;margin-bottom:20px;line-height:1.6"></div>
-    <button class="btn" id="result-modal-btn" onclick="document.getElementById('result-modal').classList.remove('open')" style="width:100%;justify-content:center">Cerrar</button>
+    <button class="btn btn-primary" id="result-modal-btn" onclick="document.getElementById('result-modal').classList.remove('open')" style="width:100%;justify-content:center">Cerrar</button>
   </div>
 </div>
 
@@ -237,22 +221,13 @@
 <header>
   <div class="header-inner">
     <div class="logo">
-      <img src="./grupo-tesacom-logo.jpg" alt="Grupo Tesacom" style="height:60px;object-fit:contain;object-position:left center;" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex';" />
-      <div id="logo-fallback" style="display:none;align-items:center;gap:10px;">
-        <div class="logo-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a7fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        </div>
-        <div>
-          <div class="logo-title">Satellite Hub</div>
-          <div class="logo-sub">TESACOM GROUP</div>
-        </div>
-      </div>
+      <img class="logo-light" src="./kit de marca/tesacom logo en negro para fondo blanco.png" alt="Tesacom" style="height:44px;object-fit:contain;object-position:left center;" />
+      <img class="logo-dark"  src="./kit de marca/tesacom logo en blanco para fondo negro.png" alt="Tesacom" style="height:44px;object-fit:contain;object-position:left center;" />
     </div>
     <div style="display:flex;align-items:center;gap:16px">
-      <span class="header-title" style="color:#1a3a6b;font-family:'Syne',sans-serif;font-weight:700;">Carga de altas y bajas</span>
+      <span class="header-title">Carga de altas y bajas</span>
       <div style="display:flex;align-items:center"><span class="status-dot"></span><span class="status-label">n8n conectado</span></div>
-
-      <button class="dark-toggle" id="dark-toggle-btn" onclick="toggleDarkMode()" title="Cambiar modo oscuro/claro">
+      <button class="dark-toggle" onclick="toggleDarkMode()" title="Modo oscuro/claro">
         <svg id="dark-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg id="dark-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
@@ -264,36 +239,30 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('clients',this)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Clientes <span id="tab-icon-clients"></span>
+      Clientes
     </button>
     <button class="tab-btn" onclick="switchTab('equipment',this)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 7 9 3 3 9l4 4"/><path d="m13 7 3 3"/><path d="M9 13l4 4 6-6-4-4"/><path d="m9 13-3 3"/><circle cx="17" cy="17" r="4"/><line x1="20.12" y1="20.12" x2="23" y2="23"/></svg>
-      Equipos <span id="tab-icon-equipment"></span>
+      Equipos
     </button>
     <button class="tab-btn" onclick="switchTab('plans',this)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 8h10"/><path d="M7 12h6"/></svg>
-      Planes <span id="tab-icon-plans"></span>
+      Planes
     </button>
   </div>
 
   <div class="main-grid">
     <div class="panel">
 
-      <!-- CLIENTS -->
+      <!-- CLIENTES -->
       <div id="tab-clients" class="tab-content active">
         <div class="form-grid">
           <div class="section-title">Informacion Principal</div>
-
-          <!-- Pais -->
           <div class="field">
-            <label>
-              Pais <span class="req">*</span>
-              <span class="tooltip-wrap">
-                <span class="tooltip-icon">?</span>
-                <span class="tooltip-popup">Selecciona el país del cliente</span>
-              </span>
+            <label>Pais <span class="req">*</span>
+              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Selecciona el país del cliente</span></span>
             </label>
-            <select id="client-pais" onchange="checkClientForm();updateFieldFilled(this)">
+            <select id="client-pais" onchange="checkClientForm();updateFieldFilled(this);onPaisChange()">
               <option value="">Seleccionar...</option>
               <option value="3">Argentina</option>
               <option value="4">Chile</option>
@@ -301,38 +270,22 @@
               <option value="6">Perú</option>
             </select>
           </div>
-
-          <!-- Nombre / Razon Social -->
           <div class="field span-2">
-            <label>
-              Nombre / Razon Social <span class="req">*</span>
-              <span class="tooltip-wrap">
-                <span class="tooltip-icon">?</span>
-                <span class="tooltip-popup">Nombre legal completo de la empresa</span>
-              </span>
+            <label>Nombre / Razon Social <span class="req">*</span>
+              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Nombre legal completo de la empresa</span></span>
             </label>
             <input id="client-nombre" type="text" placeholder="Ej: Empresa S.A." oninput="checkClientForm();updateFieldFilled(this)" />
           </div>
-
-          <!-- Numero de Documento -->
           <div class="field">
-            <label>
-              Numero de Documento <span class="req">*</span>
-              <span class="tooltip-wrap">
-                <span class="tooltip-icon">?</span>
-                <span class="tooltip-popup">Código de identificación fiscal</span>
-              </span>
+            <label>Numero de Documento <span class="req">*</span>
+              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal</span></span>
             </label>
             <input id="client-num-doc" type="text" placeholder="Ej: 20-12345678-9" oninput="checkClientForm();updateFieldFilled(this)" />
           </div>
-
-          <!-- Categoria Fiscal -->
           <div class="field">
             <label>Categoria Fiscal</label>
             <input id="client-categoria-fiscal" type="text" placeholder="Ej: Responsable Inscripto" oninput="updateFieldFilled(this)" />
           </div>
-
-          <!-- Mercado -->
           <div class="field">
             <label>Mercado</label>
             <select id="client-mercado" onchange="updateFieldFilled(this)">
@@ -361,66 +314,44 @@
               <option value="OFFSHORE SUPPLY VESSELS">Buques Offshore</option>
               <option value="OIL AND GAS">Petróleo y Gas</option>
               <option value="OTHER">Otro</option>
+              <option value="SELF EMPLOYED">Profesional Independiente</option>
               <option value="PASSENGER OR FERRY">Pasajeros o Ferry</option>
               <option value="TRANSPORTATION AND LOGISTICS">Transporte y Logística</option>
               <option value="TRAVEL AND TOURISM">Viajes y Turismo</option>
               <option value="TUG">Remolcador</option>
               <option value="UTILITIES">Utilities</option>
-              <option value="SELF EMPLOYED">Profesional Independiente</option>
             </select>
           </div>
-
           <div class="section-title">Contacto</div>
-
-          <!-- Email -->
           <div class="field">
-            <label>
-              Email
-              <span class="tooltip-wrap">
-                <span class="tooltip-icon">?</span>
-                <span class="tooltip-popup">Email principal de contacto</span>
-              </span>
-            </label>
+            <label>Email</label>
             <input id="client-email" type="email" placeholder="contacto@empresa.com" oninput="updateFieldFilled(this)" />
-            <span class="field-error-msg" id="email-error">Email inválido. Debe contener @ y punto</span>
           </div>
-
-          <!-- Telefono -->
           <div class="field">
             <label>Telefono</label>
             <input id="client-telefono" type="text" placeholder="+54 11 XXXX-XXXX" oninput="updateFieldFilled(this)" />
           </div>
-
-          <!-- Comercial Asignado -->
           <div class="field">
             <label>Comercial Asignado</label>
-            <select id="client-comercial" onchange="updateFieldFilled(this)">
+            <select id="client-comercial" disabled onchange="updateFieldFilled(this)">
               <option value="">Seleccionar...</option>
-              <option value="ADOVAL">ADOVAL</option>
-              <option value="AREBATTA">AREBATTA</option>
-              <option value="ABRAVO">ABRAVO</option>
-              <option value="RMOLINA">RMOLINA</option>
             </select>
           </div>
-
           <div class="section-title">Ubicacion</div>
-          <!-- Direccion -->
           <div class="field span-2">
             <label>Direccion</label>
             <input id="client-direccion" type="text" placeholder="Calle, número, piso" oninput="updateFieldFilled(this)" />
           </div>
         </div>
 
-
         <div style="margin-top:20px">
           <div class="form-progress-label" id="form-progress-label">0 de 3 campos obligatorios completados</div>
           <div class="form-progress-bar"><div class="form-progress-fill" id="form-progress-fill" style="width:0%"></div></div>
         </div>
 
-        <!-- DEBUG PANEL -->
         <div id="debug-panel" style="display:none;margin:12px 0;background:#0f1923;border:1px solid #2a3a4a;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;color:#7affb2">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-            <span style="color:#f0a030;font-weight:bold">🐛 DEBUG LOG</span>
+            <span style="color:#f0a030;font-weight:bold">DEBUG</span>
             <button onclick="document.getElementById('debug-log').textContent=''" style="background:none;border:1px solid #2a3a4a;color:#5a7a9a;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:10px">Limpiar</button>
           </div>
           <div id="debug-log" style="max-height:180px;overflow-y:auto;white-space:pre-wrap;line-height:1.6"></div>
@@ -428,11 +359,14 @@
 
         <div class="bottom-bar">
           <div style="display:flex;align-items:center;gap:8px">
-            <div id="badge-clients" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
-            <button onclick="toggleDebug()" style="background:none;border:1px solid #c0ccd8;border-radius:6px;padding:4px 8px;font-size:10px;color:#5a7a9a;cursor:pointer" title="Mostrar panel de debug">🐛</button>
+            <div id="badge-clients" class="sync-badge" style="background:var(--bg);border:1px solid var(--border)">
+              <div class="sync-dot" style="background:var(--text-muted)"></div>
+              <span class="sync-text" style="color:var(--text-muted)">Listo para enviar</span>
+            </div>
+            <button onclick="toggleDebug()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:10px;color:var(--text-muted);cursor:pointer" title="Debug">🐛</button>
           </div>
           <div class="btn-actions-wrap">
-            <button class="btn btn-ghost" onclick="testN8nConnection()" style="height:42px;font-size:11px" title="Probar conexión con n8n">
+            <button class="btn btn-ghost" onclick="testN8nConnection()" style="height:42px;font-size:11px">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               Test n8n
             </button>
@@ -440,11 +374,10 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg>
               Limpiar
             </button>
-
-            <button class="btn-icon" onclick="copyClientJSON()" title="Copiar datos como JSON">
+            <button class="btn-icon" onclick="copyClientJSON()" title="Copiar JSON">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             </button>
-            <button class="btn-icon" onclick="pasteClientJSON()" title="Pegar datos desde JSON">
+            <button class="btn-icon" onclick="pasteClientJSON()" title="Pegar JSON">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
             </button>
             <button id="btn-submit-clients" class="btn" onclick="openModal('clients')" disabled>
@@ -454,47 +387,17 @@
           </div>
         </div>
 
-        <!-- Actividad Reciente - Clientes -->
         <div class="recent-activity">
           <div class="recent-activity-title">Actividad Reciente</div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Iridium</div>
-              <div class="activity-msg">Lorem ipsum alta de cliente completada</div>
-              <div class="activity-time">hace 2 horas</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Inmarsat</div>
-              <div class="activity-msg">Lorem ipsum sincronización exitosa</div>
-              <div class="activity-time">hace 5 horas</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Starlink</div>
-              <div class="activity-msg">Lorem ipsum actualización de plan</div>
-              <div class="activity-time">hace 1 día</div>
-            </div>
-          </div>
+          <div id="activity-clients-list"></div>
         </div>
       </div>
 
-      <!-- EQUIPMENT -->
+      <!-- EQUIPOS -->
       <div id="tab-equipment" class="tab-content">
         <div class="info-banner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4a9adf" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Los equipos se sincronizan <strong style="margin-left:4px">solo con IBIS</strong> -- no se envian a ODOO.
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Los equipos se sincronizan <strong style="margin-left:4px">solo con IBIS</strong> — no se envian a ODOO.
         </div>
         <div class="mode-toggle">
           <button class="btn btn-ghost active" id="btn-mode-single" onclick="setEquipMode('single')">
@@ -502,37 +405,33 @@
             Carga individual
           </button>
           <button class="btn btn-ghost" id="btn-mode-bulk" onclick="setEquipMode('bulk')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Carga masiva (Excel)
           </button>
         </div>
-
-        <!-- SINGLE -->
         <div id="equip-single">
           <div class="vendor-box">
             <div class="field">
               <label>Proveedor (Vendor) <span class="req">*</span></label>
               <select id="vendor-select" onchange="onVendorChange(this.value)">
                 <option value="">Seleccionar proveedor primero...</option>
-                <option value="2-Stage">2-Stage -- 2-Stage access</option><option value="BGAN">BGAN -- Inmarsat BGAN</option><option value="BM2M">BM2M -- Inmarsat BGAN M2M</option><option value="Cellular">Cellular -- Cellular</option><option value="Cert GMDSS">Cert GMDSS -- Iridium Certus GMDSS</option><option value="Commbox">Commbox -- Commbox Starlink</option><option value="FBB">FBB -- Inmarsat Fleet Broadband</option><option value="GlobalStar">GlobalStar -- Globalstar</option><option value="GSPS">GSPS -- Inmarsat GSPS</option><option value="GX">GX -- Inmarsat GX</option><option value="IDP">IDP -- IsatDataPro</option><option value="INM C">INM C -- Inmarsat C</option><option value="IoT">IoT -- Servicio de Telemetria</option><option value="Iridium">Iridium -- Iridium</option><option value="Iridium Cr">Iridium Cr -- Iridium Crew</option><option value="Iridium GR">Iridium GR -- Iridium Geo Restricted</option><option value="Iridium PP">Iridium PP -- Iridium Prepay</option><option value="ISPL">ISPL -- Inmarsat IsatPhone Link</option><option value="OpenPort">OpenPort -- Iridium OpenPort</option><option value="PTT Device">PTT Device -- Push to Talk Device</option><option value="PTT Group">PTT Group -- Push to Talk Talkgroup</option><option value="SafetyNet">SafetyNet -- SafetyNet II</option><option value="SBD">SBD -- SBD</option><option value="Starlink">Starlink -- Starlink</option><option value="VOIP">VOIP -- VOIP</option><option value="VSAT">VSAT -- VSAT</option>
+                <option value="2-Stage">2-Stage</option><option value="BGAN">BGAN — Inmarsat BGAN</option><option value="BM2M">BM2M — Inmarsat BGAN M2M</option><option value="Cellular">Cellular</option><option value="Cert GMDSS">Cert GMDSS — Iridium Certus GMDSS</option><option value="Commbox">Commbox Starlink</option><option value="FBB">FBB — Inmarsat Fleet Broadband</option><option value="GlobalStar">GlobalStar</option><option value="GSPS">GSPS — Inmarsat GSPS</option><option value="GX">GX — Inmarsat GX</option><option value="IDP">IDP — IsatDataPro</option><option value="INM C">INM C — Inmarsat C</option><option value="IoT">IoT — Telemetría</option><option value="Iridium">Iridium</option><option value="Iridium Cr">Iridium Crew</option><option value="Iridium GR">Iridium Geo Restricted</option><option value="Iridium PP">Iridium Prepay</option><option value="ISPL">ISPL — Inmarsat IsatPhone Link</option><option value="OpenPort">Iridium OpenPort</option><option value="PTT Device">PTT Device</option><option value="PTT Group">PTT Group</option><option value="SafetyNet">SafetyNet II</option><option value="SBD">SBD</option><option value="Starlink">Starlink</option><option value="VOIP">VOIP</option><option value="VSAT">VSAT</option>
               </select>
             </div>
-            <p id="vendor-hint" class="vendor-hint">Los campos del equipo varian segun el proveedor seleccionado.</p>
+            <p id="vendor-hint" class="vendor-hint">Los campos del equipo varían según el proveedor seleccionado.</p>
           </div>
           <div id="equipment-fields" style="display:none">
             <div class="form-grid" id="equipment-form-grid"></div>
             <div class="bottom-bar">
-              <div id="badge-equipment" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
-              <button id="btn-submit-equipment" class="btn btn-ibis" onclick="openModal('equipment')" disabled>
+              <div id="badge-equipment" class="sync-badge" style="background:var(--bg);border:1px solid var(--border)"><div class="sync-dot" style="background:var(--text-muted)"></div><span class="sync-text" style="color:var(--text-muted)">Listo para enviar</span></div>
+              <button id="btn-submit-equipment" class="btn btn-primary" onclick="openModal('equipment')" disabled>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 Sincronizar con IBIS
               </button>
             </div>
           </div>
         </div>
-
-        <!-- BULK -->
-        <div id="equip-bulk" style="display:none" class="bulk-section">
+        <div id="equip-bulk" style="display:none">
           <div class="bulk-step">
             <div class="bulk-step-header"><div class="step-num">1</div><div class="step-title">Elegí el proveedor y descargá la plantilla Excel</div></div>
             <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
@@ -540,7 +439,7 @@
                 <label>Proveedor <span class="req">*</span></label>
                 <select id="bulk-vendor-select" onchange="onBulkVendorChange(this.value)">
                   <option value="">Seleccionar...</option>
-                  <option value="2-Stage">2-Stage -- 2-Stage access</option><option value="BGAN">BGAN -- Inmarsat BGAN</option><option value="BM2M">BM2M -- Inmarsat BGAN M2M</option><option value="Cellular">Cellular -- Cellular</option><option value="Cert GMDSS">Cert GMDSS -- Iridium Certus GMDSS</option><option value="Commbox">Commbox -- Commbox Starlink</option><option value="FBB">FBB -- Inmarsat Fleet Broadband</option><option value="GlobalStar">GlobalStar -- Globalstar</option><option value="GSPS">GSPS -- Inmarsat GSPS</option><option value="GX">GX -- Inmarsat GX</option><option value="IDP">IDP -- IsatDataPro</option><option value="INM C">INM C -- Inmarsat C</option><option value="IoT">IoT -- Servicio de Telemetria</option><option value="Iridium">Iridium -- Iridium</option><option value="Iridium Cr">Iridium Cr -- Iridium Crew</option><option value="Iridium GR">Iridium GR -- Iridium Geo Restricted</option><option value="Iridium PP">Iridium PP -- Iridium Prepay</option><option value="ISPL">ISPL -- Inmarsat IsatPhone Link</option><option value="OpenPort">OpenPort -- Iridium OpenPort</option><option value="PTT Device">PTT Device -- Push to Talk Device</option><option value="PTT Group">PTT Group -- Push to Talk Talkgroup</option><option value="SafetyNet">SafetyNet -- SafetyNet II</option><option value="SBD">SBD -- SBD</option><option value="Starlink">Starlink -- Starlink</option><option value="VOIP">VOIP -- VOIP</option><option value="VSAT">VSAT -- VSAT</option>
+                  <option value="2-Stage">2-Stage</option><option value="BGAN">BGAN</option><option value="BM2M">BM2M</option><option value="Cellular">Cellular</option><option value="Cert GMDSS">Cert GMDSS</option><option value="Commbox">Commbox</option><option value="FBB">FBB</option><option value="GlobalStar">GlobalStar</option><option value="GSPS">GSPS</option><option value="GX">GX</option><option value="IDP">IDP</option><option value="INM C">INM C</option><option value="IoT">IoT</option><option value="Iridium">Iridium</option><option value="Iridium Cr">Iridium Cr</option><option value="Iridium GR">Iridium GR</option><option value="Iridium PP">Iridium PP</option><option value="ISPL">ISPL</option><option value="OpenPort">OpenPort</option><option value="PTT Device">PTT Device</option><option value="PTT Group">PTT Group</option><option value="SafetyNet">SafetyNet</option><option value="SBD">SBD</option><option value="Starlink">Starlink</option><option value="VOIP">VOIP</option><option value="VSAT">VSAT</option>
                 </select>
               </div>
               <button id="btn-download-tpl" class="btn btn-ghost" onclick="downloadTemplate()" disabled style="height:38px">
@@ -554,18 +453,15 @@
             <div class="dropzone" id="dropzone" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
               <input type="file" accept=".xlsx,.xls" onchange="onFileSelect(event)" id="file-input" />
               <div class="dropzone-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg></div>
-              <div class="dropzone-text" id="dropzone-text">Arrasta el archivo Excel aca o hace clic para seleccionar</div>
-              <div class="dropzone-sub">.xlsx -- maximo 5.000 filas</div>
+              <div class="dropzone-text" id="dropzone-text">Arrastá el archivo Excel o hacé clic para seleccionar</div>
+              <div class="dropzone-sub">.xlsx — máximo 5.000 filas</div>
             </div>
           </div>
           <div class="bulk-step" id="bulk-step3" style="display:none">
-            <div class="bulk-step-header"><div class="step-num">3</div><div class="step-title">Vista previa -- revisa los datos antes de enviar</div></div>
+            <div class="bulk-step-header"><div class="step-num">3</div><div class="step-title">Vista previa — revisá los datos antes de enviar</div></div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-              <span id="preview-count" style="font-size:12px;color:#5a7a9a"></span>
-              <button class="btn btn-ghost" onclick="resetBulk()" style="font-size:11px;padding:6px 12px">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg>
-                Cambiar archivo
-              </button>
+              <span id="preview-count" style="font-size:12px;color:var(--text-muted)"></span>
+              <button class="btn btn-ghost" onclick="resetBulk()" style="font-size:11px;padding:6px 12px">Cambiar archivo</button>
             </div>
             <div class="preview-wrap"><table class="preview-table" id="preview-table"></table></div>
             <div id="bulk-progress" style="display:none" class="progress-wrap">
@@ -574,52 +470,17 @@
             </div>
             <div id="bulk-result" style="display:none" class="result-summary"></div>
             <div class="bottom-bar" style="margin-top:16px">
-              <div style="font-size:11px;color:#3a6a9a">Los equipos se envian de a uno a n8n -&gt; IBIS</div>
-              <button id="btn-bulk-send" class="btn btn-ibis" onclick="startBulkSend()">
+              <div style="font-size:11px;color:var(--text-muted)">Los equipos se envian de a uno a n8n → IBIS</div>
+              <button id="btn-bulk-send" class="btn btn-primary" onclick="startBulkSend()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 Enviar <span id="bulk-send-count"></span> equipos a IBIS
               </button>
             </div>
           </div>
         </div>
-
-        <!-- Actividad Reciente - Equipos -->
-        <div class="recent-activity">
-          <div class="recent-activity-title">Actividad Reciente</div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Iridium</div>
-              <div class="activity-msg">Lorem ipsum alta de cliente completada</div>
-              <div class="activity-time">hace 2 horas</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Inmarsat</div>
-              <div class="activity-msg">Lorem ipsum sincronización exitosa</div>
-              <div class="activity-time">hace 5 horas</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Starlink</div>
-              <div class="activity-msg">Lorem ipsum actualización de plan</div>
-              <div class="activity-time">hace 1 día</div>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- PLANS -->
+      <!-- PLANES -->
       <div id="tab-plans" class="tab-content">
         <div class="form-grid">
           <div class="section-title">Identificacion</div>
@@ -629,9 +490,6 @@
           <div class="field"><label>ProductCode</label><input type="text" /></div>
           <div class="field"><label>VendorRateplanCode</label><input type="text" /></div>
           <div class="field"><label>CurrencyCode</label><input type="text" placeholder="USD / ARS / EUR" /></div>
-          <div class="field"><label>ParentBillerPricePlanID</label><input type="text" /></div>
-          <div class="field"><label>ScapID</label><input type="text" /></div>
-          <div class="field"><label>ExtRef</label><input type="text" /></div>
           <div class="section-title">Descripciones</div>
           <div class="field"><label>ShortDescription</label><input type="text" /></div>
           <div class="field span-2"><label>LongDescription</label><input type="text" /></div>
@@ -639,99 +497,37 @@
           <div class="field"><label>StartDate</label><input type="date" /></div>
           <div class="field"><label>EndDate</label><input type="date" /></div>
           <div class="field"><label>MinimumContractMonths</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>AllowancePeriodMonths</label><input type="number" placeholder="0" /></div>
           <div class="section-title">Tarifas</div>
           <div class="field"><label>ActivationFee</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>SubscriptionFee</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>SubscriptionFeeUnit</label><input type="text" placeholder="Ej: MONTHLY" /></div>
           <div class="field"><label>SuspendedsubscriptionFee</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>PoolSubscriptionFee</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>RentalMarkupPercentage</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>SubscriptionFeeUnit</label><input type="text" placeholder="Ej: MONTHLY" /></div>
-          <div class="field"><label>SubscriptionFeeScheduleCode</label><input type="text" /></div>
-          <div class="field"><label>SubscriptionFeeScheduleName</label><input type="text" /></div>
-          <div class="field"><label>CLINActivation</label><input type="text" /></div>
-          <div class="field"><label>CLINSubscription</label><input type="text" /></div>
-          <div class="section-title">Costos</div>
-          <div class="field"><label>ActivationFeeCost</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>SubscriptionFeeCost</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>SuspendedSubscriptionFeeCost</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>PoolSubscriptionFeeCost</label><input type="number" placeholder="0" /></div>
           <div class="section-title">Allowances</div>
           <div class="field"><label>AllowanceBytes</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>AllowanceBytesPooled</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>AllowanceMinutes</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>AllowanceMinutesPooled</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>AllowanceMoney</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>AllowanceMoneyPooled</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>AllowanceSMS</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>AllowanceSMSPooled</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>AllowancePoolingModel</label><input type="text" /></div>
-          <div class="field"><label>AllowanceAlignment</label><input type="text" /></div>
           <div class="field"><label>AllowanceRollOver</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
           <div class="section-title">Configuracion Avanzada</div>
           <div class="field"><label>Rank</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>MaxSimcards</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>IsPublic</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
-          <div class="field"><label>IsSubscriptionFeePerCard</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
-          <div class="field"><label>IsActivationFeePerCard</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
-          <div class="field"><label>AutoExtendCommitment</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
           <div class="field"><label>IsAvailableForEndusers</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
           <div class="field"><label>ProRateStart</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
           <div class="field"><label>ProRateEnd</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
-          <div class="field"><label>CommitmentAlignment</label><input type="text" /></div>
-          <div class="field"><label>CommitmentAlignmentCode</label><input type="text" /></div>
-          <div class="field"><label>IncrementPolicyCode</label><input type="text" /></div>
-          <div class="field"><label>EtfCalculationMode</label><input type="text" /></div>
-          <div class="field"><label>EtfAmount</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>EtfCost</label><input type="number" placeholder="0" /></div>
-          <div class="field"><label>AvailableForCustomerID</label><input type="text" /></div>
           <div class="section-title">Iridium / VAS</div>
           <div class="field"><label>IridiumPlanID</label><input type="text" /></div>
-          <div class="field"><label>IridiumPoolingGroupID</label><input type="text" /></div>
           <div class="field"><label>VasPriceStaticIP</label><input type="number" placeholder="0" /></div>
           <div class="field"><label>PricingTier</label><input type="text" /></div>
         </div>
         <div class="bottom-bar">
-          <div id="badge-plans" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
-          <button class="btn btn-blue" onclick="openModal('plans')">
+          <div id="badge-plans" class="sync-badge" style="background:var(--bg);border:1px solid var(--border)"><div class="sync-dot" style="background:var(--text-muted)"></div><span class="sync-text" style="color:var(--text-muted)">Listo para enviar</span></div>
+          <button class="btn btn-primary" onclick="openModal('plans')">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             Sincronizar con IBIS
           </button>
-        </div>
-
-        <!-- Actividad Reciente - Planes -->
-        <div class="recent-activity">
-          <div class="recent-activity-title">Actividad Reciente</div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Iridium</div>
-              <div class="activity-msg">Lorem ipsum alta de cliente completada</div>
-              <div class="activity-time">hace 2 horas</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Inmarsat</div>
-              <div class="activity-msg">Lorem ipsum sincronización exitosa</div>
-              <div class="activity-time">hace 5 horas</div>
-            </div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2a9d5c" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="activity-body">
-              <div class="activity-name">Equipo Starlink</div>
-              <div class="activity-msg">Lorem ipsum actualización de plan</div>
-              <div class="activity-time">hace 1 día</div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -741,17 +537,15 @@
       <div class="sidebar-card">
         <div class="sidebar-label">DESTINOS</div>
         <div class="dest-row">
-          <div><span class="dest-name">IBIS</span></div>
+          <span class="dest-name">IBIS</span>
           <div class="dest-status"><div class="dest-dot" id="dot-ibis" style="background:#3a5a7a"></div><span class="dest-status-text" id="label-ibis" style="color:#3a5a7a">Verificando...</span></div>
         </div>
         <div class="via-box"><div class="via-label">VIA</div><div class="via-value">n8n Webhooks</div></div>
       </div>
-
-
       <div class="sidebar-card">
         <div class="sidebar-header">
           <div class="sidebar-label" style="margin-bottom:0">ACTIVIDAD RECIENTE</div>
-          <button class="btn-icon" onclick="exportLogToExcel()" title="Exportar actividad a Excel">
+          <button class="btn-icon" onclick="exportLogToExcel()" title="Exportar a Excel">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </button>
         </div>
@@ -762,28 +556,20 @@
 </div>
 
 <script>
-/* ============================================================
-   EQUIPMENT FIELD DEFINITIONS
-   ============================================================ */
+/* EQUIPMENT FIELDS */
 const BASE_FIELDS=[{name:"Producto",type:"text"},{name:"IMSI",type:"text"},{name:"IMEI",type:"text"},{name:"ProvisioningAccountCode",type:"text"},{name:"MSISDN",type:"text"},{name:"Name",type:"text"},{name:"Description",type:"text"},{name:"SerialNr",type:"text"},{name:"CustomerID",type:"text"},{name:"CustomerCode",type:"text"},{name:"CostCenter",type:"text"},{name:"CostCenterGroup",type:"text"},{name:"APN",type:"text"},{name:"IPAddress",type:"text"},{name:"TerminalType",type:"select",options:["VSAT","MSS","LEO","GEO","HTS"]},{name:"AlertEmailAddress",type:"email"},{name:"AlertEmailAddressCC",type:"email"},{name:"Plan Proveedor",type:"text"},{name:"Tipo de Operacion",type:"select",options:["Alta","Baja","Modificacion","Suspension","Reactivacion"]},{name:"Solicitud de Servicio",type:"text"}];
 const EXTRA_FIELDS={"Iridium":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium Cr":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium GR":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium PP":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Cert GMDSS":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"OpenPort":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"BGAN":[{name:"Tel:xxx"}],"BM2M":[{name:"Tel:xxx"}],"FBB":[{name:"Tel:xxx"}],"GX":[{name:"Tel:xxx"}],"GSPS":[{name:"Tel:xxx"}],"INM C":[{name:"Tel:xxx"}],"ISPL":[{name:"Tel:xxx"}]};
 function getFields(v){return[...BASE_FIELDS,...(EXTRA_FIELDS[v]||[]).map(f=>({type:"text",...f}))];}
 
-/* ============================================================
-   TAB SWITCHING
-   ============================================================ */
-let currentTab='clients';
+/* TABS */
 function switchTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
-  currentTab=tab;
 }
 
-/* ============================================================
-   EQUIPMENT MODE
-   ============================================================ */
+/* EQUIPMENT MODE */
 function setEquipMode(m){
   document.getElementById('equip-single').style.display=m==='single'?'block':'none';
   document.getElementById('equip-bulk').style.display=m==='bulk'?'block':'none';
@@ -791,20 +577,16 @@ function setEquipMode(m){
   document.getElementById('btn-mode-bulk').classList.toggle('active',m==='bulk');
 }
 
-/* ============================================================
-   VENDOR / EQUIPMENT FIELDS
-   ============================================================ */
+/* VENDOR FIELDS */
 function onVendorChange(v){
   const h=document.getElementById('vendor-hint');
   const fd=document.getElementById('equipment-fields');
   const g=document.getElementById('equipment-form-grid');
   if(!v){h.style.display='block';fd.style.display='none';return;}
-  h.style.display='none';
-  fd.style.display='block';
-  g.innerHTML=`<div class="section-title">Datos del Equipo -- ${v}</div>`;
+  h.style.display='none'; fd.style.display='block';
+  g.innerHTML=`<div class="section-title">Datos del Equipo — ${v}</div>`;
   getFields(v).forEach(f=>{
-    const d=document.createElement('div');
-    d.className='field';
+    const d=document.createElement('div'); d.className='field';
     d.innerHTML=f.type==='select'
       ?`<label>${f.name}</label><select><option value="">Seleccionar...</option>${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`
       :`<label>${f.name}</label><input type="${f.type||'text'}" placeholder="${f.name}" />`;
@@ -814,19 +596,15 @@ function onVendorChange(v){
 }
 function onBulkVendorChange(v){document.getElementById('btn-download-tpl').disabled=!v;}
 function downloadTemplate(){
-  const v=document.getElementById('bulk-vendor-select').value;
-  if(!v)return;
+  const v=document.getElementById('bulk-vendor-select').value; if(!v)return;
   const h=getFields(v).map(f=>f.name);
   const ws=XLSX.utils.aoa_to_sheet([h,[],[]]);
   ws['!cols']=h.map(()=>({wch:18}));
-  const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,'Equipos');
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Equipos');
   XLSX.writeFile(wb,`plantilla_${v.replace(/\s/g,'_')}.xlsx`);
 }
 
-/* ============================================================
-   BULK UPLOAD
-   ============================================================ */
+/* BULK UPLOAD */
 let bulkRows=[],bulkRowStatuses=[];
 function onDragOver(e){e.preventDefault();document.getElementById('dropzone').classList.add('dragover');}
 function onDragLeave(){document.getElementById('dropzone').classList.remove('dragover');}
@@ -840,8 +618,7 @@ function processFile(file){
       const ws=wb.Sheets[wb.SheetNames[0]];
       const data=XLSX.utils.sheet_to_json(ws,{defval:''});
       if(!data.length){alert('El archivo esta vacio.');return;}
-      bulkRows=data;
-      bulkRowStatuses=data.map(()=>'pending');
+      bulkRows=data; bulkRowStatuses=data.map(()=>'pending');
       document.getElementById('dropzone').classList.add('has-file');
       document.getElementById('dropzone-text').textContent='OK: '+file.name+' ('+data.length+' filas)';
       document.getElementById('bulk-step3').style.display='block';
@@ -858,15 +635,16 @@ function processFile(file){
 function renderPreviewTable(){
   if(!bulkRows.length)return;
   const cols=Object.keys(bulkRows[0]);
-  const sc={'pending':'#3a5a7a','sending':'#f0a030','ok':'#30c060','err':'#e05c5c'};
+  const sc={'pending':'#ADB2BC','sending':'#f0a030','ok':'#00FFDB','err':'#e05c5c'};
   const sl={'pending':'--','sending':'Enviando','ok':'OK','err':'Error'};
-  document.getElementById('preview-table').innerHTML=`<thead><tr><th>Estado</th>${cols.slice(0,8).map(c=>`<th>${c}</th>`).join('')}${cols.length>8?`<th>+${cols.length-8} mas`:''}</tr></thead><tbody>${bulkRows.map((row,i)=>`<tr class="row-${bulkRowStatuses[i]}" id="bulk-row-${i}"><td class="row-status" style="color:${sc[bulkRowStatuses[i]]}">${sl[bulkRowStatuses[i]]}</td>${cols.slice(0,8).map(c=>`<td title="${row[c]}">${row[c]||''}</td>`).join('')}${cols.length>8?'<td>...</td>':''}</tr>`).join('')}</tbody>`;
+  document.getElementById('preview-table').innerHTML=`<thead><tr><th>Estado</th>${cols.slice(0,8).map(c=>`<th>${c}</th>`).join('')}${cols.length>8?`<th>+${cols.length-8} mas`:''}
+</tr></thead><tbody>${bulkRows.map((row,i)=>`<tr class="row-${bulkRowStatuses[i]}" id="bulk-row-${i}"><td class="row-status" style="color:${sc[bulkRowStatuses[i]]}">${sl[bulkRowStatuses[i]]}</td>${cols.slice(0,8).map(c=>`<td title="${row[c]}">${row[c]||''}</td>`).join('')}${cols.length>8?'<td>...</td>':''}</tr>`).join('')}</tbody>`;
 }
 function resetBulk(){
   bulkRows=[];bulkRowStatuses=[];
   document.getElementById('bulk-step3').style.display='none';
   document.getElementById('dropzone').classList.remove('has-file');
-  document.getElementById('dropzone-text').textContent='Arrasta el archivo Excel aca o hace clic para seleccionar';
+  document.getElementById('dropzone-text').textContent='Arrastá el archivo Excel o hacé clic para seleccionar';
   document.getElementById('file-input').value='';
 }
 let bulkRunning=false;
@@ -877,20 +655,16 @@ async function startBulkSend(){
   document.getElementById('bulk-progress').style.display='block';
   document.getElementById('bulk-result').style.display='none';
   bulkRowStatuses=bulkRows.map(()=>'pending');
-  const vendor=document.getElementById('bulk-vendor-select').value;
   let ok=0,err=0;
   for(let i=0;i<bulkRows.length;i++){
-    bulkRowStatuses[i]='sending';updateRowStatus(i);
+    bulkRowStatuses[i]='sending'; updateRowStatus(i);
     const pct=Math.round((i/bulkRows.length)*100);
     document.getElementById('progress-fill').style.width=pct+'%';
     document.getElementById('progress-pct').textContent=pct+'%';
     document.getElementById('progress-text').textContent='Enviando equipo '+(i+1)+' de '+bulkRows.length+'...';
-
-    // await fetch('https://tu-n8n.com/webhook/equipos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vendor,...bulkRows[i]})});
     await new Promise(r=>setTimeout(r,200));
     const success=Math.random()>0.08;
-    bulkRowStatuses[i]=success?'ok':'err';
-    updateRowStatus(i);
+    bulkRowStatuses[i]=success?'ok':'err'; updateRowStatus(i);
     if(success)ok++;else err++;
   }
   document.getElementById('progress-fill').style.width='100%';
@@ -903,501 +677,332 @@ async function startBulkSend(){
   bulkRunning=false;
 }
 function updateRowStatus(i){
-  const row=document.getElementById('bulk-row-'+i);
-  if(!row)return;
+  const row=document.getElementById('bulk-row-'+i); if(!row)return;
   const s=bulkRowStatuses[i];
-  const sc={'pending':'#3a5a7a','sending':'#f0a030','ok':'#30c060','err':'#e05c5c'};
+  const sc={'pending':'#ADB2BC','sending':'#f0a030','ok':'#00FFDB','err':'#e05c5c'};
   const sl={'pending':'--','sending':'Enviando...','ok':'OK','err':'Error'};
   row.className='row-'+s;
   row.querySelector('.row-status').style.color=sc[s];
   row.querySelector('.row-status').textContent=sl[s];
 }
 
-/* ============================================================
-   BADGE HELPERS
-   ============================================================ */
+/* BADGE */
 const badgeConfig={
-  idle:{bg:'#f0f4f8',border:'#c0ccd8',dot:'#5a7a9a',text:'Listo para enviar',shadow:'none'},
+  idle:   {bg:'#F5F5F5',border:'#E0E0E0',dot:'#ADB2BC',text:'Listo para enviar',shadow:'none'},
   loading:{bg:'#fff8ee',border:'#f0a03030',dot:'#f0a030',text:'Sincronizando...',shadow:'0 0 6px #f0a030'},
-  success:{bg:'#0d2a1a',border:'#30c06030',dot:'#30c060',text:'Enviado correctamente',shadow:'0 0 6px #30c060'},
-  error:{bg:'#2a0d0d',border:'#e05c5c30',dot:'#e05c5c',text:'Error en sincronizacion',shadow:'0 0 6px #e05c5c'}
+  success:{bg:'#0a1a2e',border:'#723EF730',dot:'#00FFDB',text:'Enviado correctamente',shadow:'0 0 6px #00FFDB'},
+  error:  {bg:'#2a0d0d',border:'#e05c5c30',dot:'#e05c5c',text:'Error en sincronizacion',shadow:'0 0 6px #e05c5c'}
 };
 function setBadge(k,s){
-  const c=badgeConfig[s];
-  const b=document.getElementById('badge-'+k);
-  if(!b)return;
-  b.style.background=c.bg;
-  b.style.border='1px solid '+c.border;
+  const c=badgeConfig[s]; const b=document.getElementById('badge-'+k); if(!b)return;
+  b.style.background=c.bg; b.style.border='1px solid '+c.border;
   b.querySelector('.sync-dot').style.background=c.dot;
   b.querySelector('.sync-dot').style.boxShadow=c.shadow;
   b.querySelector('.sync-text').style.color=c.dot;
   b.querySelector('.sync-text').textContent=c.text;
 }
 
-/* ============================================================
-   CONFIRMATION MODAL
-   ============================================================ */
-let pendingSubmitTab = null;
-const tabDisplayNames = {clients:'Clientes', equipment:'Equipos', plans:'Planes', 'equipment-bulk':'Bulk Equipos'};
-
-function openModal(tab) {
-  pendingSubmitTab = tab;
-  document.getElementById('modal-tab-name').textContent = tabDisplayNames[tab] || tab;
+/* MODAL */
+let pendingSubmitTab=null;
+const tabDisplayNames={clients:'Clientes',equipment:'Equipos',plans:'Planes','equipment-bulk':'Bulk Equipos'};
+function openModal(tab){
+  pendingSubmitTab=tab;
+  document.getElementById('modal-tab-name').textContent=tabDisplayNames[tab]||tab;
   document.getElementById('confirm-modal').classList.add('open');
 }
-function closeModal() {
-  document.getElementById('confirm-modal').classList.remove('open');
-  pendingSubmitTab = null;
-}
-function confirmSubmit() {
-  const tab = pendingSubmitTab;
-  closeModal();
-  if (tab) handleSubmit(tab);
-}
+function closeModal(){document.getElementById('confirm-modal').classList.remove('open');pendingSubmitTab=null;}
+function confirmSubmit(){const tab=pendingSubmitTab;closeModal();if(tab)handleSubmit(tab);}
+document.getElementById('confirm-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
-document.getElementById('confirm-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+/* WEBHOOK */
+const WEBHOOK_URL='/api/clientes';
 
-/* ============================================================
-   SUBMIT HANDLER - REAL n8n WEBHOOK
-   ============================================================ */
-const WEBHOOK_URL = '/api/clientes';
-const N8N_WEBHOOK_EQUIPOS  = 'PEGAR_URL_WEBHOOK_N8N_EQUIPOS';
-const N8N_WEBHOOK_PLANES   = 'PEGAR_URL_WEBHOOK_N8N_PLANES';
-
-function getWebhookUrl(k) {
-  if (k === 'clients')   return WEBHOOK_URL;
-  if (k === 'equipment') return N8N_WEBHOOK_EQUIPOS;
-  return N8N_WEBHOOK_PLANES;
-}
-
-function getFormPayload(k) {
-  if (k !== 'clients') return {};
-  const pais = document.getElementById('client-pais')?.value || '';
-  return {
-    CustomerName: document.getElementById('client-nombre')?.value || '',
-    ParentCustomerID: parseInt(pais) || null,
-    TaxCode: document.getElementById('client-num-doc')?.value || '',
-    Description: document.getElementById('client-categoria-fiscal')?.value || '',
-    Industry: document.getElementById('client-mercado')?.value || '',
-    EmailGeneral: document.getElementById('client-email')?.value || '',
-    MainContactPhone: document.getElementById('client-telefono')?.value || '',
-    AccountManagerCode: document.getElementById('client-comercial')?.value || '',
-    Location: document.getElementById('client-direccion')?.value || '',
-    ShowCdrsOnInvoice: false,
-    MainAddressSameAsParentMainAddress: false,
-    BillingAddressSameAsMainAddress: false
+function getFormPayload(k){
+  if(k!=='clients')return{};
+  const pais=document.getElementById('client-pais')?.value||'';
+  return{
+    CustomerName:document.getElementById('client-nombre')?.value||'',
+    ParentCustomerID:parseInt(pais)||null,
+    TaxCode:document.getElementById('client-num-doc')?.value||'',
+    Description:document.getElementById('client-categoria-fiscal')?.value||'',
+    Industry:document.getElementById('client-mercado')?.value||'',
+    EmailGeneral:document.getElementById('client-email')?.value||'',
+    MainContactPhone:document.getElementById('client-telefono')?.value||'',
+    AccountManagerCode:document.getElementById('client-comercial')?.value||'',
+    Location:document.getElementById('client-direccion')?.value||'',
+    ShowCdrsOnInvoice:false,
+    MainAddressSameAsParentMainAddress:false,
+    BillingAddressSameAsMainAddress:false
   };
 }
 
-async function handleSubmit(k) {
-  const url = getWebhookUrl(k);
-  setBadge(k, 'loading');
-  if (!url || url.startsWith('PEGAR_URL') || url.includes('TU-N8N-URL')) {
-    setTimeout(() => {
-      setBadge(k, 'success'); addLog(k, 1, 0, 1);
-      showToast('Modo demo - pegar URL del webhook de n8n en el codigo');
-      setTimeout(() => setBadge(k, 'idle'), 3000);
-    }, 1200);
-    return;
-  }
-  try {
-    const payload = getFormPayload(k);
-    document.getElementById('debug-panel').style.display = 'block';
-    dbg('📤 Enviando a: ' + url);
-    dbg('📋 Payload', payload);
-    const controller = new AbortController();
-    const timeout = setTimeout(() => { controller.abort(); dbg('⏱️ TIMEOUT — n8n no respondió en 55s'); }, 55000);
+async function handleSubmit(k){
+  const url=k==='clients'?WEBHOOK_URL:null;
+  setBadge(k,'loading');
+  if(!url){showToast('Webhook no configurado para esta sección');setBadge(k,'idle');return;}
+  try{
+    const payload=getFormPayload(k);
+    document.getElementById('debug-panel').style.display='block';
+    dbg('📤 Enviando a: '+url);
+    dbg('📋 Payload',payload);
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>{controller.abort();dbg('⏱️ TIMEOUT 55s');},55000);
     let res;
-    try {
-      res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: controller.signal
-      });
-    } finally {
-      clearTimeout(timeout);
+    try{
+      res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
+    }finally{clearTimeout(timeout);}
+    dbg('📥 HTTP '+res.status+' '+res.statusText);
+    const text=await res.text();
+    dbg('📦 Respuesta: '+(text||'(vacía)').substring(0,500));
+    let data={};
+    try{data=JSON.parse(text);}catch(e){}
+    const ok=res.ok&&data.ok!==false;
+    setBadge(k,ok?'success':'error'); addLog(k,ok?1:0,ok?0:1,1);
+    if(ok){
+      showResultModal('success','✅ Cliente sincronizado','Creado correctamente en IBIS.'+(data.CustomerID?' ID: <strong>'+data.CustomerID+'</strong>':''));
+    }else{
+      showResultModal('error','❌ Error al sincronizar','HTTP '+res.status+': '+(data.Message||data.message||data.error||text||'Sin detalle'));
     }
-    dbg('📥 HTTP ' + res.status + ' ' + res.statusText);
-    const text = await res.text();
-    dbg('📦 Respuesta cruda: ' + (text || '(vacía)').substring(0, 500));
-    let data = {};
-    try { data = JSON.parse(text); } catch(e) { console.warn('[SatHub] Respuesta no es JSON:', text); }
-    const ok = res.ok && data.ok !== false;
-    setBadge(k, ok ? 'success' : 'error'); addLog(k, ok ? 1 : 0, ok ? 0 : 1, 1);
-    if (ok) {
-      showResultModal('success', '✅ Cliente sincronizado', 'Creado correctamente en IBIS.' + (data.CustomerID ? ' ID: <strong>' + data.CustomerID + '</strong>' : ''));
-    } else {
-      showResultModal('error', '❌ Error al sincronizar',
-        'HTTP ' + res.status + ': ' + (data.Message || data.message || data.error || text || 'Sin detalle'));
+  }catch(e){
+    setBadge(k,'error'); addLog(k,0,1,1);
+    dbg('❌ ERROR: '+e.name+' — '+e.message);
+    let msg=e.message||'Error desconocido';
+    if(e.name==='AbortError'){
+      const taxCode=document.getElementById('client-num-doc')?.value||'';
+      const verifyBtn=taxCode?`<br><br><button onclick="verificarEnIBIS('${taxCode}')" style="margin-top:8px;padding:8px 16px;background:#723EF7;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">🔍 Verificar si se creó en IBIS (${taxCode})</button>`:'';
+      msg='IBIS tardó más de 55 segundos.<br>El cliente <strong>puede haberse creado igual</strong>.'+verifyBtn;
+    }else if(e.message&&e.message.includes('Failed to fetch')){
+      msg='No se pudo conectar con el servidor.<br>• Asegurate de que <strong>server.js esté corriendo</strong> (npm start)';
     }
-  } catch(e) {
-    setBadge(k, 'error'); addLog(k, 0, 1, 1);
-    dbg('❌ ERROR: ' + e.name + ' — ' + e.message);
-    console.error('[SatHub] Error fetch:', e);
-    let msg = e.message || 'Error desconocido';
-    if (e.name === 'AbortError') {
-      const taxCode = document.getElementById('client-num-doc')?.value || '';
-      const verifyBtn = taxCode ? `<br><br><button onclick="verificarEnIBIS('${taxCode}')" style="margin-top:8px;padding:8px 16px;background:#2a9d5c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">🔍 Verificar si se creó en IBIS (${taxCode})</button>` : '';
-      msg = 'IBIS tardó más de 55 segundos en responder.<br>El cliente <strong>puede haberse creado igual</strong> en IBIS.' + verifyBtn;
-    } else if (e.message && e.message.includes('Failed to fetch')) {
-      msg = 'No se pudo conectar con el servidor local.<br>• Asegurate de que <strong>server.js esté corriendo</strong> (npm start)<br>• Verificá que n8n esté corriendo en la red';
-    }
-    showResultModal('error', '❌ Error de conexión', msg);
+    showResultModal('error','❌ Error de conexión',msg);
   }
-  setTimeout(() => setBadge(k, 'idle'), 4000);
+  setTimeout(()=>setBadge(k,'idle'),4000);
 }
 
-/* ============================================================
-   localStorage PERSISTENCE FOR LOG
-   ============================================================ */
-const LS_KEY = 'satelliteHub_logItems';
-const MAX_LOG = 20;
-
-function saveLogToStorage() {
-  try { localStorage.setItem(LS_KEY, JSON.stringify(logItems)); } catch(e) {}
-}
-function loadLogFromStorage() {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed.slice(0, MAX_LOG);
-    }
-  } catch(e) {}
-  return null;
-}
-
-/* ============================================================
-   LOG ITEMS & RENDERING
-   ============================================================ */
+/* LOG */
+const LS_KEY='satelliteHub_logItems';
+const MAX_LOG=20;
+function saveLogToStorage(){try{localStorage.setItem(LS_KEY,JSON.stringify(logItems));}catch(e){}}
+function loadLogFromStorage(){try{const raw=localStorage.getItem(LS_KEY);if(raw){const p=JSON.parse(raw);if(Array.isArray(p))return p.slice(0,MAX_LOG);}}catch(e){}return null;}
 const tabNames={clients:'Cliente',equipment:'Equipo',plans:'Plan','equipment-bulk':'Bulk Equipos'};
-
-let logItems = (function() {
-  const stored = loadLogFromStorage();
-  if (stored && stored.length > 0) return stored;
-  return [
-    {tab:'Equipo Iridium',time:'hace 2 horas',msg:'Lorem ipsum alta de cliente completada',ok:true},
-    {tab:'Equipo Inmarsat',time:'hace 5 horas',msg:'Lorem ipsum sincronización exitosa',ok:true},
-    {tab:'Equipo Starlink',time:'hace 1 día',msg:'Lorem ipsum actualización de plan',ok:true}
-  ];
-})();
+let logItems=(function(){const s=loadLogFromStorage();return(s&&s.length>0)?s:[];})();
 
 function renderLog(){
   const l=document.getElementById('log-list');
   if(!logItems.length){l.innerHTML='<div class="log-empty">Sin actividad aun</div>';return;}
-  l.innerHTML=logItems.map(item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#30c060':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}${item.vendor?' — '+item.vendor:''}</div><div class="log-msg">${item.msg}</div><div class="log-time">${item.time}</div></div></div>`).join('');
+  l.innerHTML=logItems.map(item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#00FFDB':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}</div><div class="log-msg">${item.msg}</div><div class="log-time">${item.time}</div></div></div>`).join('');
 }
 renderLog();
 
 function addLog(k,ok,err,total){
   const time=new Date().toLocaleTimeString('es-AR');
-  let msg;
-  if(k==='equipment-bulk'){msg=ok+'/'+total+' enviados a IBIS'+(err>0?' - '+err+' errores':'');}
-  else if(k==='equipment'){msg=ok?'Enviado a IBIS':'Error en IBIS';}
-  else{msg=ok?'Enviado a IBIS':'Error - revisar webhook';}
-  logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0},...logItems].slice(0, MAX_LOG);
-  renderLog();
-  saveLogToStorage();
+  let msg=k==='equipment-bulk'?ok+'/'+total+' enviados a IBIS'+(err>0?' - '+err+' errores':''):ok?'Enviado a IBIS':'Error - revisar webhook';
+  logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0},...logItems].slice(0,MAX_LOG);
+  renderLog(); saveLogToStorage();
 }
 
-/* ============================================================
-   EXPORT ACTIVITY LOG TO EXCEL
-   ============================================================ */
-function exportLogToExcel() {
-  if (!logItems.length) { showToast('Sin actividad para exportar'); return; }
-  const rows = logItems.map(item => ({
-    'Fecha/Hora': item.time,
-    'Tab': item.tab,
-    'Vendor': item.vendor || '',
-    'Mensaje': item.msg,
-    'Estado': item.ok ? 'OK' : 'Error'
-  }));
-  const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{wch:12},{wch:16},{wch:14},{wch:32},{wch:8}];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Actividad');
-  XLSX.writeFile(wb, 'actividad_satellite_hub.xlsx');
+function exportLogToExcel(){
+  if(!logItems.length){showToast('Sin actividad para exportar');return;}
+  const rows=logItems.map(item=>({'Fecha/Hora':item.time,'Tab':item.tab,'Mensaje':item.msg,'Estado':item.ok?'OK':'Error'}));
+  const ws=XLSX.utils.json_to_sheet(rows);
+  ws['!cols']=[{wch:12},{wch:16},{wch:32},{wch:8}];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Actividad');
+  XLSX.writeFile(wb,'actividad_satellite_hub.xlsx');
 }
 
-/* ============================================================
-   FIELD FILL VISUAL FEEDBACK
-   ============================================================ */
-function updateFieldFilled(el) {
-  if (el.value && el.value.trim() !== '') {
-    el.classList.add('field-filled');
-  } else {
-    el.classList.remove('field-filled');
-  }
+/* FORM HELPERS */
+function updateFieldFilled(el){
+  el.classList.toggle('field-filled',!!(el.value&&el.value.trim()!==''));
 }
 
-/* ============================================================
-   EMAIL VALIDATION
-   ============================================================ */
-function isValidEmail(email) {
-  return email.includes('@') && email.includes('.') && email.indexOf('@') < email.lastIndexOf('.');
+function updateProgressCounter(n){
+  const label=document.getElementById('form-progress-label');
+  const fill=document.getElementById('form-progress-fill');
+  if(label)label.textContent=n+' de 3 campos obligatorios completados';
+  if(fill)fill.style.width=(n/3*100)+'%';
 }
 
-/* ============================================================
-   PROGRESS COUNTER (3 required fields: Pais, Nombre, Documento)
-   ============================================================ */
-function updateProgressCounter(filledCount) {
-  const label = document.getElementById('form-progress-label');
-  const fill = document.getElementById('form-progress-fill');
-  if (label) label.textContent = filledCount + ' de 3 campos obligatorios completados';
-  if (fill) fill.style.width = (filledCount / 3 * 100) + '%';
-}
-
-/* ============================================================
-   CLIENT FORM VALIDATION
-   ============================================================ */
-function checkClientForm() {
-  const pais = document.getElementById('client-pais');
-  const nombre = document.getElementById('client-nombre');
-  const numDoc = document.getElementById('client-num-doc');
-
-  const paisVal = pais ? pais.value.trim() : '';
-  const nombreVal = nombre ? nombre.value.trim() : '';
-  const numVal = numDoc ? numDoc.value.trim() : '';
-
-  // Count filled required fields
-  const filled = [paisVal, nombreVal, numVal].filter(v => v !== '').length;
+function checkClientForm(){
+  const paisVal=(document.getElementById('client-pais')?.value||'').trim();
+  const nombreVal=(document.getElementById('client-nombre')?.value||'').trim();
+  const numVal=(document.getElementById('client-num-doc')?.value||'').trim();
+  const filled=[paisVal,nombreVal,numVal].filter(v=>v!=='').length;
   updateProgressCounter(filled);
-
-  // All 3 required must be filled
-  const allFilled = paisVal && nombreVal && numVal;
-
-  const btn = document.getElementById('btn-submit-clients');
-  if (btn) {
-    btn.disabled = !allFilled;
-    if (allFilled) {
-      btn.style.background = '#22c55e';
-      btn.style.color = '#fff';
-    } else {
-      btn.style.background = '';
-      btn.style.color = '';
-    }
-  }
-
-  const b = document.getElementById('badge-clients');
-  if (allFilled) {
-    b.style.background='#e8faf0'; b.style.border='1px solid #30c060';
-    b.querySelector('.sync-dot').style.background='#30c060';
-    b.querySelector('.sync-dot').style.boxShadow='0 0 8px #30c060';
-    b.querySelector('.sync-text').style.color='#1a8040';
+  const allFilled=paisVal&&nombreVal&&numVal;
+  const btn=document.getElementById('btn-submit-clients');
+  if(btn){btn.disabled=!allFilled;btn.style.background=allFilled?'#723EF7':'';}
+  const b=document.getElementById('badge-clients');
+  if(allFilled){
+    b.style.background='#ede8ff';b.style.border='1px solid #723EF7';
+    b.querySelector('.sync-dot').style.background='#723EF7';
+    b.querySelector('.sync-dot').style.boxShadow='0 0 8px #723EF750';
+    b.querySelector('.sync-text').style.color='#5f2de0';
     b.querySelector('.sync-text').textContent='Listo para enviar';
-  } else {
-    b.style.background='#f0f4f8'; b.style.border='1px solid #c0ccd8';
-    b.querySelector('.sync-dot').style.background='#5a7a9a';
+  }else{
+    b.style.background='#F5F5F5';b.style.border='1px solid #E0E0E0';
+    b.querySelector('.sync-dot').style.background='#ADB2BC';
     b.querySelector('.sync-dot').style.boxShadow='none';
-    b.querySelector('.sync-text').style.color='#5a7a9a';
+    b.querySelector('.sync-text').style.color='#ADB2BC';
     b.querySelector('.sync-text').textContent='Listo para enviar';
   }
 }
 
-/* ============================================================
-   RESET CLIENT FORM
-   ============================================================ */
-function resetClientForm() {
-  const ids = ['client-pais','client-nombre','client-num-doc','client-categoria-fiscal',
-               'client-mercado','client-email','client-telefono','client-comercial','client-direccion'];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.value = '';
-      el.classList.remove('field-error', 'field-filled');
-    }
+function resetClientForm(){
+  ['client-pais','client-nombre','client-num-doc','client-categoria-fiscal','client-mercado','client-email','client-telefono','client-comercial','client-direccion'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.value='';el.classList.remove('field-error','field-filled');}
   });
-  const emailErr = document.getElementById('email-error');
-  if (emailErr) emailErr.classList.remove('show');
-  checkClientForm();
+  checkClientForm(); onPaisChange();
 }
 
-/* ============================================================
-   COPY CLIENT JSON TO CLIPBOARD
-   ============================================================ */
-async function pasteClientJSON() {
-  let text = '';
-  try {
-    text = await navigator.clipboard.readText();
-  } catch(e) {
-    text = prompt('Pegá el JSON acá:') || '';
-  }
-  if (!text.trim()) return;
-  let data;
-  try { data = JSON.parse(text); } catch(e) { showToast('JSON inválido'); return; }
-
-  const map = {
-    'client-pais':             d => { const v = String(d.ParentCustomerID||''); const el = document.getElementById('client-pais'); if(el){ el.value=v; updateFieldFilled(el); } },
-    'client-nombre':           d => setField('client-nombre', d.CustomerName),
-    'client-num-doc':          d => setField('client-num-doc', d.TaxCode),
-    'client-categoria-fiscal': d => setField('client-categoria-fiscal', d.Description),
-    'client-mercado':          d => setField('client-mercado', d.Industry),
-    'client-email':            d => setField('client-email', d.EmailGeneral),
-    'client-telefono':         d => setField('client-telefono', d.MainContactPhone),
-    'client-comercial':        d => setField('client-comercial', d.AccountManagerCode),
-    'client-direccion':        d => setField('client-direccion', d.Location),
-  };
-  function setField(id, val) {
-    const el = document.getElementById(id);
-    if (el && val !== undefined && val !== null) { el.value = val; updateFieldFilled(el); }
-  }
-  Object.values(map).forEach(fn => fn(data));
-  checkClientForm();
-  showToast('¡Datos pegados!');
-}
-
-function copyClientJSON() {
-  const payload = getFormPayload('clients');
-  const jsonStr = JSON.stringify(payload, null, 2);
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(jsonStr).then(() => showToast('¡Copiado!')).catch(() => fallbackCopy(jsonStr));
-  } else {
-    fallbackCopy(jsonStr);
-  }
-}
-function fallbackCopy(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position = 'fixed';
-  ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.select();
-  try { document.execCommand('copy'); showToast('¡Copiado!'); } catch(e) { showToast('Error al copiar'); }
-  document.body.removeChild(ta);
-}
-/* ============================================================
-   DEBUG HELPERS
-   ============================================================ */
-function dbg(msg, data) {
-  const log = document.getElementById('debug-log');
-  if (!log) return;
-  const ts = new Date().toLocaleTimeString();
-  const line = '[' + ts + '] ' + msg + (data !== undefined ? '\n  → ' + (typeof data === 'object' ? JSON.stringify(data, null, 2) : data) : '');
-  log.textContent = (log.textContent ? log.textContent + '\n' : '') + line;
-  log.scrollTop = log.scrollHeight;
-  console.log('[SatHub]', msg, data !== undefined ? data : '');
-}
-function toggleDebug() {
-  const p = document.getElementById('debug-panel');
-  if (p) { p.style.display = p.style.display === 'none' ? 'block' : 'none'; }
-}
-async function testN8nConnection() {
-  document.getElementById('debug-panel').style.display = 'block';
-  dbg('🔌 Test conexión → ' + WEBHOOK_URL);
-  try {
-    const res = await fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ test: true, source: 'SatelliteHub-debug' })
-    });
-    dbg('✅ HTTP ' + res.status + ' ' + res.statusText);
-    const text = await res.text();
-    dbg('📦 Respuesta: ' + text.substring(0, 300));
-  } catch(e) {
-    dbg('❌ ERROR: ' + e.message);
-    if (e.message.includes('Failed to fetch')) {
-      dbg('⚠️  Posibles causas:');
-      dbg('    1. Workflow NO activado en n8n (toggle OFF)');
-      dbg('    2. CORS bloqueado (abrí desde GitHub Pages, no file://)');
-      dbg('    3. n8n no está corriendo');
-    }
-  }
-}
-
-async function verificarEnIBIS(taxCode) {
-  const btn = event.target;
-  btn.textContent = '⏳ Verificando...';
-  btn.disabled = true;
-  try {
-    const res = await fetch(`/api/verificar-cliente?taxCode=${encodeURIComponent(taxCode)}`);
-    const data = await res.json();
-    if (data.found) {
-      btn.parentElement.innerHTML = `✅ <strong>Cliente encontrado en IBIS</strong> — ID: <strong>${data.CustomerID}</strong> | Nombre: ${data.CustomerName}`;
-    } else {
-      btn.parentElement.innerHTML = '❌ No se encontró el cliente en IBIS con ese documento. No fue creado.';
-    }
-  } catch(e) {
-    btn.textContent = '❌ Error al verificar';
-    btn.disabled = false;
-  }
-}
-
-function showResultModal(type, title, body) {
-  const modal = document.getElementById('result-modal');
-  const btn   = document.getElementById('result-modal-btn');
-  document.getElementById('result-modal-title').innerHTML = title;
-  document.getElementById('result-modal-body').innerHTML  = body;
-  btn.style.background = type === 'success' ? '#22c55e' : '#e05c5c';
-  btn.style.borderColor = type === 'success' ? '#22c55e' : '#e05c5c';
-  modal.classList.add('open');
-}
-function showToast(msg) {
-  const existing = document.getElementById('toast-el');
-  if (existing) existing.remove();
-  const t = document.createElement('div');
-  t.id = 'toast-el';
-  t.className = 'toast';
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => { if (t.parentNode) t.parentNode.removeChild(t); }, 2200);
-}
-
-/* ============================================================
-   EQUIPMENT FORM CHECK
-   ============================================================ */
 function checkEquipForm(){
   const v=document.getElementById('vendor-select');
   const btn=document.getElementById('btn-submit-equipment');
   if(btn)btn.disabled=!v||!v.value;
 }
 
-/* ============================================================
-   PING DESTINATIONS (IBIS only)
-   ============================================================ */
-const DEST_URLS={ibis:'https://ibis.tesacom.net/Welcome.aspx'};
-async function pingDest(id){
-  const dot=document.getElementById('dot-'+id);
-  const lbl=document.getElementById('label-'+id);
-  if (!dot || !lbl) return;
+/* PASTE / COPY JSON */
+async function pasteClientJSON(){
+  let text='';
+  try{text=await navigator.clipboard.readText();}catch(e){text=prompt('Pegá el JSON acá:')||'';}
+  if(!text.trim())return;
+  let data;
+  try{data=JSON.parse(text);}catch(e){showToast('JSON inválido');return;}
+  const set=(id,val)=>{const el=document.getElementById(id);if(el&&val!=null){el.value=val;updateFieldFilled(el);}};
+  const paisEl=document.getElementById('client-pais');
+  if(paisEl&&data.ParentCustomerID!=null){paisEl.value=String(data.ParentCustomerID);updateFieldFilled(paisEl);onPaisChange();}
+  set('client-nombre',data.CustomerName);
+  set('client-num-doc',data.TaxCode);
+  set('client-categoria-fiscal',data.Description);
+  set('client-mercado',data.Industry);
+  set('client-email',data.EmailGeneral);
+  set('client-telefono',data.MainContactPhone);
+  set('client-comercial',data.AccountManagerCode);
+  set('client-direccion',data.Location);
+  checkClientForm();
+  showToast('¡Datos pegados!');
+}
+
+function copyClientJSON(){
+  const jsonStr=JSON.stringify(getFormPayload('clients'),null,2);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(jsonStr).then(()=>showToast('¡Copiado!')).catch(()=>fallbackCopy(jsonStr));
+  }else{fallbackCopy(jsonStr);}
+}
+function fallbackCopy(text){
+  const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');showToast('¡Copiado!');}catch(e){showToast('Error al copiar');}
+  document.body.removeChild(ta);
+}
+
+/* VERIFICAR EN IBIS (post-timeout) */
+async function verificarEnIBIS(taxCode){
+  const btn=event.target;btn.textContent='⏳ Verificando...';btn.disabled=true;
   try{
-    const ctrl=new AbortController();
-    const t=setTimeout(()=>ctrl.abort(),5000);
-    await fetch(DEST_URLS[id],{mode:'no-cors',cache:'no-store',signal:ctrl.signal});
+    const res=await fetch(`/api/verificar-cliente?taxCode=${encodeURIComponent(taxCode)}`);
+    const data=await res.json();
+    if(data.found){
+      btn.parentElement.innerHTML=`✅ <strong>Cliente encontrado</strong> — ID: <strong>${data.CustomerID}</strong> | ${data.CustomerName}`;
+    }else{
+      btn.parentElement.innerHTML='❌ No se encontró el cliente en IBIS. No fue creado.';
+    }
+  }catch(e){btn.textContent='❌ Error al verificar';btn.disabled=false;}
+}
+
+/* DEBUG */
+function dbg(msg,data){
+  const log=document.getElementById('debug-log'); if(!log)return;
+  const ts=new Date().toLocaleTimeString();
+  const line='['+ts+'] '+msg+(data!==undefined?'\n  → '+(typeof data==='object'?JSON.stringify(data,null,2):data):'');
+  log.textContent=(log.textContent?log.textContent+'\n':'')+line;
+  log.scrollTop=log.scrollHeight;
+}
+function toggleDebug(){
+  const p=document.getElementById('debug-panel');
+  if(p)p.style.display=p.style.display==='none'?'block':'none';
+}
+async function testN8nConnection(){
+  document.getElementById('debug-panel').style.display='block';
+  dbg('🔌 Test → '+WEBHOOK_URL);
+  try{
+    const res=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({test:true})});
+    dbg('✅ HTTP '+res.status);
+    const text=await res.text();
+    dbg('📦 '+text.substring(0,300));
+  }catch(e){
+    dbg('❌ '+e.message);
+    if(e.message.includes('Failed to fetch')){
+      dbg('⚠️ Verificar: 1) server.js corriendo (npm start)  2) n8n activo  3) workflow activado');
+    }
+  }
+}
+
+/* MODALS & TOAST */
+function showResultModal(type,title,body){
+  document.getElementById('result-modal-title').innerHTML=title;
+  document.getElementById('result-modal-body').innerHTML=body;
+  const btn=document.getElementById('result-modal-btn');
+  btn.style.background=type==='success'?'#723EF7':'#e05c5c';
+  document.getElementById('result-modal').classList.add('open');
+}
+function showToast(msg){
+  const existing=document.getElementById('toast-el');if(existing)existing.remove();
+  const t=document.createElement('div');t.id='toast-el';t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{if(t.parentNode)t.parentNode.removeChild(t);},2200);
+}
+
+/* PING IBIS */
+async function pingDest(id){
+  const dot=document.getElementById('dot-'+id);const lbl=document.getElementById('label-'+id);
+  if(!dot||!lbl)return;
+  try{
+    const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),5000);
+    await fetch('https://ibis.tesacom.net/Welcome.aspx',{mode:'no-cors',cache:'no-store',signal:ctrl.signal});
     clearTimeout(t);
-    dot.style.background='#30c060';dot.style.boxShadow='0 0 6px #30c060';
-    lbl.style.color='#30c060';lbl.textContent='Online';
+    dot.style.background='#00FFDB';dot.style.boxShadow='0 0 6px #00FFDB';
+    lbl.style.color='#00FFDB';lbl.textContent='Online';
   }catch(e){
     dot.style.background='#e05c5c';dot.style.boxShadow='0 0 6px #e05c5c';
     lbl.style.color='#e05c5c';lbl.textContent='Offline';
   }
 }
-function pingAll(){pingDest('ibis');}
-pingAll();
-setInterval(pingAll,30000);
+pingDest('ibis');
+setInterval(()=>pingDest('ibis'),30000);
 
-/* ============================================================
-   DARK MODE TOGGLE
-   ============================================================ */
-function toggleDarkMode() {
-  const isDark = document.body.classList.toggle('dark');
-  document.getElementById('dark-icon-moon').style.display = isDark ? 'none' : '';
-  document.getElementById('dark-icon-sun').style.display = isDark ? '' : 'none';
-  try { localStorage.setItem('satelliteHub_darkMode', isDark ? '1' : '0'); } catch(e) {}
+/* PAIS → COMERCIAL */
+const EXEC_BY_COUNTRY={
+  '3':[{code:'AFERRARIO',name:'Alejandro Ferrario'},{code:'ADOVAL',name:'Andrea Doval'},{code:'DGARCIA',name:'Daniel Garcia'},{code:'EVAYICOLI',name:'Eneas Yavicoli'},{code:'SAGOSTINI',name:'Sergio Agostini'},{code:'VAMPAGNANI',name:'Veronica Ampagnani'},{code:'XGUERRERO',name:'Xavier Guerrero'},{code:'JORZECHOSKI',name:'Janice Orzechoski'}],
+  '4':[{code:'ABRAVO',name:'Alejandra Bravo'},{code:'BURIBE',name:'Bernardo Uribe'},{code:'MACUÑA',name:'Miguel Angel Acuña'},{code:'RMNUNEZ',name:'Rose Marie Nuñez'},{code:'JPELIZZA',name:'Juan Pablo Pelizza'}],
+  '5':[{code:'GGIMENEZ',name:'Gerardo Gimenez'},{code:'JVIOLA',name:'Jorge Viola'}],
+  '6':[{code:'AREBATTA',name:'Alejandra Rebatta'},{code:'PDIAZ',name:'Paolo Diaz'}],
+};
+function onPaisChange(){
+  const pais=document.getElementById('client-pais');const sel=document.getElementById('client-comercial');
+  if(!pais||!sel)return;
+  const execs=EXEC_BY_COUNTRY[pais.value]||[];const prev=sel.value;
+  sel.innerHTML='<option value="">Seleccionar...</option>';
+  execs.forEach(e=>{const opt=document.createElement('option');opt.value=e.code;opt.textContent=e.name;sel.appendChild(opt);});
+  sel.disabled=execs.length===0;
+  if(execs.find(e=>e.code===prev))sel.value=prev;
 }
-// Restore dark mode preference on load
-(function() {
-  try {
-    if (localStorage.getItem('satelliteHub_darkMode') === '1') {
+
+/* DARK MODE */
+function toggleDarkMode(){
+  const isDark=document.body.classList.toggle('dark');
+  document.getElementById('dark-icon-moon').style.display=isDark?'none':'';
+  document.getElementById('dark-icon-sun').style.display=isDark?'':'none';
+  try{localStorage.setItem('satelliteHub_darkMode',isDark?'1':'0');}catch(e){}
+}
+(function(){
+  try{
+    if(localStorage.getItem('satelliteHub_darkMode')==='1'){
       document.body.classList.add('dark');
-      const moon = document.getElementById('dark-icon-moon');
-      const sun = document.getElementById('dark-icon-sun');
-      if (moon) moon.style.display = 'none';
-      if (sun) sun.style.display = '';
+      document.getElementById('dark-icon-moon').style.display='none';
+      document.getElementById('dark-icon-sun').style.display='';
     }
-  } catch(e) {}
+  }catch(e){}
 })();
 </script>
 </body>
