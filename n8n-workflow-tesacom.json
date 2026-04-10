@@ -17,23 +17,6 @@
     },
     {
       "parameters": {
-        "dataType": "number",
-        "value1": "={{ $json.body.ParentCustomerID }}",
-        "rules": {
-          "rules": [
-            { "value2": 3 }
-          ]
-        },
-        "fallbackOutput": "none"
-      },
-      "id": "switch-pais-010",
-      "name": "Switch País",
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 1,
-      "position": [240, 0]
-    },
-    {
-      "parameters": {
         "values": {
           "string": [
             { "name": "_cid",  "value": "ed0bca6fac254bb6a6a2901e0e4bae25" },
@@ -46,7 +29,7 @@
       "name": "Cred AR",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [464, 0]
+      "position": [240, 0]
     },
     {
       "parameters": {
@@ -68,7 +51,7 @@
       "name": "Obtener Token IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [688, 0]
+      "position": [464, 0]
     },
     {
       "parameters": {
@@ -96,7 +79,7 @@
       "name": "Crear Cliente en IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [912, 0]
+      "position": [688, 0]
     },
     {
       "parameters": {
@@ -110,16 +93,11 @@
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1136, 0]
+      "position": [912, 0]
     }
   ],
   "connections": {
     "Webhook Clientes": {
-      "main": [
-        [{ "node": "Switch País", "type": "main", "index": 0 }]
-      ]
-    },
-    "Switch País": {
       "main": [
         [{ "node": "Cred AR", "type": "main", "index": 0 }]
       ]
