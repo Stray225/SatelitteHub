@@ -1062,7 +1062,7 @@ async function handleSubmit(k) {
    localStorage PERSISTENCE FOR LOG
    ============================================================ */
 const LS_KEY = 'satelliteHub_logItems';
-const MAX_LOG = 20;
+const MAX_LOG = 10;
 
 function saveLogToStorage() {
   try { localStorage.setItem(LS_KEY, JSON.stringify(logItems)); } catch(e) {}

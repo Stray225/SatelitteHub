@@ -15,6 +15,11 @@ const IBIS_CLIENT_SECRET = 'QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=';
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+// Redirigir / al archivo correcto
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index satelitte.html'));
+});
+
 function httpRequest(url, options, body) {
   return new Promise((resolve, reject) => {
     const parsed = new URL(url);

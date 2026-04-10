@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paleta de Colores</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+    padding: 24px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #192023;
+    margin-bottom: 24px;
+    letter-spacing: -0.3px;
+  }
+
+  .palette-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .palette-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #192023;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .palette-title .star {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #723EF7;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .swatch-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .swatch {
+    width: 80px;
+    height: 80px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.08);
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+
+  .swatch:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+
+  .swatch-hex {
+    font-size: 12px;
+    font-weight: 600;
+    color: #192023;
+    font-family: 'Courier New', monospace;
+  }
+
+  .swatch-name {
+    font-size: 11px;
+    color: #666;
+  }
+
+  .copy-hint {
+    font-size: 10px;
+    color: #999;
+    font-style: italic;
+  }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #192023;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<h1>Colores de marca</h1>
+
+<!-- Paleta Principal -->
+<div class="palette-section">
+  <div class="palette-title">
+    <span class="star">★</span>
+    Paleta de colores principal
+  </div>
+  <div class="swatches">
+    <div class="swatch-wrap" onclick="copiar('#000000')">
+      <div class="swatch" style="background:#000000;"></div>
+      <span class="swatch-hex">#000000</span>
+      <span class="swatch-name">Negro</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+    <div class="swatch-wrap" onclick="copiar('#FFFFFF')">
+      <div class="swatch" style="background:#FFFFFF;"></div>
+      <span class="swatch-hex">#FFFFFF</span>
+      <span class="swatch-name">Blanco</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+    <div class="swatch-wrap" onclick="copiar('#90CFFF')">
+      <div class="swatch" style="background:#90CFFF;"></div>
+      <span class="swatch-hex">#90CFFF</span>
+      <span class="swatch-name">Celeste</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+    <div class="swatch-wrap" onclick="copiar('#723EF7')">
+      <div class="swatch" style="background:#723EF7;"></div>
+      <span class="swatch-hex">#723EF7</span>
+      <span class="swatch-name">Violeta</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+  </div>
+</div>
+
+<!-- Paleta Secundaria -->
+<div class="palette-section">
+  <div class="palette-title">Paleta Secundaria</div>
+  <div class="swatches">
+    <div class="swatch-wrap" onclick="copiar('#425463')">
+      <div class="swatch" style="background:#425463;"></div>
+      <span class="swatch-hex">#425463</span>
+      <span class="swatch-name">Azul oscuro</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+    <div class="swatch-wrap" onclick="copiar('#ADB2BC')">
+      <div class="swatch" style="background:#ADB2BC;"></div>
+      <span class="swatch-hex">#ADB2BC</span>
+      <span class="swatch-name">Gris</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+    <div class="swatch-wrap" onclick="copiar('#00FFDB')">
+      <div class="swatch" style="background:#00FFDB;"></div>
+      <span class="swatch-hex">#00FFDB</span>
+      <span class="swatch-name">Turquesa</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+  </div>
+</div>
+
+<!-- Paleta Complementaria -->
+<div class="palette-section">
+  <div class="palette-title">Paleta Complementaria</div>
+  <div class="swatches">
+    <div class="swatch-wrap" onclick="copiar('#192023')">
+      <div class="swatch" style="background:#192023;"></div>
+      <span class="swatch-hex">#192023</span>
+      <span class="swatch-name">Negro profundo</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+    <div class="swatch-wrap" onclick="copiar('#F5F5F5')">
+      <div class="swatch" style="background:#F5F5F5;"></div>
+      <span class="swatch-hex">#F5F5F5</span>
+      <span class="swatch-name">Blanco hueso</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+    <div class="swatch-wrap" onclick="copiar('#0C1135')">
+      <div class="swatch" style="background:#0C1135;"></div>
+      <span class="swatch-hex">#0C1135</span>
+      <span class="swatch-name">Azul marino</span>
+      <span class="copy-hint">clic para copiar</span>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+function copiar(hex) {
+  navigator.clipboard.writeText(hex).catch(() => {});
+  const t = document.getElementById('toast');
+  t.textContent = hex + ' copiado al portapapeles';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>

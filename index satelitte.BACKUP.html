@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Satellite Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f0f4f8; color: #1a2535; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #ffffff; } ::-webkit-scrollbar-thumb { background: #1e2e3e; border-radius: 3px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    #app { max-width: 1200px; margin: 0 auto; padding: 0 32px 40px; }
+    header { border-bottom: 1px solid #dde3ea; padding: 0 32px; margin: 0 -32px 24px; }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .header-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #1a2535; letter-spacing: 0.02em; }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 32px; height: 32px; background: #2a7fff15; border: 1px solid #2a7fff40; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .logo-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.02em; color: #1a2a4a; }
+    .logo-sub { font-size: 10px; color: #3a6a9a; letter-spacing: 0.1em; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #30c060; box-shadow: 0 0 8px #30c060; display: inline-block; }
+    .status-label { font-size: 11px; color: #30c060; margin-left: 6px; }
+    .tabs { display: flex; gap: 4px; background: #ffffff; padding: 4px; border-radius: 10px; width: fit-content; margin-bottom: 24px; }
+    .tab-btn { display: flex; align-items: center; gap: 7px; padding: 8px 18px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: #5a7a9a; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; transition: all 0.15s; }
+    .tab-btn.active { background: #e8f8ee; border-color: #2a9d5c; color: #1a6640; }
+    .tab-btn:hover:not(.active) { color: #a0b8d0; }
+    .main-grid { display: grid; grid-template-columns: 1fr 260px; gap: 20px; align-items: start; }
+    @media (max-width: 800px) { .main-grid { grid-template-columns: 1fr; } }
+    .panel { background: #ffffff; border: 1px solid #dde3ea; border-radius: 12px; padding: 24px; animation: fadeIn 0.2s ease; }
+    .sidebar { display: flex; flex-direction: column; gap: 12px; }
+    .sidebar-card { background: #ffffff; border: 1px solid #dde3ea; border-radius: 12px; padding: 16px; }
+    .sidebar-card.green { background: #f0faf4; border-color: #1e3a22; }
+    .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .span-2 { grid-column: span 2; }
+    .section-title { grid-column: 1 / -1; border-bottom: 1px solid #dde3ea; padding-bottom: 8px; margin-top: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2a9d5c; }
+    .field { display: flex; flex-direction: column; }
+    .field label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5a6a7a; margin-bottom: 6px; }
+    .field label .req { color: #e05c5c; margin-left: 3px; }
+    .field input, .field select { width: 100%; padding: 9px 12px; background: #f5f7fa; border: 1px solid #dde3ea; border-radius: 6px; color: #1a2535; font-size: 13px; outline: none; transition: border-color 0.2s; font-family: inherit; appearance: none; }
+    .field input:focus, .field select:focus { border-color: #2a9d5c; }
+    .field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a7a9a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+    .btn { display: flex; align-items: center; gap: 8px; padding: 10px 24px; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: inherit; transition: opacity 0.2s; white-space: nowrap; }
+    .btn:hover:not(:disabled) { opacity: 0.85; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-blue { background: #2a9d5c; }
+    .btn-ibis { background: #25b865; }
+    .btn-ghost { background: transparent; border: 1px solid #2a9d5c; color: #2a9d5c; padding: 8px 16px; font-size: 12px; }
+    .btn-ghost.active { background: #e8f8ee; border-color: #2a9d5c; color: #1a6640; }
+    .sync-badge { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; }
+    .sync-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .sync-text { font-size: 12px; font-weight: 500; }
+    .info-banner { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #e8f0fe; border: 1px solid #b8d4f0; border-radius: 8px; margin-bottom: 16px; font-size: 12px; color: #4a9adf; }
+    .vendor-box { margin-bottom: 20px; padding: 14px; background: #ffffff; border: 1px solid #dde3ea; border-radius: 8px; }
+    .vendor-hint { font-size: 12px; color: #5a7a9a; margin-top: 8px; }
+    .mode-toggle { display: flex; gap: 6px; margin-bottom: 20px; }
+    .bulk-section { animation: fadeIn 0.2s ease; }
+    .bulk-step { margin-bottom: 20px; padding: 16px; background: #f8fafc; border: 1px solid #dde3ea; border-radius: 10px; }
+    .bulk-step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: #2a7fff20; border: 1px solid #2a7fff60; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #2a7fff; flex-shrink: 0; }
+    .step-title { font-size: 12px; font-weight: 700; color: #2a3a4a; letter-spacing: 0.05em; }
+    .dropzone { border: 2px dashed #b8d4f0; border-radius: 8px; padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+    .dropzone:hover, .dropzone.dragover { border-color: #2a7fff; background: #0d1e30; }
+    .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .dropzone-icon { color: #3a6a9a; margin-bottom: 8px; }
+    .dropzone-text { font-size: 13px; color: #5a7a9a; }
+    .dropzone-sub { font-size: 11px; color: #3a5a7a; margin-top: 4px; }
+    .dropzone.has-file { border-color: #1a6a30; background: #f0faf4; }
+    .dropzone.has-file .dropzone-text { color: #30c060; }
+    .preview-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #dde3ea; margin-top: 8px; max-height: 260px; overflow-y: auto; }
+    .preview-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .preview-table th { background: #f8fafc; color: #5a7a9a; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid #dde3ea; white-space: nowrap; position: sticky; top: 0; }
+    .preview-table td { padding: 7px 10px; border-bottom: 1px solid #eef1f5; color: #2a3a4a; white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+    .preview-table tr:last-child td { border-bottom: none; }
+    .preview-table tr.row-ok td:first-child { border-left: 3px solid #30c060; }
+    .preview-table tr.row-err td:first-child { border-left: 3px solid #e05c5c; }
+    .preview-table tr.row-pending td:first-child { border-left: 3px solid #3a5a7a; }
+    .preview-table tr.row-sending td:first-child { border-left: 3px solid #f0a030; }
+    .row-status { font-size: 10px; font-weight: 600; }
+    .progress-wrap { margin-top: 12px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: #5a7a9a; margin-bottom: 6px; }
+    .progress-bar { height: 6px; background: #f5f7fa; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #1a6abf, #2a7fff); border-radius: 3px; transition: width 0.3s ease; }
+    .result-summary { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .result-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .pill-ok  { background: #0d2a1a; color: #30c060; border: 1px solid #30c06040; }
+    .pill-err { background: #2a0d0d; color: #e05c5c; border: 1px solid #e05c5c40; }
+    .pill-tot { background: #f8fafc; color: #5a7a9a; border: 1px solid #dde3ea; }
+    .bottom-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; flex-wrap: wrap; gap: 10px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #3a6a9a; margin-bottom: 12px; }
+    .dest-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eef1f5; transition: opacity 0.3s; }
+    .dest-row.inactive { opacity: 0.35; }
+    .dest-name { font-size: 12px; font-weight: 600; color: #2a3a4a; }
+    .dest-na { font-size: 9px; color: #5a7a9a; margin-left: 6px; }
+    .dest-status { display: flex; align-items: center; gap: 5px; }
+    .dest-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .dest-status-text { font-size: 10px; }
+    .via-box { margin-top: 8px; padding: 8px; background: #f0f4f8; border-radius: 6px; }
+    .via-label { font-size: 10px; color: #3a6a9a; }
+    .via-value { font-size: 12px; color: #f0a030; font-weight: 600; margin-top: 2px; }
+    .log-item { display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid #eef1f5; animation: fadeIn 0.3s ease; }
+    .log-title { font-size: 11px; color: #2a3a4a; font-weight: 500; }
+    .log-msg { font-size: 10px; color: #5a7a9a; }
+    .log-time { font-size: 10px; color: #3a5a7a; }
+    .log-empty { font-size: 11px; color: #3a5a7a; text-align: center; padding: 16px 0; }
+    .steps-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #30a050; margin-bottom: 8px; }
+    .steps-list { list-style: disc; padding-left: 14px; font-size: 11px; color: #5a9a6a; line-height: 1.9; }
+    .spinning { animation: spin 1s linear infinite; }
+    .btn-blue:not(:disabled) { background: #2a9d5c; }
+    .btn-ibis:not(:disabled) { background: #25b865; }
+    .btn-blue:disabled, .btn-ibis:disabled { background: #c8d8e4; color: #8aa0b0; opacity: 1; cursor: not-allowed; }
+    .btn-blue:not(:disabled):hover, .btn-ibis:not(:disabled):hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <img src="grupo-tesacom-logo.jpg" alt="Grupo Tesacom" style="height:52px;width:220px;object-fit:contain;object-position:left center;margin-left:48px;" />
+    </div>
+    <div style="display:flex;align-items:center;gap:24px">
+      <span class="header-title">Carga de altas y bajas</span>
+      <div style="display:flex;align-items:center"><span class="status-dot"></span><span class="status-label">n8n conectado</span></div>
+    </div>
+  </div>
+</header>
+<div id="app">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('clients',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Clientes <span id="tab-icon-clients"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('equipment',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 7 9 3 3 9l4 4"/><path d="m13 7 3 3"/><path d="M9 13l4 4 6-6-4-4"/><path d="m9 13-3 3"/><circle cx="17" cy="17" r="4"/><line x1="20.12" y1="20.12" x2="23" y2="23"/></svg>
+      Equipos <span id="tab-icon-equipment"></span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('plans',this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 8h10"/><path d="M7 12h6"/></svg>
+      Planes <span id="tab-icon-plans"></span>
+    </button>
+  </div>
+  <div class="main-grid">
+    <div class="panel">
+
+      <!-- CLIENTS -->
+      <div id="tab-clients" class="tab-content active">
+        <div class="form-grid">
+          <div class="section-title">Informacion Principal</div>
+          <div class="field span-2"><label>Nombre / Razon Social <span class="req">*</span></label><input id="client-nombre" type="text" placeholder="Ej: Empresa S.A." oninput="checkClientForm()" /></div>
+          <div class="field"><label>Tipo de Documento <span class="req">*</span></label><select id="client-tipo-doc" onchange="checkClientForm()"><option value="">Seleccionar...</option><option>CUIT</option><option>RUT</option><option>NIT</option><option>RFC</option><option>RUC</option><option>Otro</option></select></div>
+          <div class="field"><label>Numero de Documento <span class="req">*</span></label><input id="client-num-doc" type="text" placeholder="XX-XXXXXXXX-X" oninput="checkClientForm()" /></div>
+          <div class="field"><label>Categoria Fiscal</label><select><option value="">Seleccionar...</option><option>Responsable Inscripto</option><option>Monotributista</option><option>Exento</option><option>Consumidor Final</option></select></div>
+          <div class="field"><label>Mercado</label><select><option value="">Seleccionar...</option><option>Corporativo</option><option>Gobierno</option><option>Maritimo</option><option>Aeronautico</option><option>Mineria</option><option>Oil &amp; Gas</option></select></div>
+          <div class="section-title">Contacto</div>
+          <div class="field"><label>Email <span class="req">*</span></label><input id="client-email" type="email" placeholder="contacto@empresa.com" oninput="checkClientForm()" /></div>
+          <div class="field"><label>Telefono</label><input type="text" placeholder="+54 11 XXXX-XXXX" /></div>
+          <div class="field"><label>Comercial Asignado</label><input type="text" placeholder="Nombre del comercial" /></div>
+          <div class="section-title">Ubicacion</div>
+          <div class="field span-2"><label>Direccion</label><input type="text" placeholder="Calle, numero, piso" /></div>
+          <div class="field"><label>Pais</label><select><option value="">Seleccionar...</option><option>Argentina</option><option>Brasil</option><option>Chile</option><option>Colombia</option><option>Mexico</option><option>Peru</option><option>Uruguay</option><option>Estados Unidos</option><option>Otro</option></select></div>
+          <div class="section-title">Configuracion</div>
+          <div class="field"><label>Tipo de Formulario</label><select><option value="">Seleccionar...</option><option>Estandar</option><option>Corporativo</option><option>Enterprise</option></select></div>
+          <div class="field"><label>Categoria</label><input type="text" placeholder="Ej: Premium, Standard..." /></div>
+        </div>
+        <div class="bottom-bar">
+          <div id="badge-clients" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
+          <button id="btn-submit-clients" class="btn btn-blue" onclick="handleSubmit('clients')" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Sincronizar con ODOO + IBIS</button>
+        </div>
+      </div>
+
+      <!-- EQUIPMENT -->
+      <div id="tab-equipment" class="tab-content">
+        <div class="info-banner">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4a9adf" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Los equipos se sincronizan <strong style="margin-left:4px">solo con IBIS</strong> -- no se envian a ODOO.
+        </div>
+        <div class="mode-toggle">
+          <button class="btn btn-ghost active" id="btn-mode-single" onclick="setEquipMode('single')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>Carga individual</button>
+          <button class="btn btn-ghost" id="btn-mode-bulk" onclick="setEquipMode('bulk')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Carga masiva (Excel)</button>
+        </div>
+
+        <!-- SINGLE -->
+        <div id="equip-single">
+          <div class="vendor-box">
+            <div class="field"><label>Proveedor (Vendor) <span class="req">*</span></label>
+              <select id="vendor-select" onchange="onVendorChange(this.value)">
+                <option value="">Seleccionar proveedor primero...</option>
+                <option value="2-Stage">2-Stage -- 2-Stage access</option><option value="BGAN">BGAN -- Inmarsat BGAN</option><option value="BM2M">BM2M -- Inmarsat BGAN M2M</option><option value="Cellular">Cellular -- Cellular</option><option value="Cert GMDSS">Cert GMDSS -- Iridium Certus GMDSS</option><option value="Commbox">Commbox -- Commbox Starlink</option><option value="FBB">FBB -- Inmarsat Fleet Broadband</option><option value="GlobalStar">GlobalStar -- Globalstar</option><option value="GSPS">GSPS -- Inmarsat GSPS</option><option value="GX">GX -- Inmarsat GX</option><option value="IDP">IDP -- IsatDataPro</option><option value="INM C">INM C -- Inmarsat C</option><option value="IoT">IoT -- Servicio de Telemetria</option><option value="Iridium">Iridium -- Iridium</option><option value="Iridium Cr">Iridium Cr -- Iridium Crew</option><option value="Iridium GR">Iridium GR -- Iridium Geo Restricted</option><option value="Iridium PP">Iridium PP -- Iridium Prepay</option><option value="ISPL">ISPL -- Inmarsat IsatPhone Link</option><option value="OpenPort">OpenPort -- Iridium OpenPort</option><option value="PTT Device">PTT Device -- Push to Talk Device</option><option value="PTT Group">PTT Group -- Push to Talk Talkgroup</option><option value="SafetyNet">SafetyNet -- SafetyNet II</option><option value="SBD">SBD -- SBD</option><option value="Starlink">Starlink -- Starlink</option><option value="VOIP">VOIP -- VOIP</option><option value="VSAT">VSAT -- VSAT</option>
+              </select>
+            </div>
+            <p id="vendor-hint" class="vendor-hint">Los campos del equipo varian segun el proveedor seleccionado.</p>
+          </div>
+          <div id="equipment-fields" style="display:none">
+            <div class="form-grid" id="equipment-form-grid"></div>
+            <div class="bottom-bar">
+              <div id="badge-equipment" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
+              <button id="btn-submit-equipment" class="btn btn-ibis" onclick="handleSubmit('equipment')" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Sincronizar con IBIS</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BULK -->
+        <div id="equip-bulk" style="display:none" class="bulk-section">
+          <div class="bulk-step">
+            <div class="bulk-step-header"><div class="step-num">1</div><div class="step-title">Elegí el proveedor y descargá la plantilla Excel</div></div>
+            <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+              <div class="field" style="flex:1;min-width:200px"><label>Proveedor <span class="req">*</span></label>
+                <select id="bulk-vendor-select" onchange="onBulkVendorChange(this.value)">
+                  <option value="">Seleccionar...</option>
+                  <option value="2-Stage">2-Stage -- 2-Stage access</option><option value="BGAN">BGAN -- Inmarsat BGAN</option><option value="BM2M">BM2M -- Inmarsat BGAN M2M</option><option value="Cellular">Cellular -- Cellular</option><option value="Cert GMDSS">Cert GMDSS -- Iridium Certus GMDSS</option><option value="Commbox">Commbox -- Commbox Starlink</option><option value="FBB">FBB -- Inmarsat Fleet Broadband</option><option value="GlobalStar">GlobalStar -- Globalstar</option><option value="GSPS">GSPS -- Inmarsat GSPS</option><option value="GX">GX -- Inmarsat GX</option><option value="IDP">IDP -- IsatDataPro</option><option value="INM C">INM C -- Inmarsat C</option><option value="IoT">IoT -- Servicio de Telemetria</option><option value="Iridium">Iridium -- Iridium</option><option value="Iridium Cr">Iridium Cr -- Iridium Crew</option><option value="Iridium GR">Iridium GR -- Iridium Geo Restricted</option><option value="Iridium PP">Iridium PP -- Iridium Prepay</option><option value="ISPL">ISPL -- Inmarsat IsatPhone Link</option><option value="OpenPort">OpenPort -- Iridium OpenPort</option><option value="PTT Device">PTT Device -- Push to Talk Device</option><option value="PTT Group">PTT Group -- Push to Talk Talkgroup</option><option value="SafetyNet">SafetyNet -- SafetyNet II</option><option value="SBD">SBD -- SBD</option><option value="Starlink">Starlink -- Starlink</option><option value="VOIP">VOIP -- VOIP</option><option value="VSAT">VSAT -- VSAT</option>
+                </select>
+              </div>
+              <button id="btn-download-tpl" class="btn btn-ghost" onclick="downloadTemplate()" disabled style="height:38px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar plantilla .xlsx</button>
+            </div>
+          </div>
+          <div class="bulk-step">
+            <div class="bulk-step-header"><div class="step-num">2</div><div class="step-title">Completá la plantilla y subila acá</div></div>
+            <div class="dropzone" id="dropzone" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+              <input type="file" accept=".xlsx,.xls" onchange="onFileSelect(event)" id="file-input" />
+              <div class="dropzone-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg></div>
+              <div class="dropzone-text" id="dropzone-text">Arrasta el archivo Excel aca o hace clic para seleccionar</div>
+              <div class="dropzone-sub">.xlsx -- maximo 5.000 filas</div>
+            </div>
+          </div>
+          <div class="bulk-step" id="bulk-step3" style="display:none">
+            <div class="bulk-step-header"><div class="step-num">3</div><div class="step-title">Vista previa -- revisa los datos antes de enviar</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+              <span id="preview-count" style="font-size:12px;color:#5a7a9a"></span>
+              <button class="btn btn-ghost" onclick="resetBulk()" style="font-size:11px;padding:6px 12px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.17"/></svg>Cambiar archivo</button>
+            </div>
+            <div class="preview-wrap"><table class="preview-table" id="preview-table"></table></div>
+            <div id="bulk-progress" style="display:none" class="progress-wrap">
+              <div class="progress-label"><span id="progress-text">Enviando...</span><span id="progress-pct">0%</span></div>
+              <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+            </div>
+            <div id="bulk-result" style="display:none" class="result-summary"></div>
+            <div class="bottom-bar" style="margin-top:16px">
+              <div style="font-size:11px;color:#3a6a9a">Los equipos se envian de a uno a n8n -&gt; IBIS</div>
+              <button id="btn-bulk-send" class="btn btn-ibis" onclick="startBulkSend()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Enviar <span id="bulk-send-count"></span> equipos a IBIS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLANS -->
+      <div id="tab-plans" class="tab-content">
+        <div class="form-grid">
+          <div class="section-title">Identificacion</div>
+          <div class="field"><label>Name</label><input type="text" placeholder="Nombre del plan" /></div>
+          <div class="field"><label>Type</label><select><option value="">Seleccionar...</option><option>Postpago</option><option>Prepago</option><option>Pool</option><option>IOT</option></select></div>
+          <div class="field"><label>CatalogCode</label><input type="text" /></div>
+          <div class="field"><label>ProductCode</label><input type="text" /></div>
+          <div class="field"><label>VendorRateplanCode</label><input type="text" /></div>
+          <div class="field"><label>CurrencyCode</label><input type="text" placeholder="USD / ARS / EUR" /></div>
+          <div class="field"><label>ParentBillerPricePlanID</label><input type="text" /></div>
+          <div class="field"><label>ScapID</label><input type="text" /></div>
+          <div class="field"><label>ExtRef</label><input type="text" /></div>
+          <div class="section-title">Descripciones</div>
+          <div class="field"><label>ShortDescription</label><input type="text" /></div>
+          <div class="field span-2"><label>LongDescription</label><input type="text" /></div>
+          <div class="section-title">Fechas y Vigencia</div>
+          <div class="field"><label>StartDate</label><input type="date" /></div>
+          <div class="field"><label>EndDate</label><input type="date" /></div>
+          <div class="field"><label>MinimumContractMonths</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowancePeriodMonths</label><input type="number" placeholder="0" /></div>
+          <div class="section-title">Tarifas</div>
+          <div class="field"><label>ActivationFee</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>SubscriptionFee</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>SuspendedsubscriptionFee</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>PoolSubscriptionFee</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>RentalMarkupPercentage</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>SubscriptionFeeUnit</label><input type="text" placeholder="Ej: MONTHLY" /></div>
+          <div class="field"><label>SubscriptionFeeScheduleCode</label><input type="text" /></div>
+          <div class="field"><label>SubscriptionFeeScheduleName</label><input type="text" /></div>
+          <div class="field"><label>CLINActivation</label><input type="text" /></div>
+          <div class="field"><label>CLINSubscription</label><input type="text" /></div>
+          <div class="section-title">Costos</div>
+          <div class="field"><label>ActivationFeeCost</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>SubscriptionFeeCost</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>SuspendedSubscriptionFeeCost</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>PoolSubscriptionFeeCost</label><input type="number" placeholder="0" /></div>
+          <div class="section-title">Allowances</div>
+          <div class="field"><label>AllowanceBytes</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowanceBytesPooled</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowanceMinutes</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowanceMinutesPooled</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowanceMoney</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowanceMoneyPooled</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowanceSMS</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowanceSMSPooled</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AllowancePoolingModel</label><input type="text" /></div>
+          <div class="field"><label>AllowanceAlignment</label><input type="text" /></div>
+          <div class="field"><label>AllowanceRollOver</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="section-title">Configuracion Avanzada</div>
+          <div class="field"><label>Rank</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>MaxSimcards</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>IsPublic</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="field"><label>IsSubscriptionFeePerCard</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="field"><label>IsActivationFeePerCard</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="field"><label>AutoExtendCommitment</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="field"><label>IsAvailableForEndusers</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="field"><label>ProRateStart</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="field"><label>ProRateEnd</label><select><option value="">-</option><option value="true">Si</option><option value="false">No</option></select></div>
+          <div class="field"><label>CommitmentAlignment</label><input type="text" /></div>
+          <div class="field"><label>CommitmentAlignmentCode</label><input type="text" /></div>
+          <div class="field"><label>IncrementPolicyCode</label><input type="text" /></div>
+          <div class="field"><label>EtfCalculationMode</label><input type="text" /></div>
+          <div class="field"><label>EtfAmount</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>EtfCost</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>AvailableForCustomerID</label><input type="text" /></div>
+          <div class="section-title">Iridium / VAS</div>
+          <div class="field"><label>IridiumPlanID</label><input type="text" /></div>
+          <div class="field"><label>IridiumPoolingGroupID</label><input type="text" /></div>
+          <div class="field"><label>VasPriceStaticIP</label><input type="number" placeholder="0" /></div>
+          <div class="field"><label>PricingTier</label><input type="text" /></div>
+        </div>
+        <div class="bottom-bar">
+          <div id="badge-plans" class="sync-badge" style="background:#f0f4f8;border:1px solid #c0ccd8"><div class="sync-dot" style="background:#5a7a9a"></div><span class="sync-text" style="color:#5a7a9a">Listo para enviar</span></div>
+          <button class="btn btn-blue" onclick="handleSubmit('plans')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Sincronizar con ODOO + IBIS</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-label">DESTINOS</div>
+        <div class="dest-row" id="dest-odoo">
+          <div><span class="dest-name">ODOO</span><span class="dest-na" id="odoo-na" style="display:none">no aplica</span></div>
+          <div class="dest-status"><div class="dest-dot" id="dot-odoo" style="background:#3a5a7a"></div><span class="dest-status-text" id="label-odoo" style="color:#3a5a7a">Verificando...</span></div>
+        </div>
+        <div class="dest-row">
+          <div><span class="dest-name">IBIS</span></div>
+          <div class="dest-status"><div class="dest-dot" id="dot-ibis" style="background:#3a5a7a"></div><span class="dest-status-text" id="label-ibis" style="color:#3a5a7a">Verificando...</span></div>
+        </div>
+        <div class="via-box"><div class="via-label">VIA</div><div class="via-value">n8n Webhooks</div></div>
+      </div>
+      <div class="sidebar-card">
+        <div class="sidebar-label">ACTIVIDAD RECIENTE</div>
+        <div id="log-list"><div class="log-empty">Sin actividad aun</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const BASE_FIELDS=[{name:"Producto",type:"text"},{name:"IMSI",type:"text"},{name:"IMEI",type:"text"},{name:"ProvisioningAccountCode",type:"text"},{name:"MSISDN",type:"text"},{name:"Name",type:"text"},{name:"Description",type:"text"},{name:"SerialNr",type:"text"},{name:"CustomerID",type:"text"},{name:"CustomerCode",type:"text"},{name:"CostCenter",type:"text"},{name:"CostCenterGroup",type:"text"},{name:"APN",type:"text"},{name:"IPAddress",type:"text"},{name:"TerminalType",type:"select",options:["VSAT","MSS","LEO","GEO","HTS"]},{name:"AlertEmailAddress",type:"email"},{name:"AlertEmailAddressCC",type:"email"},{name:"Plan Proveedor",type:"text"},{name:"Tipo de Operacion",type:"select",options:["Alta","Baja","Modificacion","Suspension","Reactivacion"]},{name:"Solicitud de Servicio",type:"text"}];
+const EXTRA_FIELDS={"Iridium":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium Cr":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium GR":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium PP":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Cert GMDSS":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"OpenPort":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"BGAN":[{name:"Tel:xxx"}],"BM2M":[{name:"Tel:xxx"}],"FBB":[{name:"Tel:xxx"}],"GX":[{name:"Tel:xxx"}],"GSPS":[{name:"Tel:xxx"}],"INM C":[{name:"Tel:xxx"}],"ISPL":[{name:"Tel:xxx"}]};
+function getFields(v){return[...BASE_FIELDS,...(EXTRA_FIELDS[v]||[]).map(f=>({type:"text",...f}))];}
+let currentTab='clients';
+function switchTab(tab,btn){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));btn.classList.add('active');document.getElementById('tab-'+tab).classList.add('active');currentTab=tab;updateOdooIndicator();}
+function updateOdooIndicator(){const e=currentTab==='equipment';document.getElementById('dest-odoo').style.display=e?'none':'flex';}
+function setEquipMode(m){document.getElementById('equip-single').style.display=m==='single'?'block':'none';document.getElementById('equip-bulk').style.display=m==='bulk'?'block':'none';document.getElementById('btn-mode-single').classList.toggle('active',m==='single');document.getElementById('btn-mode-bulk').classList.toggle('active',m==='bulk');}
+function onVendorChange(v){const h=document.getElementById('vendor-hint'),fd=document.getElementById('equipment-fields'),g=document.getElementById('equipment-form-grid');if(!v){h.style.display='block';fd.style.display='none';return;}h.style.display='none';fd.style.display='block';g.innerHTML=`<div class="section-title">Datos del Equipo -- ${v}</div>`;getFields(v).forEach(f=>{const d=document.createElement('div');d.className='field';d.innerHTML=f.type==='select'?`<label>${f.name}</label><select><option value="">Seleccionar...</option>${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`:`<label>${f.name}</label><input type="${f.type||'text'}" placeholder="${f.name}" />`;g.appendChild(d);});}
+function onBulkVendorChange(v){document.getElementById('btn-download-tpl').disabled=!v;}
+function downloadTemplate(){const v=document.getElementById('bulk-vendor-select').value;if(!v)return;const h=getFields(v).map(f=>f.name);const ws=XLSX.utils.aoa_to_sheet([h,[],[]]);ws['!cols']=h.map(()=>({wch:18}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Equipos');XLSX.writeFile(wb,`plantilla_${v.replace(/\s/g,'_')}.xlsx`);}
+let bulkRows=[],bulkRowStatuses=[];
+function onDragOver(e){e.preventDefault();document.getElementById('dropzone').classList.add('dragover');}
+function onDragLeave(){document.getElementById('dropzone').classList.remove('dragover');}
+function onDrop(e){e.preventDefault();document.getElementById('dropzone').classList.remove('dragover');const f=e.dataTransfer.files[0];if(f)processFile(f);}
+function onFileSelect(e){const f=e.target.files[0];if(f)processFile(f);}
+function processFile(file){const r=new FileReader();r.onload=function(e){try{const wb=XLSX.read(e.target.result,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const data=XLSX.utils.sheet_to_json(ws,{defval:''});if(!data.length){alert('El archivo esta vacio.');return;}bulkRows=data;bulkRowStatuses=data.map(()=>'pending');document.getElementById('dropzone').classList.add('has-file');document.getElementById('dropzone-text').textContent='OK: '+file.name+' ('+data.length+' filas)';document.getElementById('bulk-step3').style.display='block';document.getElementById('preview-count').textContent=data.length+' equipos encontrados';document.getElementById('bulk-send-count').textContent=data.length;renderPreviewTable();document.getElementById('bulk-progress').style.display='none';document.getElementById('bulk-result').style.display='none';document.getElementById('btn-bulk-send').disabled=false;}catch(err){alert('Error al leer el archivo.');}};r.readAsArrayBuffer(file);}
+function renderPreviewTable(){if(!bulkRows.length)return;const cols=Object.keys(bulkRows[0]);const sc={'pending':'#3a5a7a','sending':'#f0a030','ok':'#30c060','err':'#e05c5c'};const sl={'pending':'--','sending':'Enviando','ok':'OK','err':'Error'};document.getElementById('preview-table').innerHTML=`<thead><tr><th>Estado</th>${cols.slice(0,8).map(c=>`<th>${c}</th>`).join('')}${cols.length>8?`<th>+${cols.length-8} mas`:''}</tr></thead><tbody>${bulkRows.map((row,i)=>`<tr class="row-${bulkRowStatuses[i]}" id="bulk-row-${i}"><td class="row-status" style="color:${sc[bulkRowStatuses[i]]}">${sl[bulkRowStatuses[i]]}</td>${cols.slice(0,8).map(c=>`<td title="${row[c]}">${row[c]||''}</td>`).join('')}${cols.length>8?'<td>...</td>':''}</tr>`).join('')}</tbody>`;}
+function resetBulk(){bulkRows=[];bulkRowStatuses=[];document.getElementById('bulk-step3').style.display='none';document.getElementById('dropzone').classList.remove('has-file');document.getElementById('dropzone-text').textContent='Arrasta el archivo Excel aca o hace clic para seleccionar';document.getElementById('file-input').value='';}
+let bulkRunning=false;
+async function startBulkSend(){if(bulkRunning||!bulkRows.length)return;bulkRunning=true;document.getElementById('btn-bulk-send').disabled=true;document.getElementById('bulk-progress').style.display='block';document.getElementById('bulk-result').style.display='none';bulkRowStatuses=bulkRows.map(()=>'pending');const vendor=document.getElementById('bulk-vendor-select').value;let ok=0,err=0;for(let i=0;i<bulkRows.length;i++){bulkRowStatuses[i]='sending';updateRowStatus(i);const pct=Math.round((i/bulkRows.length)*100);document.getElementById('progress-fill').style.width=pct+'%';document.getElementById('progress-pct').textContent=pct+'%';document.getElementById('progress-text').textContent='Enviando equipo '+(i+1)+' de '+bulkRows.length+'...';
+// TODO: fetch real n8n webhook
+// await fetch('https://tu-n8n.com/webhook/equipos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({vendor,...bulkRows[i]})});
+await new Promise(r=>setTimeout(r,200));const success=Math.random()>0.08;bulkRowStatuses[i]=success?'ok':'err';updateRowStatus(i);if(success)ok++;else err++;}
+document.getElementById('progress-fill').style.width='100%';document.getElementById('progress-pct').textContent='100%';document.getElementById('progress-text').textContent='Completado';const rd=document.getElementById('bulk-result');rd.style.display='flex';rd.innerHTML=`<div class="result-pill pill-tot">Total: ${bulkRows.length}</div><div class="result-pill pill-ok">OK: ${ok}</div>${err>0?`<div class="result-pill pill-err">Errores: ${err}</div>`:''}`;addLog('equipment-bulk',ok,err,bulkRows.length);bulkRunning=false;}
+function updateRowStatus(i){const row=document.getElementById('bulk-row-'+i);if(!row)return;const s=bulkRowStatuses[i];const sc={'pending':'#3a5a7a','sending':'#f0a030','ok':'#30c060','err':'#e05c5c'};const sl={'pending':'--','sending':'Enviando...','ok':'OK','err':'Error'};row.className='row-'+s;row.querySelector('.row-status').style.color=sc[s];row.querySelector('.row-status').textContent=sl[s];}
+const badgeConfig={idle:{bg:'#f0f4f8',border:'#c0ccd8',dot:'#5a7a9a',text:'Listo para enviar',shadow:'none'},loading:{bg:'#fff8ee',border:'#f0a03030',dot:'#f0a030',text:'Sincronizando...',shadow:'0 0 6px #f0a030'},success:{bg:'#0d2a1a',border:'#30c06030',dot:'#30c060',text:'Enviado correctamente',shadow:'0 0 6px #30c060'},error:{bg:'#2a0d0d',border:'#e05c5c30',dot:'#e05c5c',text:'Error en sincronizacion',shadow:'0 0 6px #e05c5c'}};
+function setBadge(k,s){const c=badgeConfig[s];const b=document.getElementById('badge-'+k);if(!b)return;b.style.background=c.bg;b.style.border='1px solid '+c.border;b.querySelector('.sync-dot').style.background=c.dot;b.querySelector('.sync-dot').style.boxShadow=c.shadow;b.querySelector('.sync-text').style.color=c.dot;b.querySelector('.sync-text').textContent=c.text;}
+const checkSvg=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#30c060" stroke-width="2.5" style="margin-left:4px;vertical-align:middle"><polyline points="20 6 9 17 4 12"/></svg>`;
+const xSvg=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e05c5c" stroke-width="2.5" style="margin-left:4px;vertical-align:middle"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+function handleSubmit(k){setBadge(k,'loading');document.getElementById('tab-icon-'+k).innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f0a030" stroke-width="2" class="spinning" style="margin-left:4px;vertical-align:middle"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;setTimeout(()=>{const ok=Math.random()>0.1;setBadge(k,ok?'success':'error');document.getElementById('tab-icon-'+k).innerHTML=ok?checkSvg:xSvg;addLog(k,ok?1:0,ok?0:1,1);setTimeout(()=>{setBadge(k,'idle');document.getElementById('tab-icon-'+k).innerHTML='';},3000);},1800);}
+const tabNames={clients:'Cliente',equipment:'Equipo',plans:'Plan','equipment-bulk':'Bulk Equipos'};
+let logItems=[{tab:'Equipo',time:'10:42:15',msg:'Enviado a IBIS',ok:true,vendor:'Iridium'},{tab:'Equipo',time:'10:38:50',msg:'Enviado a IBIS',ok:true,vendor:'GX'},{tab:'Equipo',time:'10:31:22',msg:'Enviado a IBIS',ok:true,vendor:'Starlink'}];
+function renderLog(){const l=document.getElementById('log-list');if(!logItems.length){l.innerHTML='<div class="log-empty">Sin actividad aun</div>';return;}l.innerHTML=logItems.map(item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#30c060':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}${item.vendor?' — '+item.vendor:''}</div><div class="log-msg">${item.msg}</div><div class="log-time">${item.time}</div></div></div>`).join('');}
+renderLog();
+function addLog(k,ok,err,total){const time=new Date().toLocaleTimeString('es-AR');let msg;if(k==='equipment-bulk'){msg=ok+'/'+total+' enviados a IBIS'+(err>0?' - '+err+' errores':'');}else if(k==='equipment'){msg=ok?'Enviado a IBIS':'Error en IBIS';}else{msg=ok?'Enviado a ODOO + IBIS':'Error - revisar webhook';}logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0},...logItems.slice(0,8)];renderLog();}
+function checkClientForm(){const ids=['client-nombre','client-tipo-doc','client-num-doc','client-email'];const ok=ids.every(id=>{const el=document.getElementById(id);return el&&el.value.trim()!=='';});const btn=document.getElementById('btn-submit-clients');btn.disabled=!ok;const b=document.getElementById('badge-clients');if(ok){b.style.background='#e8faf0';b.style.border='1px solid #30c060';b.querySelector('.sync-dot').style.background='#30c060';b.querySelector('.sync-dot').style.boxShadow='0 0 8px #30c060';b.querySelector('.sync-text').style.color='#1a8040';b.querySelector('.sync-text').textContent='Listo para enviar';}else{b.style.background='#f0f4f8';b.style.border='1px solid #c0ccd8';b.querySelector('.sync-dot').style.background='#5a7a9a';b.querySelector('.sync-dot').style.boxShadow='none';b.querySelector('.sync-text').style.color='#5a7a9a';b.querySelector('.sync-text').textContent='Listo para enviar';}}
+function checkEquipForm(){const v=document.getElementById('vendor-select');const btn=document.getElementById('btn-submit-equipment');if(btn)btn.disabled=!v||!v.value;}
+const _origVendorChange=onVendorChange;onVendorChange=function(v){_origVendorChange(v);checkEquipForm();};
+const DEST_URLS={odoo:'https://www.tesacom.net/odoo',ibis:'https://ibis.tesacom.net/Welcome.aspx'};
+async function pingDest(id){const dot=document.getElementById('dot-'+id);const lbl=document.getElementById('label-'+id);try{const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),5000);await fetch(DEST_URLS[id],{mode:'no-cors',cache:'no-store',signal:ctrl.signal});clearTimeout(t);dot.style.background='#30c060';dot.style.boxShadow='0 0 6px #30c060';lbl.style.color='#30c060';lbl.textContent='Online';}catch(e){dot.style.background='#e05c5c';dot.style.boxShadow='0 0 6px #e05c5c';lbl.style.color='#e05c5c';lbl.textContent='Offline';}}
+function pingAll(){pingDest('odoo');pingDest('ibis');}
+pingAll();setInterval(pingAll,30000);
+</script>
+</body>
+</html>
