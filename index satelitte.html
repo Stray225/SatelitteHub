@@ -760,7 +760,9 @@ async function handleSubmit(k){
     dbg('📦 Respuesta: '+(text||'(vacía)').substring(0,500));
     let data={};
     try{data=JSON.parse(text);}catch(e){}
-    const ok=res.ok&&data.ok!==false;
+    // ok solo si n8n responde explicitamente {ok:true} o devuelve un CustomerID
+    const ok=res.ok&&(data.ok===true||(data.CustomerID&&!data.error));
+    dbg(ok?'✅ Respuesta OK':'❌ Respuesta indica error — ok='+data.ok+' CustomerID='+data.CustomerID);
     setBadge(k,ok?'success':'error'); addLog(k,ok?1:0,ok?0:1,1);
     if(ok){
       // Intentar obtener el CustomerID: primero de la respuesta de n8n, luego GET a IBIS
@@ -786,7 +788,14 @@ async function handleSubmit(k){
         `</div>`;
       showResultModal('success','✅ Cliente sincronizado',bodyHtml);
     }else{
-      showResultModal('error','❌ Error al sincronizar','HTTP '+res.status+': '+(data.Message||data.message||data.error||text||'Sin detalle'));
+      let errDetail=data.Message||data.message||data.error||data.detail||'';
+      let errBody='';
+      if(!errDetail&&(!text||text==='{}'))  {
+        errBody='N8n respondió vacío (<code>{}</code>).<br><br>Revisá el workflow en n8n:<br>• Abrí la última ejecución y fijate en qué nodo falló<br>• El nodo <strong>Obtener Token IBIS</strong> necesita las credenciales reales (no los placeholders)<br>• Verificá que el nodo <strong>Respuesta OK</strong> esté conectado';
+      }else{
+        errBody='HTTP '+res.status+': '+(errDetail||text||'Sin detalle');
+      }
+      showResultModal('error','❌ Error al sincronizar',errBody);
     }
   }catch(e){
     setBadge(k,'error'); addLog(k,0,1,1);
