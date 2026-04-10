@@ -17,6 +17,24 @@
     },
     {
       "parameters": {
+        "dataType": "number",
+        "value1": "={{ $json.body.ParentCustomerID }}",
+        "rules": {
+          "rules": [
+            { "operation": "equal", "value2": 3, "output": 0 },
+            { "operation": "equal", "value2": 4, "output": 1 }
+          ]
+        },
+        "fallbackOutput": "none"
+      },
+      "id": "switch-pais-010",
+      "name": "Switch País",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
         "values": {
           "string": [
             { "name": "_cid",  "value": "ed0bca6fac254bb6a6a2901e0e4bae25" },
@@ -29,7 +47,23 @@
       "name": "Cred AR",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [240, 0]
+      "position": [464, -120]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "4fd1675586b646778af1e2cc0ca19f83" },
+            { "name": "_csec", "value": "l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "set-cred-cl-012",
+      "name": "Cred CL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [464, 120]
     },
     {
       "parameters": {
@@ -51,7 +85,7 @@
       "name": "Obtener Token IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [464, 0]
+      "position": [688, 0]
     },
     {
       "parameters": {
@@ -72,14 +106,14 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"CustomerID\": 0,\n  \"ParentCustomerID\": {{ $('Webhook Clientes').item.json.body.ParentCustomerID ?? 3 }},\n  \"CustomerName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n  \"TaxCode\": \"{{ $('Webhook Clientes').item.json.body.TaxCode }}\",\n  \"Description\": \"{{ $('Webhook Clientes').item.json.body.Description ?? '' }}\",\n  \"Industry\": \"{{ $('Webhook Clientes').item.json.body.Industry ?? '' }}\",\n  \"CurrencyCode\": \"USD\",\n  \"CreditTermsCode\": \"Net 30\",\n  \"InvoiceDeliveryMode\": \"E-Mail\",\n  \"EmailGeneral\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"EmailBilling\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"MainContactPhone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n  \"AccountManagerCode\": \"{{ $('Webhook Clientes').item.json.body.AccountManagerCode ?? '' }}\",\n  \"ShowCdrsOnInvoice\": {{ $('Webhook Clientes').item.json.body.ShowCdrsOnInvoice ?? false }},\n  \"ShowZeroChargesOnInvoice\": false,\n  \"ShowPreviousBalanceOnInvoice\": false,\n  \"DeviceIdentifierOnInvoice\": \"ICCID\",\n  \"RollupInvoiceToParentCustomer\": false,\n  \"MainAddressSameAsParentMainAddress\": false,\n  \"BillingAddressSameAsMainAddress\": true,\n  \"MainAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"CountryCode\": \"ARG\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"BillingAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"CountryCode\": \"ARG\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"ContactPersons\": [\n    {\n      \"ContactPersonID\": 0,\n      \"ContactName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n      \"Email\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n      \"Phone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n      \"IsMainContact\": true\n    }\n  ]\n}",
+        "jsonBody": "={\n  \"CustomerID\": 0,\n  \"ParentCustomerID\": {{ $('Webhook Clientes').item.json.body.ParentCustomerID ?? 3 }},\n  \"CustomerName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n  \"TaxCode\": \"{{ $('Webhook Clientes').item.json.body.TaxCode }}\",\n  \"Description\": \"{{ $('Webhook Clientes').item.json.body.Description ?? '' }}\",\n  \"Industry\": \"{{ $('Webhook Clientes').item.json.body.Industry ?? '' }}\",\n  \"CurrencyCode\": \"USD\",\n  \"CreditTermsCode\": \"Net 30\",\n  \"InvoiceDeliveryMode\": \"E-Mail\",\n  \"EmailGeneral\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"EmailBilling\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"MainContactPhone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n  \"AccountManagerCode\": \"{{ $('Webhook Clientes').item.json.body.AccountManagerCode ?? '' }}\",\n  \"ShowCdrsOnInvoice\": {{ $('Webhook Clientes').item.json.body.ShowCdrsOnInvoice ?? false }},\n  \"ShowZeroChargesOnInvoice\": false,\n  \"ShowPreviousBalanceOnInvoice\": false,\n  \"DeviceIdentifierOnInvoice\": \"ICCID\",\n  \"RollupInvoiceToParentCustomer\": false,\n  \"MainAddressSameAsParentMainAddress\": false,\n  \"BillingAddressSameAsMainAddress\": true,\n  \"MainAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"CountryCode\": \"{{ ({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] }}\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"BillingAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"CountryCode\": \"{{ ({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] }}\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"ContactPersons\": [\n    {\n      \"ContactPersonID\": 0,\n      \"ContactName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n      \"Email\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n      \"Phone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n      \"IsMainContact\": true\n    }\n  ]\n}",
         "options": {}
       },
       "id": "ibis-create-003",
       "name": "Crear Cliente en IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [688, 0]
+      "position": [912, 0]
     },
     {
       "parameters": {
@@ -93,16 +127,27 @@
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [912, 0]
+      "position": [1136, 0]
     }
   ],
   "connections": {
     "Webhook Clientes": {
       "main": [
-        [{ "node": "Cred AR", "type": "main", "index": 0 }]
+        [{ "node": "Switch País", "type": "main", "index": 0 }]
+      ]
+    },
+    "Switch País": {
+      "main": [
+        [{ "node": "Cred AR", "type": "main", "index": 0 }],
+        [{ "node": "Cred CL", "type": "main", "index": 0 }]
       ]
     },
     "Cred AR": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred CL": {
       "main": [
         [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
       ]
