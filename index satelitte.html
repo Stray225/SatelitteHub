@@ -540,6 +540,10 @@
           <span class="dest-name">IBIS</span>
           <div class="dest-status"><div class="dest-dot" id="dot-ibis" style="background:#3a5a7a"></div><span class="dest-status-text" id="label-ibis" style="color:#3a5a7a">Verificando...</span></div>
         </div>
+        <div class="dest-row" style="opacity:0.4" title="Próximamente">
+          <span class="dest-name">ODOO <span style="font-size:9px;background:#723EF720;border:1px solid #723EF740;border-radius:4px;padding:1px 5px;color:#723EF7;margin-left:4px">pronto</span></span>
+          <div class="dest-status"><div class="dest-dot" style="background:#ADB2BC"></div><span class="dest-status-text" style="color:#ADB2BC">Pendiente</span></div>
+        </div>
         <div class="via-box"><div class="via-label">VIA</div><div class="via-value">n8n Webhooks</div></div>
       </div>
       <div class="sidebar-card">
@@ -759,7 +763,28 @@ async function handleSubmit(k){
     const ok=res.ok&&data.ok!==false;
     setBadge(k,ok?'success':'error'); addLog(k,ok?1:0,ok?0:1,1);
     if(ok){
-      showResultModal('success','✅ Cliente sincronizado','Creado correctamente en IBIS.'+(data.CustomerID?' ID: <strong>'+data.CustomerID+'</strong>':''));
+      // Intentar obtener el CustomerID: primero de la respuesta de n8n, luego GET a IBIS
+      const taxCode=document.getElementById('client-num-doc')?.value||'';
+      let ibisId=data.CustomerID||data.ibis?.CustomerID||'';
+      let ibisName=data.ibis?.CustomerName||'';
+      if(taxCode&&!ibisId){
+        dbg('🔍 ID no en respuesta, consultando IBIS...');
+        try{
+          const vRes=await fetch(`/api/verificar-cliente?taxCode=${encodeURIComponent(taxCode)}`);
+          const vData=await vRes.json();
+          if(vData.found){ibisId=vData.CustomerID;ibisName=vData.CustomerName;dbg('✅ ID obtenido: '+ibisId);}
+        }catch(e){dbg('⚠️ No se pudo consultar ID: '+e.message);}
+      }
+      if(ibisId){
+        addLog(k,1,0,1,ibisId); // guardar con ID
+      }
+      const bodyHtml=
+        `<div style="text-align:left;background:var(--bulk-step-bg,#f9f9f9);border-radius:8px;padding:14px 16px;margin-bottom:8px;font-size:13px;line-height:2">` +
+        `<div>✅ <strong>IBIS</strong> — Creado correctamente</div>`+
+        (ibisId?`<div style="margin-top:4px;padding:6px 10px;background:#ede8ff;border-radius:6px;font-family:monospace;font-size:14px;color:#5f2de0">ID IBIS: <strong>${ibisId}</strong>${ibisName?' — '+ibisName:''}</div>`:'') +
+        `<div style="margin-top:8px;opacity:0.45">⏳ <strong>ODOO</strong> — Próximamente</div>`+
+        `</div>`;
+      showResultModal('success','✅ Cliente sincronizado',bodyHtml);
     }else{
       showResultModal('error','❌ Error al sincronizar','HTTP '+res.status+': '+(data.Message||data.message||data.error||text||'Sin detalle'));
     }
@@ -790,22 +815,26 @@ let logItems=(function(){const s=loadLogFromStorage();return(s&&s.length>0)?s:[]
 function renderLog(){
   const l=document.getElementById('log-list');
   if(!logItems.length){l.innerHTML='<div class="log-empty">Sin actividad aun</div>';return;}
-  l.innerHTML=logItems.map(item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#00FFDB':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}</div><div class="log-msg">${item.msg}</div><div class="log-time">${item.time}</div></div></div>`).join('');
+  l.innerHTML=logItems.map(item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#00FFDB':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}</div><div class="log-msg">${item.msg}</div>${item.ibisId?`<div style="font-size:10px;color:#723EF7;font-weight:500;margin-top:2px">ID IBIS: ${item.ibisId}</div>`:''}<div class="log-time">${item.time}</div></div></div>`).join('');
 }
 renderLog();
 
-function addLog(k,ok,err,total){
+function addLog(k,ok,err,total,ibisId){
   const time=new Date().toLocaleTimeString('es-AR');
-  let msg=k==='equipment-bulk'?ok+'/'+total+' enviados a IBIS'+(err>0?' - '+err+' errores':''):ok?'Enviado a IBIS':'Error - revisar webhook';
-  logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0},...logItems].slice(0,MAX_LOG);
+  let msg=k==='equipment-bulk'
+    ? ok+'/'+total+' enviados a IBIS'+(err>0?' - '+err+' errores':'')
+    : ok
+      ? 'Creado en IBIS'+(ibisId?' — ID: '+ibisId:'')
+      : 'Error - revisar webhook';
+  logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0,ibisId:ibisId||''},...logItems].slice(0,MAX_LOG);
   renderLog(); saveLogToStorage();
 }
 
 function exportLogToExcel(){
   if(!logItems.length){showToast('Sin actividad para exportar');return;}
-  const rows=logItems.map(item=>({'Fecha/Hora':item.time,'Tab':item.tab,'Mensaje':item.msg,'Estado':item.ok?'OK':'Error'}));
+  const rows=logItems.map(item=>({'Fecha/Hora':item.time,'Tab':item.tab,'ID IBIS':item.ibisId||'','Mensaje':item.msg,'Estado':item.ok?'OK':'Error'}));
   const ws=XLSX.utils.json_to_sheet(rows);
-  ws['!cols']=[{wch:12},{wch:16},{wch:32},{wch:8}];
+  ws['!cols']=[{wch:12},{wch:16},{wch:10},{wch:36},{wch:8}];
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Actividad');
   XLSX.writeFile(wb,'actividad_satellite_hub.xlsx');
 }
