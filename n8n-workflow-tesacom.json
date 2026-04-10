@@ -17,14 +17,14 @@
     },
     {
       "parameters": {
-        "dataType": "string",
-        "value1": "={{ String($json.body.ParentCustomerID) }}",
+        "dataType": "number",
+        "value1": "={{ $json.body.ParentCustomerID }}",
         "rules": {
           "rules": [
-            { "value2": "3" },
-            { "value2": "4" },
-            { "value2": "5" },
-            { "value2": "6" }
+            { "value2": 3 },
+            { "value2": 4 },
+            { "value2": 5 },
+            { "value2": 6 }
           ]
         },
         "fallbackOutput": "last"
@@ -159,8 +159,8 @@
           ]
         },
         "sendBody": true,
-        "contentType": "json",
-        "jsonBody": "={{ JSON.stringify({ CustomerName: $('Webhook Clientes').item.json.body.CustomerName, ParentCustomerID: $('Webhook Clientes').item.json.body.ParentCustomerID, TaxCode: $('Webhook Clientes').item.json.body.TaxCode, Description: $('Webhook Clientes').item.json.body.Description, Industry: $('Webhook Clientes').item.json.body.Industry, EmailGeneral: $('Webhook Clientes').item.json.body.EmailGeneral, MainContactPhone: $('Webhook Clientes').item.json.body.MainContactPhone, AccountManagerCode: $('Webhook Clientes').item.json.body.AccountManagerCode, Location: $('Webhook Clientes').item.json.body.Location, ShowCdrsOnInvoice: false, MainAddressSameAsParentMainAddress: false, BillingAddressSameAsMainAddress: false }) }}",
+        "specifyBody": "json",
+        "jsonBody": "={{ { CustomerName: $('Webhook Clientes').item.json.body.CustomerName, ParentCustomerID: $('Webhook Clientes').item.json.body.ParentCustomerID, TaxCode: $('Webhook Clientes').item.json.body.TaxCode, Description: $('Webhook Clientes').item.json.body.Description, Industry: $('Webhook Clientes').item.json.body.Industry, EmailGeneral: $('Webhook Clientes').item.json.body.EmailGeneral, MainContactPhone: $('Webhook Clientes').item.json.body.MainContactPhone, AccountManagerCode: $('Webhook Clientes').item.json.body.AccountManagerCode, Location: $('Webhook Clientes').item.json.body.Location, ShowCdrsOnInvoice: false, MainAddressSameAsParentMainAddress: false, BillingAddressSameAsMainAddress: false } }}",
         "options": {
           "continueOnFail": true
         }
