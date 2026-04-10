@@ -30,7 +30,8 @@
           ]
         },
         "options": {
-          "continueOnFail": true
+          "continueOnFail": true,
+          "timeout": 15000
         }
       },
       "id": "ibis-token-002",

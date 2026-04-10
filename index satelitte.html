@@ -1004,7 +1004,7 @@ async function handleSubmit(k) {
     dbg('📤 Enviando a: ' + url);
     dbg('📋 Payload', payload);
     const controller = new AbortController();
-    const timeout = setTimeout(() => { controller.abort(); dbg('⏱️ TIMEOUT — n8n no respondió en 20s'); }, 20000);
+    const timeout = setTimeout(() => { controller.abort(); dbg('⏱️ TIMEOUT — n8n no respondió en 55s'); }, 55000);
     let res;
     try {
       res = await fetch(url, {
@@ -1035,7 +1035,9 @@ async function handleSubmit(k) {
     console.error('[SatHub] Error fetch:', e);
     let msg = e.message || 'Error desconocido';
     if (e.name === 'AbortError') {
-      msg = 'n8n no respondió en 20 segundos.<br>• Verificá que el workflow esté <strong>activado (toggle verde)</strong><br>• El nodo "Crear Cliente en IBIS" puede estar bloqueando la respuesta';
+      const taxCode = document.getElementById('client-num-doc')?.value || '';
+      const verifyBtn = taxCode ? `<br><br><button onclick="verificarEnIBIS('${taxCode}')" style="margin-top:8px;padding:8px 16px;background:#2a9d5c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">🔍 Verificar si se creó en IBIS (${taxCode})</button>` : '';
+      msg = 'IBIS tardó más de 55 segundos en responder.<br>El cliente <strong>puede haberse creado igual</strong> en IBIS.' + verifyBtn;
     } else if (e.message && e.message.includes('Failed to fetch')) {
       msg = 'No se pudo conectar con el servidor local.<br>• Asegurate de que <strong>server.js esté corriendo</strong> (npm start)<br>• Verificá que n8n esté corriendo en la red';
     }
@@ -1267,6 +1269,24 @@ async function testN8nConnection() {
       dbg('    2. CORS bloqueado (abrí desde GitHub Pages, no file://)');
       dbg('    3. n8n no está corriendo');
     }
+  }
+}
+
+async function verificarEnIBIS(taxCode) {
+  const btn = event.target;
+  btn.textContent = '⏳ Verificando...';
+  btn.disabled = true;
+  try {
+    const res = await fetch(`/api/verificar-cliente?taxCode=${encodeURIComponent(taxCode)}`);
+    const data = await res.json();
+    if (data.found) {
+      btn.parentElement.innerHTML = `✅ <strong>Cliente encontrado en IBIS</strong> — ID: <strong>${data.CustomerID}</strong> | Nombre: ${data.CustomerName}`;
+    } else {
+      btn.parentElement.innerHTML = '❌ No se encontró el cliente en IBIS con ese documento. No fue creado.';
+    }
+  } catch(e) {
+    btn.textContent = '❌ Error al verificar';
+    btn.disabled = false;
   }
 }
 
