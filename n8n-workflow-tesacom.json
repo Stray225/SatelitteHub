@@ -17,6 +17,90 @@
     },
     {
       "parameters": {
+        "dataType": "string",
+        "value1": "={{ String($json.body.ParentCustomerID) }}",
+        "rules": {
+          "rules": [
+            { "value2": "3" },
+            { "value2": "4" },
+            { "value2": "5" },
+            { "value2": "6" }
+          ]
+        },
+        "fallbackOutput": "last"
+      },
+      "id": "switch-pais-010",
+      "name": "Switch País",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "ed0bca6fac254bb6a6a2901e0e4bae25" },
+            { "name": "_csec", "value": "QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "set-cred-ar-011",
+      "name": "Cred AR",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [620, 100]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "4fd1675586b646778af1e2cc0ca19f83" },
+            { "name": "_csec", "value": "l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "set-cred-cl-012",
+      "name": "Cred CL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [620, 220]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "6f3c4cdabcf349e3a197fd77f4be05e0" },
+            { "name": "_csec", "value": "VhJQkwnuhr607LiBZgUp5mJ1S7lduea9Ag0+k/Xrr5g=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "set-cred-py-013",
+      "name": "Cred PY",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [620, 340]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "8ddf0664d99c4493b01ec5b9317719ae" },
+            { "name": "_csec", "value": "S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "set-cred-pe-014",
+      "name": "Cred PE",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [620, 460]
+    },
+    {
+      "parameters": {
         "method": "POST",
         "url": "https://ibistesacom.satcomhost.com/identity/connect/token",
         "sendBody": true,
@@ -24,8 +108,8 @@
         "bodyParameters": {
           "parameters": [
             { "name": "grant_type",    "value": "client_credentials" },
-            { "name": "client_id",     "value": "REEMPLAZAR_CLIENT_ID" },
-            { "name": "client_secret", "value": "REEMPLAZAR_CLIENT_SECRET" },
+            { "name": "client_id",     "value": "={{ $json._cid }}" },
+            { "name": "client_secret", "value": "={{ $json._csec }}" },
             { "name": "scope",         "value": "ibisApi" }
           ]
         },
@@ -38,7 +122,7 @@
       "name": "Obtener Token IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [400, 300]
+      "position": [860, 300]
     },
     {
       "parameters": {
@@ -55,7 +139,7 @@
       "name": "Token OK?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [600, 300]
+      "position": [1060, 300]
     },
     {
       "parameters": {
@@ -85,7 +169,7 @@
       "name": "Crear Cliente en IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [820, 180]
+      "position": [1280, 180]
     },
     {
       "parameters": {
@@ -102,7 +186,7 @@
       "name": "IBIS OK?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [1020, 180]
+      "position": [1480, 180]
     },
     {
       "parameters": {
@@ -116,7 +200,7 @@
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1240, 100]
+      "position": [1700, 80]
     },
     {
       "parameters": {
@@ -130,28 +214,63 @@
       "name": "Respuesta Error",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1240, 400]
+      "position": [1700, 460]
     }
   ],
   "connections": {
     "Webhook Clientes": {
-      "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]]
+      "main": [
+        [{ "node": "Switch País", "type": "main", "index": 0 }]
+      ]
+    },
+    "Switch País": {
+      "main": [
+        [{ "node": "Cred AR", "type": "main", "index": 0 }],
+        [{ "node": "Cred CL", "type": "main", "index": 0 }],
+        [{ "node": "Cred PY", "type": "main", "index": 0 }],
+        [{ "node": "Cred PE", "type": "main", "index": 0 }],
+        [{ "node": "Respuesta Error", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred AR": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred CL": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred PY": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred PE": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
     },
     "Obtener Token IBIS": {
-      "main": [[{ "node": "Token OK?", "type": "main", "index": 0 }]]
+      "main": [
+        [{ "node": "Token OK?", "type": "main", "index": 0 }]
+      ]
     },
     "Token OK?": {
       "main": [
         [{ "node": "Crear Cliente en IBIS", "type": "main", "index": 0 }],
-        [{ "node": "Respuesta Error", "type": "main", "index": 0 }]
+        [{ "node": "Respuesta Error",       "type": "main", "index": 0 }]
       ]
     },
     "Crear Cliente en IBIS": {
-      "main": [[{ "node": "IBIS OK?", "type": "main", "index": 0 }]]
+      "main": [
+        [{ "node": "IBIS OK?", "type": "main", "index": 0 }]
+      ]
     },
     "IBIS OK?": {
       "main": [
-        [{ "node": "Respuesta OK", "type": "main", "index": 0 }],
+        [{ "node": "Respuesta OK",    "type": "main", "index": 0 }],
         [{ "node": "Respuesta Error", "type": "main", "index": 0 }]
       ]
     }
