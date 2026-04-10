@@ -12,7 +12,7 @@
       "name": "Webhook Clientes",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [180, 300],
+      "position": [16, 0],
       "webhookId": "tesacom-clientes-webhook"
     },
     {
@@ -21,19 +21,16 @@
         "value1": "={{ $json.body.ParentCustomerID }}",
         "rules": {
           "rules": [
-            { "value2": 3 },
-            { "value2": 4 },
-            { "value2": 5 },
-            { "value2": 6 }
+            { "value2": 3 }
           ]
         },
-        "fallbackOutput": "last"
+        "fallbackOutput": "none"
       },
       "id": "switch-pais-010",
       "name": "Switch País",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 1,
-      "position": [400, 300]
+      "position": [240, 0]
     },
     {
       "parameters": {
@@ -49,55 +46,7 @@
       "name": "Cred AR",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [620, 100]
-    },
-    {
-      "parameters": {
-        "values": {
-          "string": [
-            { "name": "_cid",  "value": "4fd1675586b646778af1e2cc0ca19f83" },
-            { "name": "_csec", "value": "l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=" }
-          ]
-        },
-        "options": { "keepOnlySet": false }
-      },
-      "id": "set-cred-cl-012",
-      "name": "Cred CL",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 1,
-      "position": [620, 220]
-    },
-    {
-      "parameters": {
-        "values": {
-          "string": [
-            { "name": "_cid",  "value": "6f3c4cdabcf349e3a197fd77f4be05e0" },
-            { "name": "_csec", "value": "VhJQkwnuhr607LiBZgUp5mJ1S7lduea9Ag0+k/Xrr5g=" }
-          ]
-        },
-        "options": { "keepOnlySet": false }
-      },
-      "id": "set-cred-py-013",
-      "name": "Cred PY",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 1,
-      "position": [620, 340]
-    },
-    {
-      "parameters": {
-        "values": {
-          "string": [
-            { "name": "_cid",  "value": "8ddf0664d99c4493b01ec5b9317719ae" },
-            { "name": "_csec", "value": "S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=" }
-          ]
-        },
-        "options": { "keepOnlySet": false }
-      },
-      "id": "set-cred-pe-014",
-      "name": "Cred PE",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 1,
-      "position": [620, 460]
+      "position": [464, 0]
     },
     {
       "parameters": {
@@ -113,33 +62,13 @@
             { "name": "scope",         "value": "ibisApi" }
           ]
         },
-        "options": {
-          "continueOnFail": true,
-          "timeout": 15000
-        }
+        "options": {}
       },
       "id": "ibis-token-002",
       "name": "Obtener Token IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [860, 300]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "string": [
-            {
-              "value1": "={{ $json.access_token }}",
-              "operation": "isNotEmpty"
-            }
-          ]
-        }
-      },
-      "id": "check-token-008",
-      "name": "Token OK?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [1060, 300]
+      "position": [688, 0]
     },
     {
       "parameters": {
@@ -160,38 +89,19 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { CustomerName: $('Webhook Clientes').item.json.body.CustomerName, ParentCustomerID: $('Webhook Clientes').item.json.body.ParentCustomerID, TaxCode: $('Webhook Clientes').item.json.body.TaxCode, Description: $('Webhook Clientes').item.json.body.Description, Industry: $('Webhook Clientes').item.json.body.Industry, EmailGeneral: $('Webhook Clientes').item.json.body.EmailGeneral, MainContactPhone: $('Webhook Clientes').item.json.body.MainContactPhone, AccountManagerCode: $('Webhook Clientes').item.json.body.AccountManagerCode, Location: $('Webhook Clientes').item.json.body.Location, CurrencyCode: 'USD', CreditTermsCode: 'Net 30', InvoiceDeliveryMode: 'Email', ShowCdrsOnInvoice: false, ShowZeroChargesOnInvoice: false, ShowPreviousBalanceOnInvoice: false, DeviceIdentifierOnInvoice: false, RollupInvoiceToParentCustomer: false, MainAddressSameAsParentMainAddress: false, BillingAddressSameAsMainAddress: false } }}",
-        "options": {
-          "continueOnFail": true
-        }
+        "jsonBody": "={\n  \"CustomerID\": 0,\n  \"ParentCustomerID\": {{ $('Webhook Clientes').item.json.body.ParentCustomerID ?? 3 }},\n  \"CustomerName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n  \"TaxCode\": \"{{ $('Webhook Clientes').item.json.body.TaxCode }}\",\n  \"Description\": \"{{ $('Webhook Clientes').item.json.body.Description ?? '' }}\",\n  \"Industry\": \"{{ $('Webhook Clientes').item.json.body.Industry ?? '' }}\",\n  \"CurrencyCode\": \"USD\",\n  \"CreditTermsCode\": \"Net 30\",\n  \"InvoiceDeliveryMode\": \"E-Mail\",\n  \"EmailGeneral\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"EmailBilling\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"MainContactPhone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n  \"AccountManagerCode\": \"{{ $('Webhook Clientes').item.json.body.AccountManagerCode ?? '' }}\",\n  \"ShowCdrsOnInvoice\": {{ $('Webhook Clientes').item.json.body.ShowCdrsOnInvoice ?? false }},\n  \"ShowZeroChargesOnInvoice\": false,\n  \"ShowPreviousBalanceOnInvoice\": false,\n  \"DeviceIdentifierOnInvoice\": \"ICCID\",\n  \"RollupInvoiceToParentCustomer\": false,\n  \"MainAddressSameAsParentMainAddress\": false,\n  \"BillingAddressSameAsMainAddress\": true,\n  \"MainAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"CountryCode\": \"ARG\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"BillingAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"CountryCode\": \"ARG\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"ContactPersons\": [\n    {\n      \"ContactPersonID\": 0,\n      \"ContactName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n      \"Email\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n      \"Phone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n      \"IsMainContact\": true\n    }\n  ]\n}",
+        "options": {}
       },
       "id": "ibis-create-003",
       "name": "Crear Cliente en IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
-      "position": [1280, 180]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "string": [
-            {
-              "value1": "={{ String($json.CustomerID) }}",
-              "operation": "isNotEmpty"
-            }
-          ]
-        }
-      },
-      "id": "check-ibis-009",
-      "name": "IBIS OK?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [1480, 180]
+      "position": [912, 0]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Cliente creado correctamente en IBIS', CustomerID: $('Crear Cliente en IBIS').item.json.CustomerID, ibis: $('Crear Cliente en IBIS').item.json }) }}",
+        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Cliente sincronizado correctamente', CustomerID: $input.item.json.CustomerID, ibis: $input.item.json }) }}",
         "options": {
           "responseCode": 200
         }
@@ -200,21 +110,7 @@
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1700, 80]
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: false, error: 'Error al crear cliente en IBIS', detail: ($json.Message || $json.error_description || $json.error || 'Sin detalle') }) }}",
-        "options": {
-          "responseCode": 500
-        }
-      },
-      "id": "respuesta-error-007",
-      "name": "Respuesta Error",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [1700, 460]
+      "position": [1136, 0]
     }
   ],
   "connections": {
@@ -225,11 +121,7 @@
     },
     "Switch País": {
       "main": [
-        [{ "node": "Cred AR", "type": "main", "index": 0 }],
-        [{ "node": "Cred CL", "type": "main", "index": 0 }],
-        [{ "node": "Cred PY", "type": "main", "index": 0 }],
-        [{ "node": "Cred PE", "type": "main", "index": 0 }],
-        [{ "node": "Respuesta Error", "type": "main", "index": 0 }]
+        [{ "node": "Cred AR", "type": "main", "index": 0 }]
       ]
     },
     "Cred AR": {
@@ -237,50 +129,19 @@
         [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
       ]
     },
-    "Cred CL": {
-      "main": [
-        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
-      ]
-    },
-    "Cred PY": {
-      "main": [
-        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
-      ]
-    },
-    "Cred PE": {
-      "main": [
-        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
-      ]
-    },
     "Obtener Token IBIS": {
       "main": [
-        [{ "node": "Token OK?", "type": "main", "index": 0 }]
-      ]
-    },
-    "Token OK?": {
-      "main": [
-        [{ "node": "Crear Cliente en IBIS", "type": "main", "index": 0 }],
-        [{ "node": "Respuesta Error",       "type": "main", "index": 0 }]
+        [{ "node": "Crear Cliente en IBIS", "type": "main", "index": 0 }]
       ]
     },
     "Crear Cliente en IBIS": {
       "main": [
-        [{ "node": "IBIS OK?", "type": "main", "index": 0 }]
-      ]
-    },
-    "IBIS OK?": {
-      "main": [
-        [{ "node": "Respuesta OK",    "type": "main", "index": 0 }],
-        [{ "node": "Respuesta Error", "type": "main", "index": 0 }]
+        [{ "node": "Respuesta OK", "type": "main", "index": 0 }]
       ]
     }
   },
   "settings": {
-    "executionOrder": "v1",
-    "saveManualExecutions": true,
-    "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": ""
+    "executionOrder": "v1"
   },
-  "staticData": null,
   "tags": [{ "name": "Tesacom" }]
 }
