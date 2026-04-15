@@ -22,7 +22,9 @@
         "rules": {
           "rules": [
             { "operation": "equal", "value2": 3, "output": 0 },
-            { "operation": "equal", "value2": 4, "output": 1 }
+            { "operation": "equal", "value2": 4, "output": 1 },
+            { "operation": "equal", "value2": 5, "output": 2 },
+            { "operation": "equal", "value2": 6, "output": 3 }
           ]
         },
         "fallbackOutput": "none"
@@ -47,7 +49,7 @@
       "name": "Cred AR",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [464, -120]
+      "position": [464, -360]
     },
     {
       "parameters": {
@@ -63,7 +65,39 @@
       "name": "Cred CL",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
+      "position": [464, -120]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "6f3c4cdabcf349e3a197fd77f4be05e0" },
+            { "name": "_csec", "value": "VhJQkwnuhr607LiBZgUp5mJ1S7lduea9Ag0+k/Xrr5g=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "set-cred-py-013",
+      "name": "Cred PY",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
       "position": [464, 120]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "8ddf0664d99c4493b01ec5b9317719ae" },
+            { "name": "_csec", "value": "S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "set-cred-pe-014",
+      "name": "Cred PE",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [464, 360]
     },
     {
       "parameters": {
@@ -139,7 +173,9 @@
     "Switch País": {
       "main": [
         [{ "node": "Cred AR", "type": "main", "index": 0 }],
-        [{ "node": "Cred CL", "type": "main", "index": 0 }]
+        [{ "node": "Cred CL", "type": "main", "index": 0 }],
+        [{ "node": "Cred PY", "type": "main", "index": 0 }],
+        [{ "node": "Cred PE", "type": "main", "index": 0 }]
       ]
     },
     "Cred AR": {
@@ -148,6 +184,16 @@
       ]
     },
     "Cred CL": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred PY": {
+      "main": [
+        [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred PE": {
       "main": [
         [{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]
       ]
