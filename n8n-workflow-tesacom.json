@@ -151,8 +151,36 @@
     },
     {
       "parameters": {
+        "method": "PUT",
+        "url": "=https://ibistesacom.satcomhost.com/api/v1/CustomerDetails/{{ $('Crear Cliente en IBIS').item.json.CustomerID }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Obtener Token IBIS').item.json.access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"CustomerID\": {{ $('Crear Cliente en IBIS').item.json.CustomerID }},\n  \"ParentCustomerID\": {{ $('Webhook Clientes').item.json.body.ParentCustomerID ?? 3 }},\n  \"CustomerName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n  \"TaxCode\": \"{{ $('Webhook Clientes').item.json.body.TaxCode }}\",\n  \"CustomerCategoryCode\": \"End User\",\n  \"Description\": \"{{ $('Webhook Clientes').item.json.body.Description ?? '' }}\",\n  \"IndustryCode\": \"{{ $('Webhook Clientes').item.json.body.Industry ?? '' }}\",\n  \"TaxCombinationCode\": \"EXENTO\",\n  \"CurrencyCode\": \"USD\",\n  \"CreditTermsCode\": \"Net 30\",\n  \"InvoiceDeliveryMode\": \"E-Mail\",\n  \"EmailGeneral\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"EmailBilling\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n  \"MainContactPhone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n  \"AccountManagerCode\": \"{{ $('Webhook Clientes').item.json.body.AccountManagerCode ?? '' }}\",\n  \"ShowCdrsOnInvoice\": {{ $('Webhook Clientes').item.json.body.ShowCdrsOnInvoice ?? false }},\n  \"ShowZeroChargesOnInvoice\": false,\n  \"ShowPreviousBalanceOnInvoice\": false,\n  \"DeviceIdentifierOnInvoice\": \"ICCID\",\n  \"RollupInvoiceToParentCustomer\": false,\n  \"MainAddressSameAsParentMainAddress\": false,\n  \"BillingAddressSameAsMainAddress\": true,\n  \"MainAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"City\": \"{{ $('Webhook Clientes').item.json.body.City ?? '' }}\",\n    \"PostCode\": \"{{ $('Webhook Clientes').item.json.body.PostalCode ?? '' }}\",\n    \"State\": \"{{ $('Webhook Clientes').item.json.body.State ?? '' }}\",\n    \"CountryCode\": \"{{ ({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] }}\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"BillingAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": \"{{ $('Webhook Clientes').item.json.body.Location ?? '' }}\",\n    \"City\": \"{{ $('Webhook Clientes').item.json.body.City ?? '' }}\",\n    \"PostCode\": \"{{ $('Webhook Clientes').item.json.body.PostalCode ?? '' }}\",\n    \"State\": \"{{ $('Webhook Clientes').item.json.body.State ?? '' }}\",\n    \"CountryCode\": \"{{ ({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] }}\",\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"ContactPersons\": [\n    {\n      \"ContactPersonID\": 0,\n      \"ContactName\": \"{{ $('Webhook Clientes').item.json.body.CustomerName }}\",\n      \"Email\": \"{{ $('Webhook Clientes').item.json.body.EmailGeneral }}\",\n      \"Phone\": \"{{ $('Webhook Clientes').item.json.body.MainContactPhone ?? '' }}\",\n      \"IsMainContact\": true\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "ibis-update-taxcode-007",
+      "name": "Actualizar TaxCode",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1136, 0]
+    },
+    {
+      "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Cliente sincronizado correctamente', CustomerID: $input.item.json.CustomerID, ibis: $input.item.json }) }}",
+        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Cliente sincronizado correctamente', CustomerID: $('Crear Cliente en IBIS').item.json.CustomerID, ibis: $('Crear Cliente en IBIS').item.json }) }}",
         "options": {
           "responseCode": 200
         }
@@ -161,7 +189,7 @@
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1136, 0]
+      "position": [1360, 0]
     }
   ],
   "connections": {
@@ -204,6 +232,11 @@
       ]
     },
     "Crear Cliente en IBIS": {
+      "main": [
+        [{ "node": "Actualizar TaxCode", "type": "main", "index": 0 }]
+      ]
+    },
+    "Actualizar TaxCode": {
       "main": [
         [{ "node": "Respuesta OK", "type": "main", "index": 0 }]
       ]
