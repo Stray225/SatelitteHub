@@ -339,8 +339,20 @@
           </div>
           <div class="section-title">Ubicacion</div>
           <div class="field span-2">
-            <label>Direccion</label>
-            <input id="client-direccion" type="text" placeholder="Calle, número, piso" oninput="updateFieldFilled(this)" />
+            <label>Direccion (Calle y numero)</label>
+            <input id="client-direccion" type="text" placeholder="Ej: Av. Corrientes 1234, Piso 3" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field">
+            <label>Ciudad</label>
+            <input id="client-ciudad" type="text" placeholder="Ej: Buenos Aires" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field">
+            <label>Codigo Postal</label>
+            <input id="client-cp" type="text" placeholder="Ej: 1425" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field span-2">
+            <label>Provincia / Estado / Region</label>
+            <input id="client-estado" type="text" placeholder="Ej: Buenos Aires / Metropolitana / Central" oninput="updateFieldFilled(this)" />
           </div>
         </div>
 
@@ -734,6 +746,9 @@ function getFormPayload(k){
     MainContactPhone:document.getElementById('client-telefono')?.value||'',
     AccountManagerCode:document.getElementById('client-comercial')?.value||'',
     Location:document.getElementById('client-direccion')?.value||'',
+    City:document.getElementById('client-ciudad')?.value||'',
+    PostalCode:document.getElementById('client-cp')?.value||'',
+    State:document.getElementById('client-estado')?.value||'',
     ShowCdrsOnInvoice:false,
     MainAddressSameAsParentMainAddress:false,
     BillingAddressSameAsMainAddress:false
@@ -886,7 +901,7 @@ function checkClientForm(){
 }
 
 function resetClientForm(){
-  ['client-pais','client-nombre','client-num-doc','client-categoria-fiscal','client-mercado','client-email','client-telefono','client-comercial','client-direccion'].forEach(id=>{
+  ['client-pais','client-nombre','client-num-doc','client-categoria-fiscal','client-mercado','client-email','client-telefono','client-comercial','client-direccion','client-ciudad','client-cp','client-estado'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.value='';el.classList.remove('field-error','field-filled');}
   });
@@ -917,6 +932,9 @@ async function pasteClientJSON(){
   set('client-telefono',data.MainContactPhone);
   set('client-comercial',data.AccountManagerCode);
   set('client-direccion',data.Location);
+  set('client-ciudad',data.City);
+  set('client-cp',data.PostalCode);
+  set('client-estado',data.State);
   checkClientForm();
   showToast('¡Datos pegados!');
 }
