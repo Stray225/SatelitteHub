@@ -277,8 +277,8 @@
             <input id="client-nombre" type="text" placeholder="Ej: Empresa S.A." oninput="checkClientForm();updateFieldFilled(this)" />
           </div>
           <div class="field">
-            <label>Numero de Documento <span class="req">*</span>
-              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal</span></span>
+            <label id="label-num-doc">Numero de Documento <span class="req">*</span>
+              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal del cliente</span></span>
             </label>
             <input id="client-num-doc" type="text" placeholder="Ej: 20-12345678-9" oninput="checkClientForm();updateFieldFilled(this)" />
           </div>
@@ -290,36 +290,26 @@
             <label>Mercado</label>
             <select id="client-mercado" onchange="updateFieldFilled(this)">
               <option value="">Seleccionar...</option>
-              <option value="AGRICULTURE">Agricultura</option>
-              <option value="AID AND NGO">Ayuda y ONG</option>
-              <option value="BANKING">Banca</option>
-              <option value="CABLE LAYER">Capa de Cable</option>
-              <option value="CIVIL GOVERNMENT">Gobierno Civil</option>
-              <option value="CONSTRUCTION">Construcción</option>
-              <option value="DREDGE">Dragado</option>
-              <option value="EDUCATION">Educación</option>
-              <option value="ENVIRONMENTAL MONITORING">Monitoreo Ambiental</option>
-              <option value="FISHING">Pesca</option>
-              <option value="GOV HEALTH/EDUC">Salud Gov/Educación</option>
-              <option value="HEALTHCARE">Salud</option>
-              <option value="INSURANCE">Seguros</option>
-              <option value="LEISURE">Ocio</option>
-              <option value="LOCAL GOVT">Gobierno Local</option>
-              <option value="MANUFACTURING">Manufactura</option>
-              <option value="MEDIA">Medios</option>
-              <option value="MERCHANT">Comerciante</option>
-              <option value="MILITARY GOVERNMENT">Gobierno Militar</option>
+              <option value="TRANSPORTATION AND LOGISTICS">Aeronáutico</option>
+              <option value="UTILITIES">Energía</option>
+              <option value="PROFESSIONAL SERVICES">Equipos de Rescate</option>
+              <option value="BANKING">Financieros</option>
+              <option value="MILITARY GOVERNMENT">Fuerzas Armadas y de Seguridad</option>
+              <option value="MILITARY GOVERNMENT">Fuerzas de Seguridad</option>
+              <option value="NATIONAL GOVT">Gobierno</option>
+              <option value="CONSTRUCTION">Grandes Obras de Ingeniería</option>
+              <option value="MANUFACTURING">Industrias y Servicios</option>
+              <option value="UTILITIES">Integrador</option>
+              <option value="UTILITIES">Internos</option>
+              <option value="MARITIME">Marítimo</option>
+              <option value="UTILITIES">Mayorista</option>
+              <option value="MEDIA">Medios de Comunicación</option>
               <option value="MINING">Minería</option>
-              <option value="NATIONAL GOVT">Gobierno Nacional</option>
-              <option value="OFFSHORE SUPPLY VESSELS">Buques Offshore</option>
               <option value="OIL AND GAS">Petróleo y Gas</option>
-              <option value="OTHER">Otro</option>
-              <option value="SELF EMPLOYED">Profesional Independiente</option>
-              <option value="PASSENGER OR FERRY">Pasajeros o Ferry</option>
+              <option value="UTILITIES">Profesional Independiente</option>
+              <option value="UTILITIES">Service Provider</option>
               <option value="TRANSPORTATION AND LOGISTICS">Transporte y Logística</option>
-              <option value="TRAVEL AND TOURISM">Viajes y Turismo</option>
-              <option value="TUG">Remolcador</option>
-              <option value="UTILITIES">Utilities</option>
+              <option value="TRAVEL AND TOURISM">Turismo</option>
             </select>
           </div>
           <div class="section-title">Contacto</div>
@@ -1042,6 +1032,14 @@ function onPaisChange(){
   execs.forEach(e=>{const opt=document.createElement('option');opt.value=e.code;opt.textContent=e.name;sel.appendChild(opt);});
   sel.disabled=execs.length===0;
   if(execs.find(e=>e.code===prev))sel.value=prev;
+  // Label dinamico segun pais
+  const docLabels={3:'CUIT',4:'RUT',5:'RUC',6:'RUC'};
+  const docPlaceholders={3:'Ej: 30-12345678-9',4:'Ej: 12.345.678-9',5:'Ej: 80012345-6',6:'Ej: 20123456789'};
+  const labelEl=document.getElementById('label-num-doc');
+  const inputEl=document.getElementById('client-num-doc');
+  const tipo=docLabels[pais.value]||'Numero de Documento';
+  if(labelEl)labelEl.innerHTML=tipo+' <span class="req">*</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal del cliente</span></span>';
+  if(inputEl)inputEl.placeholder=docPlaceholders[pais.value]||'Ej: 20-12345678-9';
 }
 
 /* DARK MODE */
