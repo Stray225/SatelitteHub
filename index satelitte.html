@@ -258,6 +258,12 @@
       <div id="tab-clients" class="tab-content active">
         <div class="form-grid">
           <div class="section-title">Informacion Principal</div>
+          <div class="field span-2">
+            <label>Nombre / Razon Social <span class="req">*</span>
+              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Nombre legal completo de la empresa</span></span>
+            </label>
+            <input id="client-nombre" type="text" placeholder="Ej: Empresa S.A." oninput="checkClientForm();updateFieldFilled(this)" />
+          </div>
           <div class="field">
             <label>Pais <span class="req">*</span>
               <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Selecciona el país del cliente</span></span>
@@ -271,13 +277,7 @@
             </select>
           </div>
           <div class="field span-2">
-            <label>Nombre / Razon Social <span class="req">*</span>
-              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Nombre legal completo de la empresa</span></span>
-            </label>
-            <input id="client-nombre" type="text" placeholder="Ej: Empresa S.A." oninput="checkClientForm();updateFieldFilled(this)" />
-          </div>
-          <div class="field">
-            <label id="label-num-doc">Numero de Documento <span class="req">*</span>
+            <label id="label-num-doc">CUIT / RUT / RUC <span class="req">*</span>
               <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal del cliente</span></span>
             </label>
             <input id="client-num-doc" type="text" placeholder="Ej: 20-12345678-9" oninput="checkClientForm();updateFieldFilled(this)" />
@@ -286,7 +286,39 @@
             <label>Categoria Fiscal</label>
             <input id="client-categoria-fiscal" type="text" placeholder="Ej: Responsable Inscripto" oninput="updateFieldFilled(this)" />
           </div>
+          <div class="section-title">Ubicacion</div>
+          <div class="field span-3">
+            <label>Direccion (Calle y numero)</label>
+            <input id="client-direccion" type="text" placeholder="Ej: Av. Corrientes 1234, Piso 3" oninput="updateFieldFilled(this)" />
+          </div>
           <div class="field">
+            <label>Ciudad</label>
+            <input id="client-ciudad" type="text" placeholder="Ej: Buenos Aires" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field">
+            <label>Provincia / Estado / Region</label>
+            <input id="client-estado" type="text" placeholder="Ej: Buenos Aires" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field">
+            <label>Codigo Postal</label>
+            <input id="client-cp" type="text" placeholder="Ej: 1425" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="section-title">Contacto</div>
+          <div class="field">
+            <label>Telefono</label>
+            <input id="client-telefono" type="text" placeholder="+54 11 XXXX-XXXX" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field span-2">
+            <label>Email</label>
+            <input id="client-email" type="email" placeholder="contacto@empresa.com" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field">
+            <label>Comercial Asignado</label>
+            <select id="client-comercial" disabled onchange="updateFieldFilled(this)">
+              <option value="">Seleccionar...</option>
+            </select>
+          </div>
+          <div class="field span-2">
             <label>Mercado</label>
             <select id="client-mercado" onchange="updateFieldFilled(this)">
               <option value="">Seleccionar...</option>
@@ -311,38 +343,6 @@
               <option value="TRANSPORTATION AND LOGISTICS">Transporte y Logística</option>
               <option value="TRAVEL AND TOURISM">Turismo</option>
             </select>
-          </div>
-          <div class="section-title">Contacto</div>
-          <div class="field">
-            <label>Email</label>
-            <input id="client-email" type="email" placeholder="contacto@empresa.com" oninput="updateFieldFilled(this)" />
-          </div>
-          <div class="field">
-            <label>Telefono</label>
-            <input id="client-telefono" type="text" placeholder="+54 11 XXXX-XXXX" oninput="updateFieldFilled(this)" />
-          </div>
-          <div class="field">
-            <label>Comercial Asignado</label>
-            <select id="client-comercial" disabled onchange="updateFieldFilled(this)">
-              <option value="">Seleccionar...</option>
-            </select>
-          </div>
-          <div class="section-title">Ubicacion</div>
-          <div class="field span-2">
-            <label>Direccion (Calle y numero)</label>
-            <input id="client-direccion" type="text" placeholder="Ej: Av. Corrientes 1234, Piso 3" oninput="updateFieldFilled(this)" />
-          </div>
-          <div class="field">
-            <label>Ciudad</label>
-            <input id="client-ciudad" type="text" placeholder="Ej: Buenos Aires" oninput="updateFieldFilled(this)" />
-          </div>
-          <div class="field">
-            <label>Codigo Postal</label>
-            <input id="client-cp" type="text" placeholder="Ej: 1425" oninput="updateFieldFilled(this)" />
-          </div>
-          <div class="field span-2">
-            <label>Provincia / Estado / Region</label>
-            <input id="client-estado" type="text" placeholder="Ej: Buenos Aires / Metropolitana / Central" oninput="updateFieldFilled(this)" />
           </div>
         </div>
 
