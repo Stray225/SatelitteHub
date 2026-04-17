@@ -765,7 +765,7 @@ async function handleSubmit(k){
     dbg('📤 Enviando a: '+url);
     dbg('📋 Payload',payload);
     const controller=new AbortController();
-    const timeout=setTimeout(()=>{controller.abort();dbg('⏱️ TIMEOUT 55s');},55000);
+    const timeout=setTimeout(()=>{controller.abort();dbg('⏱️ TIMEOUT 90s');},90000);
     let res;
     try{
       res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
