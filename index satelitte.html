@@ -422,25 +422,78 @@
           </button>
         </div>
         <div id="equip-single">
-          <div class="vendor-box">
+          <div class="form-grid">
+            <div class="section-title">Identificacion del Equipo</div>
+            <div class="field span-2">
+              <label>ICCID <span class="req">*</span>
+                <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Número de 19-20 dígitos impreso en la SIM</span></span>
+              </label>
+              <input id="equip-iccid" type="text" placeholder="8954XXXXXXXXXXXXXXX" oninput="checkEquipForm();updateFieldFilled(this)" />
+            </div>
             <div class="field">
-              <label>Proveedor (Vendor) <span class="req">*</span></label>
-              <select id="vendor-select" onchange="onVendorChange(this.value)">
-                <option value="">Seleccionar proveedor primero...</option>
-                <option value="2-Stage">2-Stage</option><option value="BGAN">BGAN — Inmarsat BGAN</option><option value="BM2M">BM2M — Inmarsat BGAN M2M</option><option value="Cellular">Cellular</option><option value="Cert GMDSS">Cert GMDSS — Iridium Certus GMDSS</option><option value="Commbox">Commbox Starlink</option><option value="FBB">FBB — Inmarsat Fleet Broadband</option><option value="GlobalStar">GlobalStar</option><option value="GSPS">GSPS — Inmarsat GSPS</option><option value="GX">GX — Inmarsat GX</option><option value="IDP">IDP — IsatDataPro</option><option value="INM C">INM C — Inmarsat C</option><option value="IoT">IoT — Telemetría</option><option value="Iridium">Iridium</option><option value="Iridium Cr">Iridium Crew</option><option value="Iridium GR">Iridium Geo Restricted</option><option value="Iridium PP">Iridium Prepay</option><option value="ISPL">ISPL — Inmarsat IsatPhone Link</option><option value="OpenPort">Iridium OpenPort</option><option value="PTT Device">PTT Device</option><option value="PTT Group">PTT Group</option><option value="SafetyNet">SafetyNet II</option><option value="SBD">SBD</option><option value="Starlink">Starlink</option><option value="VOIP">VOIP</option><option value="VSAT">VSAT</option>
+              <label>Tipo de Operacion <span class="req">*</span></label>
+              <select id="equip-tipo-op" onchange="checkEquipForm();updateFieldFilled(this)">
+                <option value="">Seleccionar...</option>
+                <option value="Alta">Alta</option>
+                <option value="Baja">Baja</option>
+                <option value="Modificacion">Modificacion</option>
+                <option value="Suspension">Suspension</option>
+                <option value="Reactivacion">Reactivacion</option>
               </select>
             </div>
-            <p id="vendor-hint" class="vendor-hint">Los campos del equipo varían según el proveedor seleccionado.</p>
-          </div>
-          <div id="equipment-fields" style="display:none">
-            <div class="form-grid" id="equipment-form-grid"></div>
-            <div class="bottom-bar">
-              <div id="badge-equipment" class="sync-badge" style="background:var(--bg);border:1px solid var(--border)"><div class="sync-dot" style="background:var(--text-muted)"></div><span class="sync-text" style="color:var(--text-muted)">Listo para enviar</span></div>
-              <button id="btn-submit-equipment" class="btn btn-primary" onclick="openModal('equipment')" disabled>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Sincronizar con IBIS
-              </button>
+            <div class="field span-2">
+              <label>Customer (Codigo Metris o ID IBIS) <span class="req">*</span>
+                <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código Metris del cliente (ej: ACME-AR-001) o su ID numérico en IBIS</span></span>
+              </label>
+              <input id="equip-customer" type="text" placeholder="Ej: ACME-AR-001 o 12801" oninput="checkEquipForm();updateFieldFilled(this)" />
             </div>
+            <div class="field">
+              <label>Producto <span class="req">*</span></label>
+              <select id="vendor-select" onchange="onVendorChange(this.value);checkEquipForm();updateFieldFilled(this)">
+                <option value="">Seleccionar producto...</option>
+                <option value="BGAN">BGAN — Inmarsat BGAN</option>
+                <option value="BM2M">BM2M — Inmarsat BGAN M2M</option>
+                <option value="Cellular">Cellular</option>
+                <option value="Cert GMDSS">Cert GMDSS — Iridium Certus GMDSS</option>
+                <option value="Commbox">Commbox Starlink</option>
+                <option value="FBB">FBB — Inmarsat Fleet Broadband</option>
+                <option value="GlobalStar">GlobalStar</option>
+                <option value="GSPS">GSPS — Inmarsat GSPS</option>
+                <option value="GX">GX — Inmarsat GX</option>
+                <option value="IDP">IDP — IsatDataPro</option>
+                <option value="INM C">INM C — Inmarsat C</option>
+                <option value="IoT">IoT — Telemetría</option>
+                <option value="Iridium">Iridium</option>
+                <option value="Iridium GR">Iridium Geo Restricted</option>
+                <option value="Iridium PP">Iridium Prepay</option>
+                <option value="ISPL">ISPL — Inmarsat IsatPhone Link</option>
+                <option value="PTT Device">PTT Device</option>
+                <option value="PTT Group">PTT Group</option>
+                <option value="SafetyNet">SafetyNet II</option>
+                <option value="SBD">SBD</option>
+                <option value="Starlink">Starlink</option>
+                <option value="VSAT">VSAT</option>
+              </select>
+            </div>
+            <div class="field span-2">
+              <label>Solicitud de Servicio</label>
+              <input id="equip-solicitud" type="text" placeholder="N° de solicitud o ticket" oninput="updateFieldFilled(this)" />
+            </div>
+          </div>
+
+          <div id="equipment-fields" style="display:none;margin-top:4px">
+            <div class="form-grid" id="equipment-form-grid"></div>
+          </div>
+
+          <div class="bottom-bar" style="margin-top:20px">
+            <div id="badge-equipment" class="sync-badge" style="background:var(--bg);border:1px solid var(--border)">
+              <div class="sync-dot" style="background:var(--text-muted)"></div>
+              <span class="sync-text" style="color:var(--text-muted)">Listo para enviar</span>
+            </div>
+            <button id="btn-submit-equipment" class="btn btn-primary" onclick="openModal('equipment')" disabled>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Sincronizar con IBIS
+            </button>
           </div>
         </div>
         <div id="equip-bulk" style="display:none">
@@ -577,9 +630,49 @@
 
 <script>
 /* EQUIPMENT FIELDS */
-const BASE_FIELDS=[{name:"Producto",type:"text"},{name:"IMSI",type:"text"},{name:"IMEI",type:"text"},{name:"ProvisioningAccountCode",type:"text"},{name:"MSISDN",type:"text"},{name:"Name",type:"text"},{name:"Description",type:"text"},{name:"SerialNr",type:"text"},{name:"CustomerID",type:"text"},{name:"CustomerCode",type:"text"},{name:"CostCenter",type:"text"},{name:"CostCenterGroup",type:"text"},{name:"APN",type:"text"},{name:"IPAddress",type:"text"},{name:"TerminalType",type:"select",options:["VSAT","MSS","LEO","GEO","HTS"]},{name:"AlertEmailAddress",type:"email"},{name:"AlertEmailAddressCC",type:"email"},{name:"Plan Proveedor",type:"text"},{name:"Tipo de Operacion",type:"select",options:["Alta","Baja","Modificacion","Suspension","Reactivacion"]},{name:"Solicitud de Servicio",type:"text"}];
-const EXTRA_FIELDS={"Iridium":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium Cr":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium GR":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Iridium PP":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"Cert GMDSS":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"OpenPort":[{name:"PIN1"},{name:"PIN2"},{name:"PUK1"},{name:"PUK2"}],"BGAN":[{name:"Tel:xxx"}],"BM2M":[{name:"Tel:xxx"}],"FBB":[{name:"Tel:xxx"}],"GX":[{name:"Tel:xxx"}],"GSPS":[{name:"Tel:xxx"}],"INM C":[{name:"Tel:xxx"}],"ISPL":[{name:"Tel:xxx"}]};
-function getFields(v){return[...BASE_FIELDS,...(EXTRA_FIELDS[v]||[]).map(f=>({type:"text",...f}))];}
+// Vendor groups define which extra fields are required vs optional
+const VENDOR_GROUPS={
+  // Iridium family: IMSI + PIN/PUK required
+  'Iridium':     {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
+  'Iridium GR':  {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
+  'Iridium PP':  {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
+  'Cert GMDSS':  {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
+  // BGAN/phone family: IMSI + MSISDN required
+  'BGAN':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  'BM2M':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  'FBB':    {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  'GX':     {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  'GSPS':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  'INM C':  {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  'ISPL':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  // Cellular/IoT: IMSI + MSISDN required
+  'Cellular':{req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
+  'IoT':    {req:[{name:'IMSI'}]},
+  // Rest: no extra required fields
+  'VSAT':       {req:[]},
+  'Starlink':   {req:[]},
+  'Commbox':    {req:[]},
+  'GlobalStar': {req:[]},
+  'SafetyNet':  {req:[]},
+  'SBD':        {req:[]},
+  'IDP':        {req:[{name:'IMSI'}]},
+  'PTT Device': {req:[]},
+  'PTT Group':  {req:[]},
+};
+// Optional fields shown for all vendors after selection
+const EQUIP_OPTIONAL=[
+  {name:'Nombre del Equipo',key:'Name',type:'text'},
+  {name:'N° de Serie',key:'SerialNr',type:'text'},
+  {name:'IMEI',key:'IMEI',type:'text'},
+  {name:'Cuenta Provisioning',key:'ProvisioningAccountCode',type:'text'},
+  {name:'Tipo de Terminal',key:'TerminalType',type:'select',options:['VSAT','MSS','LEO','GEO','HTS']},
+  {name:'APN',key:'APN',type:'text'},
+  {name:'Email Alertas',key:'AlertEmailAddress',type:'email'},
+  {name:'Email Alertas CC',key:'AlertEmailAddressCC',type:'email'},
+  {name:'Grupo Centro de Costo',key:'CostCenterGroup',type:'text'},
+  {name:'Centro de Costo',key:'CostCenter',type:'text'},
+  {name:'Descripcion',key:'Description',type:'text'},
+];
 
 /* TABS */
 function switchTab(tab,btn){
@@ -599,17 +692,31 @@ function setEquipMode(m){
 
 /* VENDOR FIELDS */
 function onVendorChange(v){
-  const h=document.getElementById('vendor-hint');
   const fd=document.getElementById('equipment-fields');
   const g=document.getElementById('equipment-form-grid');
-  if(!v){h.style.display='block';fd.style.display='none';return;}
-  h.style.display='none'; fd.style.display='block';
-  g.innerHTML=`<div class="section-title">Datos del Equipo — ${v}</div>`;
-  getFields(v).forEach(f=>{
+  if(!v){fd.style.display='none';g.innerHTML='';return;}
+  const group=VENDOR_GROUPS[v]||{req:[]};
+  const reqFields=group.req;
+  fd.style.display='block';
+  g.innerHTML='';
+  // Required fields section
+  if(reqFields.length>0){
+    const rt=document.createElement('div'); rt.className='section-title'; rt.textContent='Campos Requeridos — '+v;
+    g.appendChild(rt);
+    reqFields.forEach(f=>{
+      const d=document.createElement('div'); d.className='field';
+      d.innerHTML=`<label>${f.name} <span class="req">*</span></label><input type="text" placeholder="${f.name}" data-key="${f.key||f.name}" />`;
+      g.appendChild(d);
+    });
+  }
+  // Optional fields section
+  const ot=document.createElement('div'); ot.className='section-title'; ot.textContent='Campos Opcionales';
+  g.appendChild(ot);
+  EQUIP_OPTIONAL.forEach(f=>{
     const d=document.createElement('div'); d.className='field';
     d.innerHTML=f.type==='select'
-      ?`<label>${f.name}</label><select><option value="">Seleccionar...</option>${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`
-      :`<label>${f.name}</label><input type="${f.type||'text'}" placeholder="${f.name}" />`;
+      ?`<label>${f.name}</label><select data-key="${f.key||f.name}"><option value="">Seleccionar...</option>${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`
+      :`<label>${f.name}</label><input type="${f.type||'text'}" placeholder="${f.name}" data-key="${f.key||f.name}" />`;
     g.appendChild(d);
   });
   checkEquipForm();
@@ -922,9 +1029,13 @@ function resetClientForm(){
 }
 
 function checkEquipForm(){
-  const v=document.getElementById('vendor-select');
+  const iccid=document.getElementById('equip-iccid');
+  const customer=document.getElementById('equip-customer');
+  const tipoOp=document.getElementById('equip-tipo-op');
+  const vendor=document.getElementById('vendor-select');
   const btn=document.getElementById('btn-submit-equipment');
-  if(btn)btn.disabled=!v||!v.value;
+  const ok=iccid&&iccid.value.trim()&&customer&&customer.value.trim()&&tipoOp&&tipoOp.value&&vendor&&vendor.value;
+  if(btn)btn.disabled=!ok;
 }
 
 /* PASTE / COPY JSON */
