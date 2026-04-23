@@ -276,15 +276,23 @@
               <option value="6">Perú</option>
             </select>
           </div>
-          <div class="field span-2">
+          <div class="field">
             <label id="label-num-doc">CUIT / RUT / RUC <span class="req">*</span>
               <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal del cliente</span></span>
             </label>
             <input id="client-num-doc" type="text" placeholder="Ej: 20-12345678-9" oninput="checkClientForm();updateFieldFilled(this)" />
           </div>
           <div class="field">
+            <label>Codigo Metris
+              <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de cliente en Metris / CustomerCode en IBIS</span></span>
+            </label>
+            <input id="client-codigo-metris" type="text" placeholder="Ej: ACME-AR-001" oninput="updateFieldFilled(this)" />
+          </div>
+          <div class="field">
             <label>Categoria Fiscal</label>
-            <input id="client-categoria-fiscal" type="text" placeholder="Ej: Responsable Inscripto" oninput="updateFieldFilled(this)" />
+            <select id="client-categoria-fiscal" disabled onchange="updateFieldFilled(this)">
+              <option value="">Seleccionar pais primero...</option>
+            </select>
           </div>
           <div class="section-title">Ubicacion</div>
           <div class="field span-3">
@@ -296,8 +304,10 @@
             <input id="client-ciudad" type="text" placeholder="Ej: Buenos Aires" oninput="updateFieldFilled(this)" />
           </div>
           <div class="field">
-            <label>Provincia / Estado / Region</label>
-            <input id="client-estado" type="text" placeholder="Ej: Buenos Aires" oninput="updateFieldFilled(this)" />
+            <label>Provincia</label>
+            <select id="client-estado" disabled onchange="updateFieldFilled(this)">
+              <option value="">Seleccionar pais primero...</option>
+            </select>
           </div>
           <div class="field">
             <label>Codigo Postal</label>
@@ -351,7 +361,7 @@
           <div class="form-progress-bar"><div class="form-progress-fill" id="form-progress-fill" style="width:0%"></div></div>
         </div>
 
-        <div id="debug-panel" style="display:none;margin:12px 0;background:#0f1923;border:1px solid #2a3a4a;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;color:#7affb2">
+        <div id="debug-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;background:#0f1923;border-top:2px solid #2a3a4a;border-radius:10px 10px 0 0;padding:12px 24px;font-family:monospace;font-size:11px;color:#7affb2;box-shadow:0 -4px 24px rgba(0,0,0,0.5)">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <span style="color:#f0a030;font-weight:bold">DEBUG</span>
             <button onclick="document.getElementById('debug-log').textContent=''" style="background:none;border:1px solid #2a3a4a;color:#5a7a9a;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:10px">Limpiar</button>
@@ -561,6 +571,10 @@
   </div>
 </div>
 
+<footer style="text-align:center;padding:18px 0 10px;font-size:11px;color:#ADB2BC;font-weight:300;letter-spacing:0.04em;font-family:'Poppins','Segoe UI',sans-serif;">
+  Desarrollado para Tesacom por Agustín Pazos
+</footer>
+
 <script>
 /* EQUIPMENT FIELDS */
 const BASE_FIELDS=[{name:"Producto",type:"text"},{name:"IMSI",type:"text"},{name:"IMEI",type:"text"},{name:"ProvisioningAccountCode",type:"text"},{name:"MSISDN",type:"text"},{name:"Name",type:"text"},{name:"Description",type:"text"},{name:"SerialNr",type:"text"},{name:"CustomerID",type:"text"},{name:"CustomerCode",type:"text"},{name:"CostCenter",type:"text"},{name:"CostCenterGroup",type:"text"},{name:"APN",type:"text"},{name:"IPAddress",type:"text"},{name:"TerminalType",type:"select",options:["VSAT","MSS","LEO","GEO","HTS"]},{name:"AlertEmailAddress",type:"email"},{name:"AlertEmailAddressCC",type:"email"},{name:"Plan Proveedor",type:"text"},{name:"Tipo de Operacion",type:"select",options:["Alta","Baja","Modificacion","Suspension","Reactivacion"]},{name:"Solicitud de Servicio",type:"text"}];
@@ -728,6 +742,7 @@ function getFormPayload(k){
   const pais=document.getElementById('client-pais')?.value||'';
   return{
     CustomerName:document.getElementById('client-nombre')?.value||'',
+    CustomerCode:document.getElementById('client-codigo-metris')?.value||'',
     ParentCustomerID:parseInt(pais)||null,
     TaxCode:document.getElementById('client-num-doc')?.value||'',
     Description:document.getElementById('client-categoria-fiscal')?.value||'',
@@ -826,11 +841,19 @@ function loadLogFromStorage(){try{const raw=localStorage.getItem(LS_KEY);if(raw)
 const tabNames={clients:'Cliente',equipment:'Equipo',plans:'Plan','equipment-bulk':'Bulk Equipos'};
 let logItems=(function(){const s=loadLogFromStorage();return(s&&s.length>0)?s:[];})();
 
+let logExpanded=false;
 function renderLog(){
   const l=document.getElementById('log-list');
   if(!logItems.length){l.innerHTML='<div class="log-empty">Sin actividad aun</div>';return;}
-  l.innerHTML=logItems.map(item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#00FFDB':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}</div><div class="log-msg">${item.msg}</div>${item.ibisId?`<div style="font-size:10px;color:#723EF7;font-weight:500;margin-top:2px">ID IBIS: ${item.ibisId}</div>`:''}<div class="log-time">${item.time}</div></div></div>`).join('');
+  const limit=logExpanded?10:5;
+  const visible=logItems.slice(0,limit);
+  const renderItem=item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#00FFDB':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}</div><div class="log-msg">${item.msg}</div>${item.ibisId?`<div style="font-size:10px;color:#723EF7;font-weight:500;margin-top:2px">ID IBIS: ${item.ibisId}</div>`:''}<div class="log-time">${item.time}</div></div></div>`;
+  const moreBtn=logItems.length>5
+    ?`<div style="text-align:center;padding:8px 0 2px"><button onclick="toggleLogExpand()" style="background:none;border:none;color:var(--primary);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font-base)">${logExpanded?'▲ Ver menos':'▼ Ver más ('+Math.min(logItems.length,10)+')'}</button></div>`
+    :'';
+  l.innerHTML=visible.map(renderItem).join('')+moreBtn;
 }
+function toggleLogExpand(){logExpanded=!logExpanded;renderLog();}
 renderLog();
 
 function addLog(k,ok,err,total,ibisId){
@@ -891,7 +914,7 @@ function checkClientForm(){
 }
 
 function resetClientForm(){
-  ['client-pais','client-nombre','client-num-doc','client-categoria-fiscal','client-mercado','client-email','client-telefono','client-comercial','client-direccion','client-ciudad','client-cp','client-estado'].forEach(id=>{
+  ['client-pais','client-nombre','client-num-doc','client-codigo-metris','client-categoria-fiscal','client-mercado','client-email','client-telefono','client-comercial','client-direccion','client-ciudad','client-cp','client-estado'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.value='';el.classList.remove('field-error','field-filled');}
   });
@@ -1024,22 +1047,54 @@ const EXEC_BY_COUNTRY={
   '5':[{code:'GGIMENEZ',name:'Gerardo Gimenez'},{code:'JVIOLA',name:'Jorge Viola'}],
   '6':[{code:'AREBATTA',name:'Alejandra Rebatta'},{code:'PDIAZ',name:'Paolo Diaz'}],
 };
+const CAT_FISCAL_BY_COUNTRY={
+  '3':['Consumidor Final','Exento','Exento - Exportación','Monotributo','No Responsable','Responsable Inscripto','Responsable No Inscripto','Sujeto No Categorizado','Zona Franca'],
+  '4':['Consumidor final','Exento','Exento - Exportación'],
+  '5':['Exento','Gravado IVA 10%','Gravado IVA 5%'],
+  '6':['Contribuyente','No Contribuyente']
+};
+const PROVINCES_BY_COUNTRY={
+  '3':['Buenos Aires','Ciudad Autónoma de Buenos Aires','Catamarca','Chaco','Chubut','Córdoba','Corrientes','Entre Ríos','Formosa','Jujuy','La Pampa','La Rioja','Mendoza','Misiones','Neuquén','Río Negro','Salta','San Juan','San Luis','Santa Cruz','Santa Fe','Santiago del Estero','Tierra del Fuego','Tucumán'],
+  '4':['Arica y Parinacota','Tarapacá','Antofagasta','Atacama','Coquimbo','Valparaíso','Metropolitana de Santiago','O\'Higgins','Maule','Ñuble','Biobío','La Araucanía','Los Ríos','Los Lagos','Aysén','Magallanes'],
+  '5':['Asunción','Alto Paraguay','Alto Paraná','Amambay','Boquerón','Caaguazú','Caazapá','Canindeyú','Central','Concepción','Cordillera','Guairá','Itapúa','Misiones','Ñeembucú','Paraguarí','Presidente Hayes','San Pedro'],
+  '6':['Amazonas','Áncash','Apurímac','Arequipa','Ayacucho','Cajamarca','Callao','Cusco','Huancavelica','Huánuco','Ica','Junín','La Libertad','Lambayeque','Lima','Loreto','Madre de Dios','Moquegua','Pasco','Piura','Puno','San Martín','Tacna','Tumbes','Ucayali']
+};
 function onPaisChange(){
   const pais=document.getElementById('client-pais');const sel=document.getElementById('client-comercial');
   if(!pais||!sel)return;
-  const execs=EXEC_BY_COUNTRY[pais.value]||[];const prev=sel.value;
+  const v=pais.value;
+  // Comerciales
+  const execs=EXEC_BY_COUNTRY[v]||[];const prev=sel.value;
   sel.innerHTML='<option value="">Seleccionar...</option>';
   execs.forEach(e=>{const opt=document.createElement('option');opt.value=e.code;opt.textContent=e.name;sel.appendChild(opt);});
   sel.disabled=execs.length===0;
   if(execs.find(e=>e.code===prev))sel.value=prev;
-  // Label dinamico segun pais
+  // Label CUIT/RUT/RUC
   const docLabels={3:'CUIT',4:'RUT',5:'RUC',6:'RUC'};
   const docPlaceholders={3:'Ej: 30-12345678-9',4:'Ej: 12.345.678-9',5:'Ej: 80012345-6',6:'Ej: 20123456789'};
   const labelEl=document.getElementById('label-num-doc');
   const inputEl=document.getElementById('client-num-doc');
-  const tipo=docLabels[pais.value]||'Numero de Documento';
+  const tipo=docLabels[v]||'Numero de Documento';
   if(labelEl)labelEl.innerHTML=tipo+' <span class="req">*</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal del cliente</span></span>';
-  if(inputEl)inputEl.placeholder=docPlaceholders[pais.value]||'Ej: 20-12345678-9';
+  if(inputEl)inputEl.placeholder=docPlaceholders[v]||'Ej: 20-12345678-9';
+  // Categoría Fiscal dropdown
+  const catSel=document.getElementById('client-categoria-fiscal');
+  if(catSel){
+    const cats=CAT_FISCAL_BY_COUNTRY[v]||[];
+    catSel.innerHTML='<option value="">Seleccionar...</option>';
+    cats.forEach(c=>{const opt=document.createElement('option');opt.value=c;opt.textContent=c;catSel.appendChild(opt);});
+    catSel.disabled=cats.length===0;
+    updateFieldFilled(catSel);
+  }
+  // Provincia dropdown
+  const provSel=document.getElementById('client-estado');
+  if(provSel){
+    const provs=PROVINCES_BY_COUNTRY[v]||[];
+    provSel.innerHTML='<option value="">Seleccionar...</option>';
+    provs.forEach(p=>{const opt=document.createElement('option');opt.value=p;opt.textContent=p;provSel.appendChild(opt);});
+    provSel.disabled=provs.length===0;
+    updateFieldFilled(provSel);
+  }
 }
 
 /* DARK MODE */
