@@ -441,11 +441,23 @@
                 <option value="Reactivacion">Reactivacion</option>
               </select>
             </div>
-            <div class="field span-2">
-              <label>Customer (Codigo Metris o ID IBIS) <span class="req">*</span>
-                <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código Metris del cliente (ej: ACME-AR-001) o su ID numérico en IBIS</span></span>
+            <div class="field">
+              <label>País del Cliente <span class="req">*</span></label>
+              <select id="equip-pais" onchange="checkEquipForm();updateFieldFilled(this);resetEquipCustomer()">
+                <option value="">Seleccionar...</option>
+                <option value="3">Argentina</option>
+                <option value="4">Chile</option>
+                <option value="5">Paraguay</option>
+                <option value="6">Perú</option>
+              </select>
+            </div>
+            <div class="field span-2" style="position:relative">
+              <label>Cliente <span class="req">*</span>
+                <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Escribí el nombre para buscar en IBIS</span></span>
               </label>
-              <input id="equip-customer" type="text" placeholder="Ej: ACME-AR-001 o 12801" oninput="checkEquipForm();updateFieldFilled(this)" />
+              <input id="equip-customer-search" type="text" placeholder="Escribí el nombre del cliente..." oninput="onEquipCustomerSearch(this.value)" onfocus="if(this.value.length>=2)onEquipCustomerSearch(this.value)" autocomplete="off" />
+              <input type="hidden" id="equip-customer-id" />
+              <div id="equip-customer-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:200;background:var(--surface);border:1px solid var(--primary);border-top:none;border-radius:0 0 6px 6px;max-height:220px;overflow-y:auto;box-shadow:0 6px 16px rgba(0,0,0,0.15)"></div>
             </div>
             <div class="field">
               <label>Producto <span class="req">*</span></label>
@@ -1029,14 +1041,63 @@ function resetClientForm(){
 }
 
 function checkEquipForm(){
-  const iccid=document.getElementById('equip-iccid');
-  const customer=document.getElementById('equip-customer');
-  const tipoOp=document.getElementById('equip-tipo-op');
-  const vendor=document.getElementById('vendor-select');
+  const iccid=(document.getElementById('equip-iccid')?.value||'').trim();
+  const customerId=(document.getElementById('equip-customer-id')?.value||'').trim();
+  const tipoOp=(document.getElementById('equip-tipo-op')?.value||'').trim();
+  const vendor=(document.getElementById('vendor-select')?.value||'').trim();
+  const pais=(document.getElementById('equip-pais')?.value||'').trim();
+  const allOk=iccid&&customerId&&tipoOp&&vendor&&pais;
   const btn=document.getElementById('btn-submit-equipment');
-  const ok=iccid&&iccid.value.trim()&&customer&&customer.value.trim()&&tipoOp&&tipoOp.value&&vendor&&vendor.value;
-  if(btn)btn.disabled=!ok;
+  if(btn)btn.disabled=!allOk;
 }
+
+/* CUSTOMER AUTOCOMPLETE */
+let _equipSearchTimer=null;
+function onEquipCustomerSearch(val){
+  const dd=document.getElementById('equip-customer-dropdown');
+  document.getElementById('equip-customer-id').value='';
+  checkEquipForm();
+  if(val.trim().length<2){dd.style.display='none';return;}
+  clearTimeout(_equipSearchTimer);
+  dd.innerHTML='<div style="padding:10px 12px;font-size:11px;color:var(--text-muted)">Buscando...</div>';
+  dd.style.display='block';
+  _equipSearchTimer=setTimeout(async()=>{
+    const pais=document.getElementById('equip-pais')?.value||'3';
+    try{
+      const res=await fetch(`/api/buscar-cliente?q=${encodeURIComponent(val.trim())}&pais=${pais}`);
+      const results=await res.json();
+      if(!Array.isArray(results)||!results.length){
+        dd.innerHTML='<div style="padding:10px 12px;font-size:12px;color:var(--text-muted)">Sin resultados para "'+val+'"</div>';
+      }else{
+        dd.innerHTML=results.map(c=>`<div onclick="selectEquipCustomer(${c.CustomerID},${JSON.stringify(c.CustomerName)})" style="padding:9px 14px;font-size:12px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px" onmouseover="this.style.background='#ede8ff'" onmouseout="this.style.background=''"><span style="font-weight:500;color:var(--text)">${c.CustomerName}</span><span style="color:var(--text-muted);font-size:11px;flex-shrink:0">ID: ${c.CustomerID}</span></div>`).join('');
+      }
+      dd.style.display='block';
+    }catch(e){
+      dd.innerHTML='<div style="padding:10px 12px;font-size:12px;color:#e05c5c">Error al buscar — verificá la conexión</div>';
+    }
+  },350);
+}
+function selectEquipCustomer(id,name){
+  document.getElementById('equip-customer-search').value=name;
+  document.getElementById('equip-customer-id').value=id;
+  document.getElementById('equip-customer-dropdown').style.display='none';
+  updateFieldFilled(document.getElementById('equip-customer-search'));
+  checkEquipForm();
+}
+function resetEquipCustomer(){
+  const s=document.getElementById('equip-customer-search');
+  const h=document.getElementById('equip-customer-id');
+  const dd=document.getElementById('equip-customer-dropdown');
+  if(s){s.value='';s.classList.remove('field-filled');}
+  if(h)h.value='';
+  if(dd)dd.style.display='none';
+  checkEquipForm();
+}
+// Close dropdown when clicking outside
+document.addEventListener('click',function(e){
+  const dd=document.getElementById('equip-customer-dropdown');
+  if(dd&&!dd.contains(e.target)&&e.target.id!=='equip-customer-search')dd.style.display='none';
+});
 
 /* PASTE / COPY JSON */
 async function pasteClientJSON(){

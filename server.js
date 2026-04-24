@@ -7,10 +7,32 @@ const app = express();
 const PORT = 3000;
 const N8N_WEBHOOK = 'http://n8n.tesacom.net:7830/webhook/tesacom-clientes';
 
-const IBIS_TOKEN_URL  = 'https://ibistesacom.satcomhost.com/identity/connect/token';
-const IBIS_API_BASE   = 'https://ibistesacom.satcomhost.com/api/v1';
-const IBIS_CLIENT_ID  = 'ed0bca6fac254bb6a6a2901e0e4bae25';
+const IBIS_TOKEN_URL = 'https://ibistesacom.satcomhost.com/identity/connect/token';
+const IBIS_API_BASE  = 'https://ibistesacom.satcomhost.com/api/v1';
+const IBIS_CLIENT_ID     = 'ed0bca6fac254bb6a6a2901e0e4bae25';
 const IBIS_CLIENT_SECRET = 'QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=';
+
+// Credenciales por pais (ParentCustomerID)
+const IBIS_CREDS = {
+  '3': { id: 'ed0bca6fac254bb6a6a2901e0e4bae25', secret: 'QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=' },  // AR
+  '4': { id: '4fd1675586b646778af1e2cc0ca19f83', secret: 'l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=' },  // CL
+  '5': { id: '6f3c4cdabcf349e3a197fd77f4be05e0', secret: 'VhJQkwnuhr607LiBZgUp5mJ1S7lduea9Ag0+k/Xrr5g=' },  // PY
+  '6': { id: '8ddf0664d99c4493b01ec5b9317719ae', secret: 'S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=' },  // PE
+};
+
+// Cache de tokens por pais (evita pedir token en cada búsqueda)
+const tokenCache = {};
+async function getIbisToken(paisId) {
+  const now = Date.now();
+  if (tokenCache[paisId] && tokenCache[paisId].expires > now) return tokenCache[paisId].token;
+  const creds = IBIS_CREDS[paisId] || IBIS_CREDS['3'];
+  const formBody = `grant_type=client_credentials&client_id=${encodeURIComponent(creds.id)}&client_secret=${encodeURIComponent(creds.secret)}&scope=ibisApi`;
+  const r = await httpRequest(IBIS_TOKEN_URL, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, timeout:15000 }, formBody);
+  const d = JSON.parse(r.text);
+  if (!d.access_token) throw new Error('No se pudo obtener token IBIS');
+  tokenCache[paisId] = { token: d.access_token, expires: now + 50 * 60 * 1000 };
+  return d.access_token;
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
@@ -68,15 +90,10 @@ app.get('/api/verificar-cliente', async (req, res) => {
   const { taxCode } = req.query;
   if (!taxCode) return res.status(400).json({ ok: false, error: 'taxCode requerido' });
   try {
-    // 1. Obtener token
-    const formBody = `grant_type=client_credentials&client_id=${encodeURIComponent(IBIS_CLIENT_ID)}&client_secret=${encodeURIComponent(IBIS_CLIENT_SECRET)}&scope=ibisApi`;
-    const tokenRes = await httpRequest(IBIS_TOKEN_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      timeout: 15000
-    }, formBody);
-    const tokenData = JSON.parse(tokenRes.text);
-    if (!tokenData.access_token) return res.status(401).json({ ok: false, error: 'No se pudo obtener token IBIS' });
+    // 1. Obtener token (con cache)
+    let accessToken;
+    try { accessToken = await getIbisToken('3'); } catch(e) { return res.status(401).json({ ok: false, error: 'No se pudo obtener token IBIS' }); }
+    const tokenData = { access_token: accessToken };
 
     // 2. Buscar cliente por TaxCode
     const searchUrl = `${IBIS_API_BASE}/Customers?$filter=TaxCode eq '${encodeURIComponent(taxCode)}'&$top=1`;
@@ -95,6 +112,25 @@ app.get('/api/verificar-cliente', async (req, res) => {
   } catch (err) {
     console.error('[verificar] ERROR:', err.message);
     res.status(502).json({ ok: false, error: err.message });
+  }
+});
+
+// Buscar cliente en IBIS por nombre o código (autocomplete)
+app.get('/api/buscar-cliente', async (req, res) => {
+  const { q, pais } = req.query;
+  if (!q || q.trim().length < 2) return res.json([]);
+  try {
+    const token = await getIbisToken(pais || '3');
+    const safe = q.trim().replace(/'/g, "''");
+    const filter = encodeURIComponent(`contains(CustomerName,'${safe}') or contains(CustomerCode,'${safe}')`);
+    const url = `${IBIS_API_BASE}/Customers?$filter=${filter}&$top=10&$select=CustomerID,CustomerName,CustomerCode,ParentCustomerID`;
+    const r = await httpRequest(url, { method:'GET', headers:{ 'Authorization': `Bearer ${token}` }, timeout:15000 });
+    let data;
+    try { data = JSON.parse(r.text); } catch(e) { return res.json([]); }
+    res.json(data.value || []);
+  } catch(err) {
+    console.error('[buscar-cliente]', err.message);
+    res.status(502).json({ error: err.message });
   }
 });
 
