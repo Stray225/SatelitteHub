@@ -27,10 +27,8 @@
       --accent:          #00FFDB;
       --secondary:       #90CFFF;
       --font-base:       'Poppins', 'Segoe UI', sans-serif;
-      --fw-heading:      900;
       --fw-sub:          500;
       --fw-body:         300;
-      --fw-meta:         200;
       --card:            var(--surface);
       --input-bg:        #F5F5F5;
       --sidebar-bg:      var(--surface);
@@ -87,6 +85,7 @@
     .sidebar-card { background: var(--sidebar-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: background 0.25s, border-color 0.25s; }
     .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
     .section-title { grid-column: 1 / -1; border-bottom: 1px solid var(--section-border); padding-bottom: 8px; margin-top: 8px; font-size: 11px; font-weight: var(--fw-sub); letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary); }
     .field { display: flex; flex-direction: column; }
     .field label { font-size: 11px; font-weight: var(--fw-sub); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
@@ -254,7 +253,6 @@
   <div class="main-grid">
     <div class="panel">
 
-      <!-- CLIENTES -->
       <div id="tab-clients" class="tab-content active">
         <div class="form-grid">
           <div class="section-title">Informacion Principal</div>
@@ -401,11 +399,9 @@
 
         <div class="recent-activity">
           <div class="recent-activity-title">Actividad Reciente</div>
-          <div id="activity-clients-list"></div>
         </div>
       </div>
 
-      <!-- EQUIPOS -->
       <div id="tab-equipment" class="tab-content">
         <div class="info-banner">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -557,7 +553,6 @@
         </div>
       </div>
 
-      <!-- PLANES -->
       <div id="tab-plans" class="tab-content">
         <div class="form-grid">
           <div class="section-title">Identificacion</div>
@@ -609,7 +604,6 @@
       </div>
     </div>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-card">
         <div class="sidebar-label">DESTINOS</div>
@@ -641,15 +635,11 @@
 </footer>
 
 <script>
-/* EQUIPMENT FIELDS */
-// Vendor groups define which extra fields are required vs optional
 const VENDOR_GROUPS={
-  // Iridium family: IMSI + PIN/PUK required
   'Iridium':     {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
   'Iridium GR':  {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
   'Iridium PP':  {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
   'Cert GMDSS':  {req:[{name:'IMSI'},{name:'PIN 1',key:'PIN1'},{name:'PIN 2',key:'PIN2'},{name:'PUK 1',key:'PUK1'},{name:'PUK 2',key:'PUK2'}]},
-  // BGAN/phone family: IMSI + MSISDN required
   'BGAN':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
   'BM2M':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
   'FBB':    {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
@@ -657,10 +647,8 @@ const VENDOR_GROUPS={
   'GSPS':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
   'INM C':  {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
   'ISPL':   {req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
-  // Cellular/IoT: IMSI + MSISDN required
   'Cellular':{req:[{name:'IMSI'},{name:'MSISDN (N° Telefono)',key:'MSISDN'}]},
   'IoT':    {req:[{name:'IMSI'}]},
-  // Rest: no extra required fields
   'VSAT':       {req:[]},
   'Starlink':   {req:[]},
   'Commbox':    {req:[]},
@@ -671,7 +659,6 @@ const VENDOR_GROUPS={
   'PTT Device': {req:[]},
   'PTT Group':  {req:[]},
 };
-// Optional fields shown for all vendors after selection
 const EQUIP_OPTIONAL=[
   {name:'Nombre del Equipo',key:'Name',type:'text'},
   {name:'N° de Serie',key:'SerialNr',type:'text'},
@@ -686,7 +673,6 @@ const EQUIP_OPTIONAL=[
   {name:'Descripcion',key:'Description',type:'text'},
 ];
 
-/* TABS */
 function switchTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
@@ -694,7 +680,6 @@ function switchTab(tab,btn){
   document.getElementById('tab-'+tab).classList.add('active');
 }
 
-/* EQUIPMENT MODE */
 function setEquipMode(m){
   document.getElementById('equip-single').style.display=m==='single'?'block':'none';
   document.getElementById('equip-bulk').style.display=m==='bulk'?'block':'none';
@@ -702,7 +687,6 @@ function setEquipMode(m){
   document.getElementById('btn-mode-bulk').classList.toggle('active',m==='bulk');
 }
 
-/* VENDOR FIELDS */
 function onVendorChange(v){
   const fd=document.getElementById('equipment-fields');
   const g=document.getElementById('equipment-form-grid');
@@ -711,7 +695,6 @@ function onVendorChange(v){
   const reqFields=group.req;
   fd.style.display='block';
   g.innerHTML='';
-  // Required fields section
   if(reqFields.length>0){
     const rt=document.createElement('div'); rt.className='section-title'; rt.textContent='Campos Requeridos — '+v;
     g.appendChild(rt);
@@ -721,7 +704,6 @@ function onVendorChange(v){
       g.appendChild(d);
     });
   }
-  // Optional fields section
   const ot=document.createElement('div'); ot.className='section-title'; ot.textContent='Campos Opcionales';
   g.appendChild(ot);
   EQUIP_OPTIONAL.forEach(f=>{
@@ -734,6 +716,10 @@ function onVendorChange(v){
   checkEquipForm();
 }
 function onBulkVendorChange(v){document.getElementById('btn-download-tpl').disabled=!v;}
+function getFields(v){
+  const g=VENDOR_GROUPS[v]||{req:[]};
+  return[{name:'ICCID'},{name:'CustomerID'},...g.req,...EQUIP_OPTIONAL];
+}
 function downloadTemplate(){
   const v=document.getElementById('bulk-vendor-select').value; if(!v)return;
   const h=getFields(v).map(f=>f.name);
@@ -743,7 +729,6 @@ function downloadTemplate(){
   XLSX.writeFile(wb,`plantilla_${v.replace(/\s/g,'_')}.xlsx`);
 }
 
-/* BULK UPLOAD */
 let bulkRows=[],bulkRowStatuses=[];
 function onDragOver(e){e.preventDefault();document.getElementById('dropzone').classList.add('dragover');}
 function onDragLeave(){document.getElementById('dropzone').classList.remove('dragover');}
@@ -801,8 +786,11 @@ async function startBulkSend(){
     document.getElementById('progress-fill').style.width=pct+'%';
     document.getElementById('progress-pct').textContent=pct+'%';
     document.getElementById('progress-text').textContent='Enviando equipo '+(i+1)+' de '+bulkRows.length+'...';
-    await new Promise(r=>setTimeout(r,200));
-    const success=Math.random()>0.08;
+    let success=false;
+    try{
+      const r=await fetch('/api/equipos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(bulkRows[i])});
+      success=r.ok;
+    }catch(e){success=false;}
     bulkRowStatuses[i]=success?'ok':'err'; updateRowStatus(i);
     if(success)ok++;else err++;
   }
@@ -825,7 +813,6 @@ function updateRowStatus(i){
   row.querySelector('.row-status').textContent=sl[s];
 }
 
-/* BADGE */
 const badgeConfig={
   idle:   {bg:'#F5F5F5',border:'#E0E0E0',dot:'#ADB2BC',text:'Listo para enviar',shadow:'none'},
   loading:{bg:'#fff8ee',border:'#f0a03030',dot:'#f0a030',text:'Sincronizando...',shadow:'0 0 6px #f0a030'},
@@ -841,20 +828,15 @@ function setBadge(k,s){
   b.querySelector('.sync-text').textContent=c.text;
 }
 
-/* MODAL */
 let pendingSubmitTab=null;
-const tabDisplayNames={clients:'Clientes',equipment:'Equipos',plans:'Planes','equipment-bulk':'Bulk Equipos'};
 function openModal(tab){
   pendingSubmitTab=tab;
-  document.getElementById('modal-tab-name').textContent=tabDisplayNames[tab]||tab;
+  document.getElementById('modal-tab-name').textContent=tabNames[tab]||tab;
   document.getElementById('confirm-modal').classList.add('open');
 }
 function closeModal(){document.getElementById('confirm-modal').classList.remove('open');pendingSubmitTab=null;}
 function confirmSubmit(){const tab=pendingSubmitTab;closeModal();if(tab)handleSubmit(tab);}
 document.getElementById('confirm-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
-
-/* WEBHOOK */
-const WEBHOOK_URL='/api/clientes';
 
 function getFormPayload(k){
   if(k!=='clients')return{};
@@ -881,44 +863,42 @@ function getFormPayload(k){
 }
 
 async function handleSubmit(k){
-  const url=k==='clients'?WEBHOOK_URL:null;
+  const url=k==='clients'?'/api/clientes':null;
   setBadge(k,'loading');
   if(!url){showToast('Webhook no configurado para esta sección');setBadge(k,'idle');return;}
   try{
     const payload=getFormPayload(k);
     document.getElementById('debug-panel').style.display='block';
-    dbg('📤 Enviando a: '+url);
-    dbg('📋 Payload',payload);
+    dbg('enviando a: '+url);
+    dbg('payload', payload);
     const controller=new AbortController();
-    const timeout=setTimeout(()=>{controller.abort();dbg('⏱️ TIMEOUT 90s');},90000);
+    const timeout=setTimeout(()=>{controller.abort();dbg('timeout 90s');},90000);
     let res;
     try{
       res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
     }finally{clearTimeout(timeout);}
-    dbg('📥 HTTP '+res.status+' '+res.statusText);
+    dbg('HTTP '+res.status+' '+res.statusText);
     const text=await res.text();
-    dbg('📦 Respuesta: '+(text||'(vacía)').substring(0,500));
+    dbg('respuesta: '+(text||'(vacía)').substring(0,500));
     let data={};
     try{data=JSON.parse(text);}catch(e){}
-    // ok solo si n8n responde explicitamente {ok:true} o devuelve un CustomerID
     const ok=res.ok&&(data.ok===true||(data.CustomerID&&!data.error));
-    dbg(ok?'✅ Respuesta OK':'❌ Respuesta indica error — ok='+data.ok+' CustomerID='+data.CustomerID);
+    dbg(ok?'ok':'error — ok='+data.ok+' CustomerID='+data.CustomerID);
     setBadge(k,ok?'success':'error'); addLog(k,ok?1:0,ok?0:1,1);
     if(ok){
-      // Intentar obtener el CustomerID: primero de la respuesta de n8n, luego GET a IBIS
       const taxCode=document.getElementById('client-num-doc')?.value||'';
       let ibisId=data.CustomerID||data.ibis?.CustomerID||'';
       let ibisName=data.ibis?.CustomerName||'';
       if(taxCode&&!ibisId){
-        dbg('🔍 ID no en respuesta, consultando IBIS...');
+        dbg('ID no en respuesta, consultando IBIS...');
         try{
           const vRes=await fetch(`/api/verificar-cliente?taxCode=${encodeURIComponent(taxCode)}`);
           const vData=await vRes.json();
-          if(vData.found){ibisId=vData.CustomerID;ibisName=vData.CustomerName;dbg('✅ ID obtenido: '+ibisId);}
-        }catch(e){dbg('⚠️ No se pudo consultar ID: '+e.message);}
+          if(vData.found){ibisId=vData.CustomerID;ibisName=vData.CustomerName;dbg('ID obtenido: '+ibisId);}
+        }catch(e){dbg('no se pudo consultar ID: '+e.message);}
       }
       if(ibisId){
-        addLog(k,1,0,1,ibisId); // guardar con ID
+        addLog(k,1,0,1,ibisId);
       }
       const bodyHtml=
         `<div style="text-align:left;background:var(--bulk-step-bg,#f9f9f9);border-radius:8px;padding:14px 16px;margin-bottom:8px;font-size:13px;line-height:2">` +
@@ -930,8 +910,8 @@ async function handleSubmit(k){
     }else{
       let errDetail=data.Message||data.message||data.error||data.detail||'';
       let errBody='';
-      if(!errDetail&&(!text||text==='{}'))  {
-        errBody='N8n respondió vacío (<code>{}</code>).<br><br>Revisá el workflow en n8n:<br>• Abrí la última ejecución y fijate en qué nodo falló<br>• El nodo <strong>Obtener Token IBIS</strong> necesita las credenciales reales (no los placeholders)<br>• Verificá que el nodo <strong>Respuesta OK</strong> esté conectado';
+      if(!errDetail&&(!text||text==='{}')){
+        errBody='Sin respuesta del servidor. Revisá el workflow en n8n.';
       }else{
         errBody='HTTP '+res.status+': '+(errDetail||text||'Sin detalle');
       }
@@ -939,12 +919,12 @@ async function handleSubmit(k){
     }
   }catch(e){
     setBadge(k,'error'); addLog(k,0,1,1);
-    dbg('❌ ERROR: '+e.name+' — '+e.message);
+    dbg('error: '+e.name+' — '+e.message);
     let msg=e.message||'Error desconocido';
     if(e.name==='AbortError'){
       const taxCode=document.getElementById('client-num-doc')?.value||'';
       const verifyBtn=taxCode?`<br><br><button onclick="verificarEnIBIS('${taxCode}')" style="margin-top:8px;padding:8px 16px;background:#723EF7;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">🔍 Verificar si se creó en IBIS (${taxCode})</button>`:'';
-      msg='IBIS tardó más de 55 segundos.<br>El cliente <strong>puede haberse creado igual</strong>.'+verifyBtn;
+      msg='IBIS tardó más de 55 segundos. El cliente <strong>puede haberse creado igual</strong>.'+verifyBtn;
     }else if(e.message&&e.message.includes('Failed to fetch')){
       msg='No se pudo conectar con el servidor.<br>• Asegurate de que <strong>server.js esté corriendo</strong> (npm start)';
     }
@@ -953,13 +933,10 @@ async function handleSubmit(k){
   setTimeout(()=>setBadge(k,'idle'),4000);
 }
 
-/* LOG */
-const LS_KEY='satelliteHub_logItems';
-const MAX_LOG=20;
-function saveLogToStorage(){try{localStorage.setItem(LS_KEY,JSON.stringify(logItems));}catch(e){}}
-function loadLogFromStorage(){try{const raw=localStorage.getItem(LS_KEY);if(raw){const p=JSON.parse(raw);if(Array.isArray(p))return p.slice(0,MAX_LOG);}}catch(e){}return null;}
+function saveLogToStorage(){try{localStorage.setItem('sat_log',JSON.stringify(logItems));}catch(e){}}
+function loadLogFromStorage(){try{const raw=localStorage.getItem('sat_log');if(raw){const p=JSON.parse(raw);if(Array.isArray(p))return p.slice(0,20);}}catch(e){}return null;}
 const tabNames={clients:'Cliente',equipment:'Equipo',plans:'Plan','equipment-bulk':'Bulk Equipos'};
-let logItems=(function(){const s=loadLogFromStorage();return(s&&s.length>0)?s:[];})();
+let logItems=loadLogFromStorage()||[];
 
 let logExpanded=false;
 function renderLog(){
@@ -983,7 +960,7 @@ function addLog(k,ok,err,total,ibisId){
     : ok
       ? 'Creado en IBIS'+(ibisId?' — ID: '+ibisId:'')
       : 'Error - revisar webhook';
-  logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0,ibisId:ibisId||''},...logItems].slice(0,MAX_LOG);
+  logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0,ibisId:ibisId||''},...logItems].slice(0,20);
   renderLog(); saveLogToStorage();
 }
 
@@ -996,7 +973,6 @@ function exportLogToExcel(){
   XLSX.writeFile(wb,'actividad_satellite_hub.xlsx');
 }
 
-/* FORM HELPERS */
 function updateFieldFilled(el){
   el.classList.toggle('field-filled',!!(el.value&&el.value.trim()!==''));
 }
@@ -1052,17 +1028,16 @@ function checkEquipForm(){
   if(btn)btn.disabled=!allOk;
 }
 
-/* CUSTOMER AUTOCOMPLETE */
-let _equipSearchTimer=null;
+let searchTimer=null;
 function onEquipCustomerSearch(val){
   const dd=document.getElementById('equip-customer-dropdown');
   document.getElementById('equip-customer-id').value='';
   checkEquipForm();
   if(val.trim().length<2){dd.style.display='none';return;}
-  clearTimeout(_equipSearchTimer);
+  clearTimeout(searchTimer);
   dd.innerHTML='<div style="padding:10px 12px;font-size:11px;color:var(--text-muted)">Buscando...</div>';
   dd.style.display='block';
-  _equipSearchTimer=setTimeout(async()=>{
+  searchTimer=setTimeout(async()=>{
     const pais=document.getElementById('equip-pais')?.value||'3';
     try{
       const res=await fetch(`/api/buscar-cliente?q=${encodeURIComponent(val.trim())}&pais=${pais}`);
@@ -1094,13 +1069,11 @@ function resetEquipCustomer(){
   if(dd)dd.style.display='none';
   checkEquipForm();
 }
-// Close dropdown when clicking outside
 document.addEventListener('click',function(e){
   const dd=document.getElementById('equip-customer-dropdown');
   if(dd&&!dd.contains(e.target)&&e.target.id!=='equip-customer-search')dd.style.display='none';
 });
 
-/* PASTE / COPY JSON */
 async function pasteClientJSON(){
   let text='';
   try{text=await navigator.clipboard.readText();}catch(e){text=prompt('Pegá el JSON acá:')||'';}
@@ -1138,7 +1111,6 @@ function fallbackCopy(text){
   document.body.removeChild(ta);
 }
 
-/* VERIFICAR EN IBIS (post-timeout) */
 async function verificarEnIBIS(taxCode){
   const btn=event.target;btn.textContent='⏳ Verificando...';btn.disabled=true;
   try{
@@ -1152,7 +1124,6 @@ async function verificarEnIBIS(taxCode){
   }catch(e){btn.textContent='❌ Error al verificar';btn.disabled=false;}
 }
 
-/* DEBUG */
 function dbg(msg,data){
   const log=document.getElementById('debug-log'); if(!log)return;
   const ts=new Date().toLocaleTimeString();
@@ -1166,21 +1137,20 @@ function toggleDebug(){
 }
 async function testN8nConnection(){
   document.getElementById('debug-panel').style.display='block';
-  dbg('🔌 Test → '+WEBHOOK_URL);
+  dbg('test: /api/clientes');
   try{
-    const res=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({test:true})});
-    dbg('✅ HTTP '+res.status);
+    const res=await fetch('/api/clientes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({test:true})});
+    dbg('HTTP '+res.status);
     const text=await res.text();
-    dbg('📦 '+text.substring(0,300));
+    dbg(text.substring(0,300));
   }catch(e){
-    dbg('❌ '+e.message);
+    dbg('error: '+e.message);
     if(e.message.includes('Failed to fetch')){
-      dbg('⚠️ Verificar: 1) server.js corriendo (npm start)  2) n8n activo  3) workflow activado');
+      dbg('verificar: 1) server.js corriendo (npm start)  2) n8n activo  3) workflow activado');
     }
   }
 }
 
-/* MODALS & TOAST */
 function showResultModal(type,title,body){
   document.getElementById('result-modal-title').innerHTML=title;
   document.getElementById('result-modal-body').innerHTML=body;
@@ -1195,7 +1165,6 @@ function showToast(msg){
   setTimeout(()=>{if(t.parentNode)t.parentNode.removeChild(t);},2200);
 }
 
-/* PING IBIS */
 async function pingDest(id){
   const dot=document.getElementById('dot-'+id);const lbl=document.getElementById('label-'+id);
   if(!dot||!lbl)return;
@@ -1213,7 +1182,6 @@ async function pingDest(id){
 pingDest('ibis');
 setInterval(()=>pingDest('ibis'),30000);
 
-/* PAIS → COMERCIAL */
 const EXEC_BY_COUNTRY={
   '3':[
     {code:'ADOVAL',   name:'Andrea Doval',          email:'adoval@tesacom.net'},
@@ -1292,7 +1260,6 @@ function onPaisChange(){
   }
 }
 
-/* DARK MODE */
 function toggleDarkMode(){
   const isDark=document.body.classList.toggle('dark');
   document.getElementById('dark-icon-moon').style.display=isDark?'none':'';

@@ -8,12 +8,12 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "webhook-001",
+      "id": "3f8a2b91-c4d5-4e6a-b7c8-d9e0f1a2b3c4",
       "name": "Webhook Clientes",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [16, 0],
-      "webhookId": "tesacom-clientes-webhook"
+      "webhookId": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d"
     },
     {
       "parameters": {
@@ -29,7 +29,7 @@
         },
         "fallbackOutput": "none"
       },
-      "id": "switch-pais-010",
+      "id": "5d7e9f1a-b2c3-4d4e-a5f6-7b8c9d0e1f2a",
       "name": "Switch País",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 1,
@@ -45,7 +45,7 @@
         },
         "options": { "keepOnlySet": false }
       },
-      "id": "set-cred-ar-011",
+      "id": "4c6d8e0f-a1b2-4c3d-b4e5-6f7a8b9c0d1e",
       "name": "Cred AR",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
@@ -61,7 +61,7 @@
         },
         "options": { "keepOnlySet": false }
       },
-      "id": "set-cred-cl-012",
+      "id": "6e8f0a1b-c2d3-4e4f-c5a6-8b9c0d1e2f3a",
       "name": "Cred CL",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
@@ -77,7 +77,7 @@
         },
         "options": { "keepOnlySet": false }
       },
-      "id": "set-cred-py-013",
+      "id": "8a0b2c3d-e4f5-4a6b-d7c8-0e1f2a3b4c5d",
       "name": "Cred PY",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
@@ -93,7 +93,7 @@
         },
         "options": { "keepOnlySet": false }
       },
-      "id": "set-cred-pe-014",
+      "id": "1b3c5d6e-f7a8-4b9c-e0d1-2f3a4b5c6d7e",
       "name": "Cred PE",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
@@ -115,7 +115,7 @@
         },
         "options": {}
       },
-      "id": "ibis-token-002",
+      "id": "7c1d4e5f-a6b7-4c8d-9e0f-1a2b3c4d5e6f",
       "name": "Obtener Token IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
@@ -140,10 +140,10 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"CustomerID\": 0,\n  \"CustomerCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.CustomerCode ?? '') }},\n  \"ParentCustomerID\": {{ $('Webhook Clientes').item.json.body.ParentCustomerID ?? 3 }},\n  \"CustomerName\": {{ JSON.stringify($('Webhook Clientes').item.json.body.CustomerName ?? '') }},\n  \"TaxExemptionCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.TaxCode ?? '') }},\n  \"CustomerCategoryCode\": \"End User\",\n  \"Description\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Description ?? '') }},\n  \"IndustryCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Industry ?? '') }},\n  \"TaxCombinationCode\": \"EXENTO\",\n  \"CurrencyCode\": \"USD\",\n  \"CreditTermsCode\": \"Net 30\",\n  \"InvoiceDeliveryMode\": \"E-Mail\",\n  \"EmailGeneral\": {{ JSON.stringify($('Webhook Clientes').item.json.body.EmailGeneral ?? '') }},\n  \"EmailBilling\": {{ JSON.stringify($('Webhook Clientes').item.json.body.EmailGeneral ?? '') }},\n  \"EmailBillingCC\": {{ JSON.stringify($('Webhook Clientes').item.json.body.AccountManagerEmail ?? '') }},\n  \"EmailAlertsAndNotifications\": {{ JSON.stringify($('Webhook Clientes').item.json.body.AccountManagerEmail ?? '') }},\n  \"AccountManagerCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.AccountManagerCode ?? '') }},\n  \"ShowCdrsOnInvoice\": {{ $('Webhook Clientes').item.json.body.ShowCdrsOnInvoice ?? false }},\n  \"ShowZeroChargesOnInvoice\": false,\n  \"ShowPreviousBalanceOnInvoice\": false,\n  \"DeviceIdentifierOnInvoice\": \"ICCID\",\n  \"RollupInvoiceToParentCustomer\": false,\n  \"MainAddressSameAsParentMainAddress\": false,\n  \"BillingAddressSameAsMainAddress\": true,\n  \"MainAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Location ?? '') }},\n    \"City\": {{ JSON.stringify($('Webhook Clientes').item.json.body.City ?? '') }},\n    \"PostCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.PostalCode ?? '') }},\n    \"State\": {{ JSON.stringify($('Webhook Clientes').item.json.body.State ?? '') }},\n    \"CountryCode\": {{ JSON.stringify(({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] ?? '') }},\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"BillingAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Location ?? '') }},\n    \"City\": {{ JSON.stringify($('Webhook Clientes').item.json.body.City ?? '') }},\n    \"PostCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.PostalCode ?? '') }},\n    \"State\": {{ JSON.stringify($('Webhook Clientes').item.json.body.State ?? '') }},\n    \"CountryCode\": {{ JSON.stringify(({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] ?? '') }},\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"ContactPersons\": [\n    {\n      \"ContactPersonID\": 0,\n      \"ContactName\": {{ JSON.stringify($('Webhook Clientes').item.json.body.CustomerName ?? '') }},\n      \"Email\": {{ JSON.stringify($('Webhook Clientes').item.json.body.EmailGeneral ?? '') }},\n      \"Phone1\": {{ JSON.stringify($('Webhook Clientes').item.json.body.MainContactPhone ?? '') }},\n      \"IsMainContact\": true\n    }\n  ]\n}",
+        "jsonBody": "={\n  \"CustomerID\": 0,\n  \"CustomerCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.CustomerCode ?? '') }},\n  \"ParentCustomerID\": {{ $('Webhook Clientes').item.json.body.ParentCustomerID ?? 3 }},\n  \"CustomerName\": {{ JSON.stringify($('Webhook Clientes').item.json.body.CustomerName ?? '') }},\n  \"TaxExemptionCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.TaxCode ?? '') }},\n  \"CustomerCategoryCode\": \"End User\",\n  \"Description\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Description ?? '') }},\n  \"IndustryCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Industry ?? '') }},\n  \"TaxCombinationCode\": \"EXENTO\",\n  \"CurrencyCode\": \"USD\",\n  \"CreditTermsCode\": \"Net 30\",\n  \"InvoiceDeliveryMode\": \"E-Mail\",\n  \"EmailGeneral\": {{ JSON.stringify($('Webhook Clientes').item.json.body.EmailGeneral ?? '') }},\n  \"EmailBilling\": {{ JSON.stringify($('Webhook Clientes').item.json.body.EmailGeneral ?? '') }},\n  \"EmailBillingCC\": {{ JSON.stringify(($('Webhook Clientes').item.json.body.EmailBillingCC ? $('Webhook Clientes').item.json.body.EmailBillingCC + ';' : '') + ($('Webhook Clientes').item.json.body.AccountManagerEmail ?? '')) }},\n  \"EmailAlertsAndNotifications\": {{ JSON.stringify(($('Webhook Clientes').item.json.body.EmailAlertsAndNotifications ? $('Webhook Clientes').item.json.body.EmailAlertsAndNotifications + ';' : '') + ($('Webhook Clientes').item.json.body.AccountManagerEmail ?? '')) }},\n  \"AccountManagerCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.AccountManagerCode ?? '') }},\n  \"ShowCdrsOnInvoice\": {{ $('Webhook Clientes').item.json.body.ShowCdrsOnInvoice ?? false }},\n  \"ShowZeroChargesOnInvoice\": false,\n  \"ShowPreviousBalanceOnInvoice\": false,\n  \"DeviceIdentifierOnInvoice\": \"ICCID\",\n  \"RollupInvoiceToParentCustomer\": false,\n  \"MainAddressSameAsParentMainAddress\": false,\n  \"BillingAddressSameAsMainAddress\": true,\n  \"MainAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Location ?? '') }},\n    \"City\": {{ JSON.stringify($('Webhook Clientes').item.json.body.City ?? '') }},\n    \"PostCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.PostalCode ?? '') }},\n    \"State\": {{ JSON.stringify($('Webhook Clientes').item.json.body.State ?? '') }},\n    \"CountryCode\": {{ JSON.stringify(({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] ?? '') }},\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"BillingAddress\": {\n    \"AddressID\": 0,\n    \"AddressLine1\": {{ JSON.stringify($('Webhook Clientes').item.json.body.Location ?? '') }},\n    \"City\": {{ JSON.stringify($('Webhook Clientes').item.json.body.City ?? '') }},\n    \"PostCode\": {{ JSON.stringify($('Webhook Clientes').item.json.body.PostalCode ?? '') }},\n    \"State\": {{ JSON.stringify($('Webhook Clientes').item.json.body.State ?? '') }},\n    \"CountryCode\": {{ JSON.stringify(({3:'ARG',4:'CHL',5:'PRY',6:'PER'})[$('Webhook Clientes').item.json.body.ParentCustomerID] ?? '') }},\n    \"AddressFormatCode\": \"Postcode City\"\n  },\n  \"ContactPersons\": [\n    {\n      \"ContactPersonID\": 0,\n      \"ContactName\": {{ JSON.stringify($('Webhook Clientes').item.json.body.CustomerName ?? '') }},\n      \"Email\": {{ JSON.stringify($('Webhook Clientes').item.json.body.EmailGeneral ?? '') }},\n      \"Phone1\": {{ JSON.stringify($('Webhook Clientes').item.json.body.MainContactPhone ?? '') }},\n      \"IsMainContact\": true\n    }\n  ]\n}",
         "options": {}
       },
-      "id": "ibis-create-003",
+      "id": "9e2f5a6b-c7d8-4e9f-0a1b-2c3d4e5f6a7b",
       "name": "Crear Cliente en IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
@@ -157,7 +157,7 @@
           "responseCode": 200
         }
       },
-      "id": "respuesta-ok-006",
+      "id": "2a4b6c8d-e0f1-4a2b-8c3d-4e5f6a7b8c9d",
       "name": "Respuesta OK",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,

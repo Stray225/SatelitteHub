@@ -1,7 +1,7 @@
 {
   "name": "satelitte-hub",
   "version": "1.0.0",
-  "description": "Tesacom SatelitteHub - proxy local a n8n",
+  "description": "App interna de carga de clientes y equipos para Tesacom",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

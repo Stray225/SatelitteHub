@@ -9,10 +9,8 @@ const N8N_WEBHOOK = 'http://n8n.tesacom.net:7830/webhook/tesacom-clientes';
 
 const IBIS_TOKEN_URL = 'https://ibistesacom.satcomhost.com/identity/connect/token';
 const IBIS_API_BASE  = 'https://ibistesacom.satcomhost.com/api/v1';
-const IBIS_CLIENT_ID     = 'ed0bca6fac254bb6a6a2901e0e4bae25';
-const IBIS_CLIENT_SECRET = 'QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=';
 
-// Credenciales por pais (ParentCustomerID)
+// credenciales por país (ParentCustomerID)
 const IBIS_CREDS = {
   '3': { id: 'ed0bca6fac254bb6a6a2901e0e4bae25', secret: 'QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=' },  // AR
   '4': { id: '4fd1675586b646778af1e2cc0ca19f83', secret: 'l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=' },  // CL
@@ -20,7 +18,6 @@ const IBIS_CREDS = {
   '6': { id: '8ddf0664d99c4493b01ec5b9317719ae', secret: 'S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=' },  // PE
 };
 
-// Cache de tokens por pais (evita pedir token en cada búsqueda)
 const tokenCache = {};
 async function getIbisToken(paisId) {
   const now = Date.now();
@@ -37,7 +34,6 @@ async function getIbisToken(paisId) {
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-// Redirigir / al archivo correcto
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index satelitte.html'));
 });
@@ -67,9 +63,8 @@ function httpRequest(url, options, body) {
   });
 }
 
-// Proxy a n8n
 app.post('/api/clientes', async (req, res) => {
-  console.log('[proxy] →', JSON.stringify(req.body, null, 2));
+  console.log('POST /api/clientes', JSON.stringify(req.body, null, 2));
   try {
     const body = JSON.stringify(req.body);
     const { status, text } = await httpRequest(N8N_WEBHOOK, {
@@ -77,29 +72,25 @@ app.post('/api/clientes', async (req, res) => {
       headers: { 'Content-Type': 'application/json' },
       timeout: 60000
     }, body);
-    console.log('[proxy] ← HTTP', status, text.substring(0, 300));
+    console.log('n8n respuesta HTTP', status, text.substring(0, 300));
     res.status(status).set('Content-Type', 'application/json').send(text || '{}');
   } catch (err) {
-    console.error('[proxy] ERROR:', err.message);
+    console.error('error proxy clientes:', err.message);
     res.status(502).json({ ok: false, error: err.message });
   }
 });
 
-// Verificar si el cliente existe en IBIS por TaxCode
 app.get('/api/verificar-cliente', async (req, res) => {
   const { taxCode } = req.query;
   if (!taxCode) return res.status(400).json({ ok: false, error: 'taxCode requerido' });
   try {
-    // 1. Obtener token (con cache)
     let accessToken;
     try { accessToken = await getIbisToken('3'); } catch(e) { return res.status(401).json({ ok: false, error: 'No se pudo obtener token IBIS' }); }
-    const tokenData = { access_token: accessToken };
 
-    // 2. Buscar cliente por TaxCode
     const searchUrl = `${IBIS_API_BASE}/Customers?$filter=TaxCode eq '${encodeURIComponent(taxCode)}'&$top=1`;
     const searchRes = await httpRequest(searchUrl, {
       method: 'GET',
-      headers: { 'Authorization': `Bearer ${tokenData.access_token}` },
+      headers: { 'Authorization': `Bearer ${accessToken}` },
       timeout: 15000
     });
     const data = JSON.parse(searchRes.text);
@@ -110,12 +101,11 @@ app.get('/api/verificar-cliente', async (req, res) => {
       res.json({ ok: true, found: false });
     }
   } catch (err) {
-    console.error('[verificar] ERROR:', err.message);
+    console.error('error verificar-cliente:', err.message);
     res.status(502).json({ ok: false, error: err.message });
   }
 });
 
-// Buscar cliente en IBIS por nombre o código (autocomplete)
 app.get('/api/buscar-cliente', async (req, res) => {
   const { q, pais } = req.query;
   if (!q || q.trim().length < 2) return res.json([]);
@@ -129,12 +119,12 @@ app.get('/api/buscar-cliente', async (req, res) => {
     try { data = JSON.parse(r.text); } catch(e) { return res.json([]); }
     res.json(data.value || []);
   } catch(err) {
-    console.error('[buscar-cliente]', err.message);
+    console.error('error buscar-cliente:', err.message);
     res.status(502).json({ error: err.message });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`\n✅ Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`   Proxy: /api/clientes → ${N8N_WEBHOOK}\n`);
+  console.log(`servidor en http://localhost:${PORT}`);
+  console.log(`webhook: ${N8N_WEBHOOK}`);
 });
