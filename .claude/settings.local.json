@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr:*)",
+      "Bash(winget install:*)",
+      "WebFetch(domain:ibistesacom.satcomhost.com)",
+      "Bash(cmd /c \"node --version\")",
+      "Bash(cmd /c node --version)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}
