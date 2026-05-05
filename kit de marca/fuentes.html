@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --c-violeta: #723EF7;
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --border: #e8e8ec;
+    --text: #192023;
+    --text-muted: #6b7280;
+  }
+  body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px 28px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .font-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .font-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .font-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+  }
+  .font-card.primary { border-color: var(--c-violeta); border-width: 1.5px; }
+  .font-card.primary::before {
+    content: '★ Principal';
+    position: absolute;
+    top: 12px; right: 14px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--c-violeta);
+    font-family: 'Poppins', sans-serif;
+  }
+  .font-preview {
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+  .font-meta { display: flex; justify-content: space-between; align-items: flex-end; }
+  .font-name { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+  .font-usage { font-size: 11px; color: var(--c-violeta); margin-top: 4px; font-weight: 500; }
+  .font-weight-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .font-card { animation: fadeUp 0.35s ease both; }
+  .font-card:nth-child(2) { animation-delay: 0.05s; }
+  .font-card:nth-child(3) { animation-delay: 0.10s; }
+  .font-card:nth-child(4) { animation-delay: 0.15s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="section-header">
+  <span class="section-label">Tipografías</span>
+  <div class="section-line"></div>
+</div>
+
+<div class="font-cards">
+
+  <div class="font-card">
+    <div class="font-preview" style="font-family:'Poppins',sans-serif; font-weight:900; font-size:42px;">Título</div>
+    <div class="font-meta">
+      <div>
+        <div class="font-name">Poppins</div>
+        <div class="font-usage">Títulos principales</div>
+      </div>
+      <span class="font-weight-badge">Black · 900</span>
+    </div>
+  </div>
+
+  <div class="font-card primary">
+    <div class="font-preview" style="font-family:'Poppins',sans-serif; font-weight:500; font-size:32px;">Subtítulo</div>
+    <div class="font-meta">
+      <div>
+        <div class="font-name">Poppins</div>
+        <div class="font-usage">Subtítulos y destacados</div>
+      </div>
+      <span class="font-weight-badge">Medium · 500</span>
+    </div>
+  </div>
+
+  <div class="font-card">
+    <div class="font-preview" style="font-family:'Poppins',sans-serif; font-weight:300; font-size:22px;">Cuerpo del texto</div>
+    <div class="font-meta">
+      <div>
+        <div class="font-name">Poppins</div>
+        <div class="font-usage">Cuerpo de texto</div>
+      </div>
+      <span class="font-weight-badge">Light · 300</span>
+    </div>
+  </div>
+
+  <div class="font-card">
+    <div class="font-preview" style="font-family:'Poppins',sans-serif; font-weight:200; font-size:22px;">Cuerpo del texto</div>
+    <div class="font-meta">
+      <div>
+        <div class="font-name">Poppins</div>
+        <div class="font-usage">Textos secundarios</div>
+      </div>
+      <span class="font-weight-badge">ExtraLight · 200</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
