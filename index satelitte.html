@@ -1266,15 +1266,13 @@ function toggleDarkMode(){
   document.getElementById('dark-icon-sun').style.display=isDark?'':'none';
   try{localStorage.setItem('satelliteHub_darkMode',isDark?'1':'0');}catch(e){}
 }
-(function(){
-  try{
-    if(localStorage.getItem('satelliteHub_darkMode')==='1'){
-      document.body.classList.add('dark');
-      document.getElementById('dark-icon-moon').style.display='none';
-      document.getElementById('dark-icon-sun').style.display='';
-    }
-  }catch(e){}
-})();
+try{
+  if(localStorage.getItem('satelliteHub_darkMode')==='1'){
+    document.body.classList.add('dark');
+    document.getElementById('dark-icon-moon').style.display='none';
+    document.getElementById('dark-icon-sun').style.display='';
+  }
+}catch(e){}
 </script>
 </body>
 </html>
