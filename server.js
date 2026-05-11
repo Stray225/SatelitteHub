@@ -5,7 +5,8 @@ const http = require('http');
 
 const app = express();
 const PORT = 3000;
-const N8N_WEBHOOK = 'http://n8n.tesacom.net:7830/webhook/tesacom-clientes';
+const N8N_WEBHOOK        = 'http://n8n.tesacom.net:7830/webhook/tesacom-clientes';
+const N8N_WEBHOOK_EQUIPOS = 'http://n8n.tesacom.net:7830/webhook/tesacom-equipos';
 
 const IBIS_TOKEN_URL = 'https://ibistesacom.satcomhost.com/identity/connect/token';
 const IBIS_API_BASE  = 'https://ibistesacom.satcomhost.com/api/v1';
@@ -76,6 +77,23 @@ app.post('/api/clientes', async (req, res) => {
     res.status(status).set('Content-Type', 'application/json').send(text || '{}');
   } catch (err) {
     console.error('error proxy clientes:', err.message);
+    res.status(502).json({ ok: false, error: err.message });
+  }
+});
+
+app.post('/api/equipos', async (req, res) => {
+  console.log('POST /api/equipos', JSON.stringify(req.body, null, 2));
+  try {
+    const body = JSON.stringify(req.body);
+    const { status, text } = await httpRequest(N8N_WEBHOOK_EQUIPOS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      timeout: 60000
+    }, body);
+    console.log('n8n equipos respuesta HTTP', status, text.substring(0, 300));
+    res.status(status).set('Content-Type', 'application/json').send(text || '{}');
+  } catch (err) {
+    console.error('error proxy equipos:', err.message);
     res.status(502).json({ ok: false, error: err.message });
   }
 });

@@ -839,6 +839,23 @@ function confirmSubmit(){const tab=pendingSubmitTab;closeModal();if(tab)handleSu
 document.getElementById('confirm-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 function getFormPayload(k){
+  if(k==='equipment'){
+    const vendor=document.getElementById('vendor-select')?.value||'';
+    const pais=document.getElementById('equip-pais')?.value||'';
+    const payload={
+      ICCID:document.getElementById('equip-iccid')?.value||'',
+      CustomerID:document.getElementById('equip-customer-id')?.value||'',
+      CustomerName:document.getElementById('equip-customer-search')?.value||'',
+      TipoOperacion:document.getElementById('equip-tipo-op')?.value||'',
+      ParentCustomerID:parseInt(pais)||null,
+      Vendor:vendor,
+      SolicitudServicio:document.getElementById('equip-solicitud')?.value||''
+    };
+    document.querySelectorAll('#equipment-form-grid [data-key]').forEach(el=>{
+      if(el.value)payload[el.dataset.key]=el.value;
+    });
+    return payload;
+  }
   if(k!=='clients')return{};
   const pais=document.getElementById('client-pais')?.value||'';
   return{
@@ -863,12 +880,12 @@ function getFormPayload(k){
 }
 
 async function handleSubmit(k){
-  const url=k==='clients'?'/api/clientes':null;
+  const url=k==='clients'?'/api/clientes':k==='equipment'?'/api/equipos':null;
   setBadge(k,'loading');
   if(!url){showToast('Webhook no configurado para esta sección');setBadge(k,'idle');return;}
   try{
     const payload=getFormPayload(k);
-    document.getElementById('debug-panel').style.display='block';
+    if(document.getElementById('debug-panel'))document.getElementById('debug-panel').style.display='block';
     dbg('enviando a: '+url);
     dbg('payload', payload);
     const controller=new AbortController();
@@ -886,27 +903,36 @@ async function handleSubmit(k){
     dbg(ok?'ok':'error — ok='+data.ok+' CustomerID='+data.CustomerID);
     setBadge(k,ok?'success':'error'); addLog(k,ok?1:0,ok?0:1,1);
     if(ok){
-      const taxCode=document.getElementById('client-num-doc')?.value||'';
-      let ibisId=data.CustomerID||data.ibis?.CustomerID||'';
-      let ibisName=data.ibis?.CustomerName||'';
-      if(taxCode&&!ibisId){
-        dbg('ID no en respuesta, consultando IBIS...');
-        try{
-          const vRes=await fetch(`/api/verificar-cliente?taxCode=${encodeURIComponent(taxCode)}`);
-          const vData=await vRes.json();
-          if(vData.found){ibisId=vData.CustomerID;ibisName=vData.CustomerName;dbg('ID obtenido: '+ibisId);}
-        }catch(e){dbg('no se pudo consultar ID: '+e.message);}
+      if(k==='clients'){
+        const taxCode=document.getElementById('client-num-doc')?.value||'';
+        let ibisId=data.CustomerID||data.ibis?.CustomerID||'';
+        let ibisName=data.ibis?.CustomerName||'';
+        if(taxCode&&!ibisId){
+          dbg('ID no en respuesta, consultando IBIS...');
+          try{
+            const vRes=await fetch(`/api/verificar-cliente?taxCode=${encodeURIComponent(taxCode)}`);
+            const vData=await vRes.json();
+            if(vData.found){ibisId=vData.CustomerID;ibisName=vData.CustomerName;dbg('ID obtenido: '+ibisId);}
+          }catch(e){dbg('no se pudo consultar ID: '+e.message);}
+        }
+        if(ibisId)addLog(k,1,0,1,ibisId);
+        const bodyHtml=
+          `<div style="text-align:left;background:var(--bulk-step-bg,#f9f9f9);border-radius:8px;padding:14px 16px;margin-bottom:8px;font-size:13px;line-height:2">` +
+          `<div>✅ <strong>IBIS</strong> — Creado correctamente</div>`+
+          (ibisId?`<div style="margin-top:4px;padding:6px 10px;background:#ede8ff;border-radius:6px;font-family:monospace;font-size:14px;color:#5f2de0">ID IBIS: <strong>${ibisId}</strong>${ibisName?' — '+ibisName:''}</div>`:'') +
+          `<div style="margin-top:8px;opacity:0.45">⏳ <strong>ODOO</strong> — Próximamente</div>`+
+          `</div>`;
+        showResultModal('success','✅ Cliente sincronizado',bodyHtml);
+      }else if(k==='equipment'){
+        const iccid=payload.ICCID||'';
+        const custName=payload.CustomerName||'';
+        const bodyHtml=
+          `<div style="text-align:left;background:var(--bulk-step-bg,#f9f9f9);border-radius:8px;padding:14px 16px;margin-bottom:8px;font-size:13px;line-height:2">` +
+          `<div>✅ <strong>IBIS</strong> — Equipo enviado correctamente</div>`+
+          (iccid?`<div style="margin-top:4px;padding:6px 10px;background:#ede8ff;border-radius:6px;font-family:monospace;font-size:14px;color:#5f2de0">ICCID: <strong>${iccid}</strong>${custName?' — '+custName:''}</div>`:'') +
+          `</div>`;
+        showResultModal('success','✅ Equipo sincronizado',bodyHtml);
       }
-      if(ibisId){
-        addLog(k,1,0,1,ibisId);
-      }
-      const bodyHtml=
-        `<div style="text-align:left;background:var(--bulk-step-bg,#f9f9f9);border-radius:8px;padding:14px 16px;margin-bottom:8px;font-size:13px;line-height:2">` +
-        `<div>✅ <strong>IBIS</strong> — Creado correctamente</div>`+
-        (ibisId?`<div style="margin-top:4px;padding:6px 10px;background:#ede8ff;border-radius:6px;font-family:monospace;font-size:14px;color:#5f2de0">ID IBIS: <strong>${ibisId}</strong>${ibisName?' — '+ibisName:''}</div>`:'') +
-        `<div style="margin-top:8px;opacity:0.45">⏳ <strong>ODOO</strong> — Próximamente</div>`+
-        `</div>`;
-      showResultModal('success','✅ Cliente sincronizado',bodyHtml);
     }else{
       let errDetail=data.Message||data.message||data.error||data.detail||'';
       let errBody='';
@@ -922,9 +948,13 @@ async function handleSubmit(k){
     dbg('error: '+e.name+' — '+e.message);
     let msg=e.message||'Error desconocido';
     if(e.name==='AbortError'){
-      const taxCode=document.getElementById('client-num-doc')?.value||'';
-      const verifyBtn=taxCode?`<br><br><button onclick="verificarEnIBIS('${taxCode}')" style="margin-top:8px;padding:8px 16px;background:#723EF7;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">🔍 Verificar si se creó en IBIS (${taxCode})</button>`:'';
-      msg='IBIS tardó más de 55 segundos. El cliente <strong>puede haberse creado igual</strong>.'+verifyBtn;
+      if(k==='clients'){
+        const taxCode=document.getElementById('client-num-doc')?.value||'';
+        const verifyBtn=taxCode?`<br><br><button onclick="verificarEnIBIS('${taxCode}')" style="margin-top:8px;padding:8px 16px;background:#723EF7;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">🔍 Verificar si se creó en IBIS (${taxCode})</button>`:'';
+        msg='IBIS tardó más de 55 segundos. El cliente <strong>puede haberse creado igual</strong>.'+verifyBtn;
+      }else{
+        msg='La operación tardó demasiado. Verificá en IBIS si el equipo fue procesado.';
+      }
     }else if(e.message&&e.message.includes('Failed to fetch')){
       msg='No se pudo conectar con el servidor.<br>• Asegurate de que <strong>server.js esté corriendo</strong> (npm start)';
     }
