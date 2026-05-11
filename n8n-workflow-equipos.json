@@ -1,0 +1,196 @@
+{
+  "name": "Tesacom - Sync Equipos IBIS",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tesacom-equipos",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e",
+      "name": "Webhook Equipos",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [16, 0],
+      "webhookId": "e5f6a7b8-c9d0-4e1f-a2b3-c4d5e6f7a8b9"
+    },
+    {
+      "parameters": {
+        "dataType": "number",
+        "value1": "={{ $json.body.ParentCustomerID }}",
+        "rules": {
+          "rules": [
+            { "operation": "equal", "value2": 3, "output": 0 },
+            { "operation": "equal", "value2": 4, "output": 1 },
+            { "operation": "equal", "value2": 5, "output": 2 },
+            { "operation": "equal", "value2": 6, "output": 3 }
+          ]
+        },
+        "fallbackOutput": "none"
+      },
+      "id": "c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f",
+      "name": "Switch País",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "ed0bca6fac254bb6a6a2901e0e4bae25" },
+            { "name": "_csec", "value": "QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "d3e4f5a6-b7c8-4d9e-0f1a-2b3c4d5e6f7a",
+      "name": "Cred AR",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [464, -360]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "4fd1675586b646778af1e2cc0ca19f83" },
+            { "name": "_csec", "value": "l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "e4f5a6b7-c8d9-4e0f-1a2b-3c4d5e6f7a8b",
+      "name": "Cred CL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [464, -120]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "6f3c4cdabcf349e3a197fd77f4be05e0" },
+            { "name": "_csec", "value": "VhJQkwnuhr607LiBZgUp5mJ1S7lduea9Ag0+k/Xrr5g=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "f5a6b7c8-d9e0-4f1a-2b3c-4d5e6f7a8b9c",
+      "name": "Cred PY",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [464, 120]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "_cid",  "value": "8ddf0664d99c4493b01ec5b9317719ae" },
+            { "name": "_csec", "value": "S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=" }
+          ]
+        },
+        "options": { "keepOnlySet": false }
+      },
+      "id": "a6b7c8d9-e0f1-4a2b-3c4d-5e6f7a8b9c0d",
+      "name": "Cred PE",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [464, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ibistesacom.satcomhost.com/identity/connect/token",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "grant_type",    "value": "client_credentials" },
+            { "name": "client_id",     "value": "={{ $json._cid }}" },
+            { "name": "client_secret", "value": "={{ $json._csec }}" },
+            { "name": "scope",         "value": "ibisApi" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b7c8d9e0-f1a2-4b3c-4d5e-6f7a8b9c0d1e",
+      "name": "Obtener Token IBIS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [688, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ibistesacom.satcomhost.com/api/v1/TODO_ENDPOINT_EQUIPOS",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Obtener Token IBIS').item.json.access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"ICCID\": {{ JSON.stringify($('Webhook Equipos').item.json.body.ICCID ?? '') }},\n  \"CustomerID\": {{ $('Webhook Equipos').item.json.body.CustomerID ?? 0 }},\n  \"TipoOperacion\": {{ JSON.stringify($('Webhook Equipos').item.json.body.TipoOperacion ?? '') }},\n  \"Vendor\": {{ JSON.stringify($('Webhook Equipos').item.json.body.Vendor ?? '') }},\n  \"IMSI\": {{ JSON.stringify($('Webhook Equipos').item.json.body.IMSI ?? '') }},\n  \"MSISDN\": {{ JSON.stringify($('Webhook Equipos').item.json.body.MSISDN ?? '') }},\n  \"PIN1\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PIN1 ?? '') }},\n  \"PIN2\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PIN2 ?? '') }},\n  \"PUK1\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PUK1 ?? '') }},\n  \"PUK2\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PUK2 ?? '') }},\n  \"SerialNr\": {{ JSON.stringify($('Webhook Equipos').item.json.body.SerialNr ?? '') }},\n  \"IMEI\": {{ JSON.stringify($('Webhook Equipos').item.json.body.IMEI ?? '') }},\n  \"Name\": {{ JSON.stringify($('Webhook Equipos').item.json.body.Name ?? '') }},\n  \"Description\": {{ JSON.stringify($('Webhook Equipos').item.json.body.Description ?? '') }},\n  \"APN\": {{ JSON.stringify($('Webhook Equipos').item.json.body.APN ?? '') }}\n}",
+        "options": {}
+      },
+      "id": "c8d9e0f1-a2b3-4c4d-5e6f-7a8b9c0d1e2f",
+      "name": "Crear Equipo en IBIS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [912, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, message: 'Equipo sincronizado correctamente', ibis: $input.item.json }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "d9e0f1a2-b3c4-4d5e-6f7a-8b9c0d1e2f3a",
+      "name": "Respuesta OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1136, 0]
+    }
+  ],
+  "connections": {
+    "Webhook Equipos": {
+      "main": [
+        [{ "node": "Switch País", "type": "main", "index": 0 }]
+      ]
+    },
+    "Switch País": {
+      "main": [
+        [{ "node": "Cred AR", "type": "main", "index": 0 }],
+        [{ "node": "Cred CL", "type": "main", "index": 0 }],
+        [{ "node": "Cred PY", "type": "main", "index": 0 }],
+        [{ "node": "Cred PE", "type": "main", "index": 0 }]
+      ]
+    },
+    "Cred AR": { "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]] },
+    "Cred CL": { "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]] },
+    "Cred PY": { "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]] },
+    "Cred PE": { "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]] },
+    "Obtener Token IBIS": {
+      "main": [[{ "node": "Crear Equipo en IBIS", "type": "main", "index": 0 }]]
+    },
+    "Crear Equipo en IBIS": {
+      "main": [[{ "node": "Respuesta OK", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [{ "name": "Tesacom" }]
+}
