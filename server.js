@@ -11,14 +11,16 @@ const N8N_WEBHOOK_EQUIPOS = 'http://n8n.tesacom.net:7830/webhook/tesacom-equipos
 const IBIS_TOKEN_URL = 'https://ibistesacom.satcomhost.com/identity/connect/token';
 const IBIS_API_BASE  = 'https://ibistesacom.satcomhost.com/api/v1';
 
-// credenciales por país (ParentCustomerID)
+// OAuth2 client credentials por país (ParentCustomerID → 3=AR, 4=CL, 5=PY, 6=PE)
+// En producción mover a variables de entorno (.env.example)
 const IBIS_CREDS = {
   '3': { id: 'ed0bca6fac254bb6a6a2901e0e4bae25', secret: 'QT7OOC+yjCbOIHOfi6itJag7UhQIsq3qfSV2/9TUQhE=' },  // AR
-  '4': { id: '4fd1675586b646778af1e2cc0ca19f83', secret: 'l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=' },  // CL
+  '4': { id: '4fd1675586b646778af1e2cc0ca19f83', secret: 'l82+rnPT1yaP8TA73B3HzabctTRhr3W03QPgw4YRNfl=' },  // CL — credencial pendiente de renovación
   '5': { id: '6f3c4cdabcf349e3a197fd77f4be05e0', secret: 'VhJQkwnuhr607LiBZgUp5mJ1S7lduea9Ag0+k/Xrr5g=' },  // PY
-  '6': { id: '8ddf0664d99c4493b01ec5b9317719ae', secret: 'S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=' },  // PE
+  '6': { id: '8ddf0664d99c4493b01ec5b9317719ae', secret: 'S8iHbB0oogBbePAy8K417jTouIoKYbRE07zK9Kg2lh0=' },  // PE — credencial pendiente de renovación
 };
 
+// Los tokens duran 1h en IBIS. Los cacheamos 50min para tener margen.
 const tokenCache = {};
 async function getIbisToken(paisId) {
   const now = Date.now();

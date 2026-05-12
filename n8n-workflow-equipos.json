@@ -124,7 +124,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://ibistesacom.satcomhost.com/api/v1/TODO_ENDPOINT_EQUIPOS",
+        "url": "=https://ibistesacom.satcomhost.com/api/v1/Provisioning/Devices/ActivateTemplate?activationTemplateID={{ $('Webhook Equipos').item.json.body.activationTemplateID }}&customerID={{ $('Webhook Equipos').item.json.body.CustomerID }}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -140,11 +140,11 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"ICCID\": {{ JSON.stringify($('Webhook Equipos').item.json.body.ICCID ?? '') }},\n  \"CustomerID\": {{ $('Webhook Equipos').item.json.body.CustomerID ?? 0 }},\n  \"TipoOperacion\": {{ JSON.stringify($('Webhook Equipos').item.json.body.TipoOperacion ?? '') }},\n  \"Vendor\": {{ JSON.stringify($('Webhook Equipos').item.json.body.Vendor ?? '') }},\n  \"IMSI\": {{ JSON.stringify($('Webhook Equipos').item.json.body.IMSI ?? '') }},\n  \"MSISDN\": {{ JSON.stringify($('Webhook Equipos').item.json.body.MSISDN ?? '') }},\n  \"PIN1\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PIN1 ?? '') }},\n  \"PIN2\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PIN2 ?? '') }},\n  \"PUK1\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PUK1 ?? '') }},\n  \"PUK2\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PUK2 ?? '') }},\n  \"SerialNr\": {{ JSON.stringify($('Webhook Equipos').item.json.body.SerialNr ?? '') }},\n  \"IMEI\": {{ JSON.stringify($('Webhook Equipos').item.json.body.IMEI ?? '') }},\n  \"Name\": {{ JSON.stringify($('Webhook Equipos').item.json.body.Name ?? '') }},\n  \"Description\": {{ JSON.stringify($('Webhook Equipos').item.json.body.Description ?? '') }},\n  \"APN\": {{ JSON.stringify($('Webhook Equipos').item.json.body.APN ?? '') }}\n}",
+        "jsonBody": "=[\n  { \"ParameterCode\": \"ICCID\",  \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.ICCID ?? '') }} },\n  { \"ParameterCode\": \"IMSI\",   \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.IMSI ?? '') }} },\n  { \"ParameterCode\": \"MSISDN\", \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.MSISDN ?? '') }} },\n  { \"ParameterCode\": \"PIN1\",   \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PIN1 ?? '') }} },\n  { \"ParameterCode\": \"PIN2\",   \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PIN2 ?? '') }} },\n  { \"ParameterCode\": \"PUK1\",   \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PUK1 ?? '') }} },\n  { \"ParameterCode\": \"PUK2\",   \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.PUK2 ?? '') }} },\n  { \"ParameterCode\": \"SerialNr\",\"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.SerialNr ?? '') }} },\n  { \"ParameterCode\": \"Name\",   \"Value\": {{ JSON.stringify($('Webhook Equipos').item.json.body.Name ?? '') }} }\n]",
         "options": {}
       },
       "id": "c8d9e0f1-a2b3-4c4d-5e6f-7a8b9c0d1e2f",
-      "name": "Crear Equipo en IBIS",
+      "name": "Activar Equipo IBIS",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4,
       "position": [912, 0]
@@ -183,9 +183,9 @@
     "Cred PY": { "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]] },
     "Cred PE": { "main": [[{ "node": "Obtener Token IBIS", "type": "main", "index": 0 }]] },
     "Obtener Token IBIS": {
-      "main": [[{ "node": "Crear Equipo en IBIS", "type": "main", "index": 0 }]]
+      "main": [[{ "node": "Activar Equipo IBIS", "type": "main", "index": 0 }]]
     },
-    "Crear Equipo en IBIS": {
+    "Activar Equipo IBIS": {
       "main": [[{ "node": "Respuesta OK", "type": "main", "index": 0 }]]
     }
   },

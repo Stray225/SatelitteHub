@@ -756,13 +756,33 @@ function processFile(file){
   };
   r.readAsArrayBuffer(file);
 }
-function renderPreviewTable(){
-  if(!bulkRows.length)return;
-  const cols=Object.keys(bulkRows[0]);
-  const sc={'pending':'#ADB2BC','sending':'#f0a030','ok':'#00FFDB','err':'#e05c5c'};
-  const sl={'pending':'--','sending':'Enviando','ok':'OK','err':'Error'};
-  document.getElementById('preview-table').innerHTML=`<thead><tr><th>Estado</th>${cols.slice(0,8).map(c=>`<th>${c}</th>`).join('')}${cols.length>8?`<th>+${cols.length-8} mas`:''}
-</tr></thead><tbody>${bulkRows.map((row,i)=>`<tr class="row-${bulkRowStatuses[i]}" id="bulk-row-${i}"><td class="row-status" style="color:${sc[bulkRowStatuses[i]]}">${sl[bulkRowStatuses[i]]}</td>${cols.slice(0,8).map(c=>`<td title="${row[c]}">${row[c]||''}</td>`).join('')}${cols.length>8?'<td>...</td>':''}</tr>`).join('')}</tbody>`;
+function renderPreviewTable() {
+  if (!bulkRows.length) return;
+
+  const cols        = Object.keys(bulkRows[0]);
+  const visibleCols = cols.slice(0, 8);
+  const hasExtra    = cols.length > 8;
+
+  const rowColors = { pending: '#ADB2BC', sending: '#f0a030', ok: '#00FFDB', err: '#e05c5c' };
+  const rowLabels = { pending: '--', sending: 'Enviando', ok: 'OK', err: 'Error' };
+
+  const thead = `<thead><tr>
+    <th>Estado</th>
+    ${visibleCols.map(c => `<th>${c}</th>`).join('')}
+    ${hasExtra ? `<th>+${cols.length - 8} mas</th>` : ''}
+  </tr></thead>`;
+
+  const rows = bulkRows.map((row, i) => {
+    const s     = bulkRowStatuses[i];
+    const cells = visibleCols.map(c => `<td title="${row[c]}">${row[c] || ''}</td>`).join('');
+    return `<tr class="row-${s}" id="bulk-row-${i}">
+      <td class="row-status" style="color:${rowColors[s]}">${rowLabels[s]}</td>
+      ${cells}
+      ${hasExtra ? '<td>...</td>' : ''}
+    </tr>`;
+  });
+
+  document.getElementById('preview-table').innerHTML = thead + `<tbody>${rows.join('')}</tbody>`;
 }
 function resetBulk(){
   bulkRows=[];bulkRowStatuses=[];
@@ -968,30 +988,56 @@ function loadLogFromStorage(){try{const raw=localStorage.getItem('sat_log');if(r
 const tabNames={clients:'Cliente',equipment:'Equipo',plans:'Plan','equipment-bulk':'Bulk Equipos'};
 let logItems=loadLogFromStorage()||[];
 
-let logExpanded=false;
-function renderLog(){
-  const l=document.getElementById('log-list');
-  if(!logItems.length){l.innerHTML='<div class="log-empty">Sin actividad aun</div>';return;}
-  const limit=logExpanded?10:5;
-  const visible=logItems.slice(0,limit);
-  const renderItem=item=>`<div class="log-item"><div style="margin-top:2px;color:${item.ok?'#00FFDB':'#e05c5c'}">${item.ok?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'}</div><div><div class="log-title">${item.tab}</div><div class="log-msg">${item.msg}</div>${item.ibisId?`<div style="font-size:10px;color:#723EF7;font-weight:500;margin-top:2px">ID IBIS: ${item.ibisId}</div>`:''}<div class="log-time">${item.time}</div></div></div>`;
-  const moreBtn=logItems.length>5
-    ?`<div style="text-align:center;padding:8px 0 2px"><button onclick="toggleLogExpand()" style="background:none;border:none;color:var(--primary);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font-base)">${logExpanded?'▲ Ver menos':'▼ Ver más ('+Math.min(logItems.length,10)+')'}</button></div>`
-    :'';
-  l.innerHTML=visible.map(renderItem).join('')+moreBtn;
+const LOG_ICON_OK  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+const LOG_ICON_ERR = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+function renderLogItem(item) {
+  const icon  = item.ok ? LOG_ICON_OK : LOG_ICON_ERR;
+  const color = item.ok ? '#00FFDB' : '#e05c5c';
+  const ibisIdHtml = item.ibisId
+    ? `<div style="font-size:10px;color:#723EF7;font-weight:500;margin-top:2px">ID IBIS: ${item.ibisId}</div>`
+    : '';
+  return `<div class="log-item">
+    <div style="margin-top:2px;color:${color}">${icon}</div>
+    <div>
+      <div class="log-title">${item.tab}</div>
+      <div class="log-msg">${item.msg}</div>
+      ${ibisIdHtml}
+      <div class="log-time">${item.time}</div>
+    </div>
+  </div>`;
 }
-function toggleLogExpand(){logExpanded=!logExpanded;renderLog();}
+
+let logExpanded = false;
+function renderLog() {
+  const list = document.getElementById('log-list');
+  if (!logItems.length) {
+    list.innerHTML = '<div class="log-empty">Sin actividad aun</div>';
+    return;
+  }
+
+  const limit   = logExpanded ? 10 : 5;
+  const visible = logItems.slice(0, limit);
+  const moreBtn = logItems.length > 5
+    ? `<div style="text-align:center;padding:8px 0 2px"><button onclick="toggleLogExpand()" style="background:none;border:none;color:var(--primary);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font-base)">${logExpanded ? '▲ Ver menos' : '▼ Ver más (' + Math.min(logItems.length, 10) + ')'}</button></div>`
+    : '';
+
+  list.innerHTML = visible.map(renderLogItem).join('') + moreBtn;
+}
+function toggleLogExpand() { logExpanded = !logExpanded; renderLog(); }
 renderLog();
 
-function addLog(k,ok,err,total,ibisId){
-  const time=new Date().toLocaleTimeString('es-AR');
-  let msg=k==='equipment-bulk'
-    ? ok+'/'+total+' enviados a IBIS'+(err>0?' - '+err+' errores':'')
-    : ok
-      ? 'Creado en IBIS'+(ibisId?' — ID: '+ibisId:'')
-      : 'Error - revisar webhook';
-  logItems=[{tab:tabNames[k]||k,time,msg,ok:ok>0,ibisId:ibisId||''},...logItems].slice(0,20);
-  renderLog(); saveLogToStorage();
+function addLog(k, ok, err, total, ibisId) {
+  const time = new Date().toLocaleTimeString('es-AR');
+  let msg;
+  if (k === 'equipment-bulk') {
+    msg = ok + '/' + total + ' enviados a IBIS' + (err > 0 ? ' - ' + err + ' errores' : '');
+  } else {
+    msg = ok ? 'Creado en IBIS' + (ibisId ? ' — ID: ' + ibisId : '') : 'Error - revisar webhook';
+  }
+  logItems = [{ tab: tabNames[k] || k, time, msg, ok: ok > 0, ibisId: ibisId || '' }, ...logItems].slice(0, 20);
+  renderLog();
+  saveLogToStorage();
 }
 
 function exportLogToExcel(){
@@ -1252,40 +1298,57 @@ const PROVINCES_BY_COUNTRY={
   '5':['Asunción','Alto Paraguay','Alto Paraná','Amambay','Boquerón','Caaguazú','Caazapá','Canindeyú','Central','Concepción','Cordillera','Guairá','Itapúa','Misiones','Ñeembucú','Paraguarí','Presidente Hayes','San Pedro'],
   '6':['Amazonas','Áncash','Apurímac','Arequipa','Ayacucho','Cajamarca','Callao','Cusco','Huancavelica','Huánuco','Ica','Junín','La Libertad','Lambayeque','Lima','Loreto','Madre de Dios','Moquegua','Pasco','Piura','Puno','San Martín','Tacna','Tumbes','Ucayali']
 };
-function onPaisChange(){
-  const pais=document.getElementById('client-pais');const sel=document.getElementById('client-comercial');
-  if(!pais||!sel)return;
-  const v=pais.value;
-  // Comerciales
-  const execs=EXEC_BY_COUNTRY[v]||[];const prev=sel.value;
-  sel.innerHTML='<option value="">Seleccionar...</option>';
-  execs.forEach(e=>{const opt=document.createElement('option');opt.value=e.code;opt.textContent=e.name;sel.appendChild(opt);});
-  sel.disabled=execs.length===0;
-  if(execs.find(e=>e.code===prev))sel.value=prev;
-  // Label CUIT/RUT/RUC
-  const docLabels={3:'CUIT',4:'RUT',5:'RUC',6:'RUC'};
-  const docPlaceholders={3:'Ej: 30-12345678-9',4:'Ej: 12.345.678-9',5:'Ej: 80012345-6',6:'Ej: 20123456789'};
-  const labelEl=document.getElementById('label-num-doc');
-  const inputEl=document.getElementById('client-num-doc');
-  const tipo=docLabels[v]||'Numero de Documento';
-  if(labelEl)labelEl.innerHTML=tipo+' <span class="req">*</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal del cliente</span></span>';
-  if(inputEl)inputEl.placeholder=docPlaceholders[v]||'Ej: 20-12345678-9';
-  // Categoría Fiscal dropdown
-  const catSel=document.getElementById('client-categoria-fiscal');
-  if(catSel){
-    const cats=CAT_FISCAL_BY_COUNTRY[v]||[];
-    catSel.innerHTML='<option value="">Seleccionar...</option>';
-    cats.forEach(c=>{const opt=document.createElement('option');opt.value=c;opt.textContent=c;catSel.appendChild(opt);});
-    catSel.disabled=cats.length===0;
+function onPaisChange() {
+  const pais = document.getElementById('client-pais');
+  const sel  = document.getElementById('client-comercial');
+  if (!pais || !sel) return;
+  const v = pais.value;
+
+  const execs = EXEC_BY_COUNTRY[v] || [];
+  const prev  = sel.value;
+  sel.innerHTML = '<option value="">Seleccionar...</option>';
+  execs.forEach(e => {
+    const opt = document.createElement('option');
+    opt.value = e.code;
+    opt.textContent = e.name;
+    sel.appendChild(opt);
+  });
+  sel.disabled = execs.length === 0;
+  if (execs.find(e => e.code === prev)) sel.value = prev;
+
+  const docLabels       = { 3: 'CUIT', 4: 'RUT', 5: 'RUC', 6: 'RUC' };
+  const docPlaceholders = { 3: 'Ej: 30-12345678-9', 4: 'Ej: 12.345.678-9', 5: 'Ej: 80012345-6', 6: 'Ej: 20123456789' };
+  const labelEl = document.getElementById('label-num-doc');
+  const inputEl = document.getElementById('client-num-doc');
+  const tipo = docLabels[v] || 'Numero de Documento';
+  if (labelEl) labelEl.innerHTML = tipo + ' <span class="req">*</span><span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-popup">Código de identificación fiscal del cliente</span></span>';
+  if (inputEl) inputEl.placeholder = docPlaceholders[v] || 'Ej: 20-12345678-9';
+
+  const catSel = document.getElementById('client-categoria-fiscal');
+  if (catSel) {
+    const cats = CAT_FISCAL_BY_COUNTRY[v] || [];
+    catSel.innerHTML = '<option value="">Seleccionar...</option>';
+    cats.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      catSel.appendChild(opt);
+    });
+    catSel.disabled = cats.length === 0;
     updateFieldFilled(catSel);
   }
-  // Provincia dropdown
-  const provSel=document.getElementById('client-estado');
-  if(provSel){
-    const provs=PROVINCES_BY_COUNTRY[v]||[];
-    provSel.innerHTML='<option value="">Seleccionar...</option>';
-    provs.forEach(p=>{const opt=document.createElement('option');opt.value=p;opt.textContent=p;provSel.appendChild(opt);});
-    provSel.disabled=provs.length===0;
+
+  const provSel = document.getElementById('client-estado');
+  if (provSel) {
+    const provs = PROVINCES_BY_COUNTRY[v] || [];
+    provSel.innerHTML = '<option value="">Seleccionar...</option>';
+    provs.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      provSel.appendChild(opt);
+    });
+    provSel.disabled = provs.length === 0;
     updateFieldFilled(provSel);
   }
 }
