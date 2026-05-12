@@ -29,7 +29,7 @@ Herramienta interna de Tesacom para sincronizar altas, bajas y modificaciones de
 ├── fonts/                     # Fuentes locales (fallback si no carga Google Fonts)
 ├── .env.example               # Variables de entorno necesarias (ver abajo)
 ├── README.md                  # Este archivo
-└── HANDOFF.md                 # Estado del proyecto y guía para developers
+└── HANDOFF.md                 # Estado del proyecto y guía para ustedes
 ```
 
 ---
@@ -134,7 +134,7 @@ Los workflows están en los archivos JSON del repo. Para usarlos:
 
 - Las credenciales de Chile (CL) y Perú (PE) en los workflows n8n están vencidas o son inválidas — los tokens no se generan.
 - El tab **Planes** tiene el formulario construido pero no está conectado a ningún endpoint IBIS.
-- El workflow de equipos usa `POST /Provisioning/Devices/ActivateTemplate`, que requiere un `activationTemplateID` entero. Ese ID no está disponible vía API con las credenciales actuales — necesita confirmación de soporte IBIS.
+- El workflow de equipos usa `POST /Provisioning/Devices/ActivateTemplate`, que requiere un `activationTemplateID` entero. Ese ID no está disponible vía API con las credenciales actuales, necesitamos confirmación de soporte IBIS.
 - No hay manejo de errores si n8n está caído al momento de la request (timeout de 60s, luego error 502).
 
 ---
@@ -144,6 +144,5 @@ Los workflows están en los archivos JSON del repo. Para usarlos:
 - [ ] Obtener `activationTemplateID` por tipo de equipo/vendor desde soporte IBIS
 - [ ] Actualizar credenciales de CL y PE
 - [ ] Mover credenciales a variables de entorno
-- [ ] Conectar tab Planes a un endpoint IBIS
+- [ ] Conectar tab Planes a un endpoint IBIS (Si es que se hace)
 - [ ] Agregar autenticación básica al servidor (hoy cualquiera en la red puede acceder)
-- [ ] Considerar PM2 o similar para mantener el proceso vivo en el servidor
